@@ -16,7 +16,7 @@ Social network platform dedicated to written roleplay platform
 <a name="diagramas"></a>
 ## 1. Diagramas
 <a name="diagrama_de_caso_de_uso"></a>
-### 1.1. Diagrama de caso de uso
+###   1.1. Diagrama de caso de uso
 Se utiliza para describir los requisitos funcionales del sistema desde el punto de vista del usuario. Proporciona una visión general de las funcionalidades del sistema y las interacciones entre el usuario y el sistema.
 
 <a name="diagrama_de_secuencia"></a>
