@@ -1,4 +1,4 @@
-# werply
+# werply (We roleplay!)
 Social network platform dedicated to written roleplay platform
 
 ## Table of Contents
