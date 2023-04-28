@@ -9,8 +9,7 @@ Social network platform dedicated to written roleplay platform
   * [Diagrama de componentes](#diagrama_de_componentes)
   * [Diagrama de despliegue](#diagrama_de_despliegue)
 * [Base de datos](#base_datos)
-* [Backend](backend)
-  * [Testing](testing)
+* [Backend (nestjs)](https://github.com/dkaerit/nest-api-rest)
 * [Frontend](#fronted)
   * [Testing](testing)
 
