@@ -8,6 +8,11 @@ Social network platform dedicated to written roleplay platform
   * [Diagrama de clases](#diagrama_de_clases) 
   * [Diagrama de componentes](#diagrama_de_componentes)
   * [Diagrama de despliegue](#diagrama_de_despliegue)
+* [Base de datos](#base_datos)
+* [Backend](backend)
+  * [Testing](testing)
+* [Frontend](#fronted)
+  * [Testing](testing)
 
 <a name="diagramas"></a>
 ## Diagramas
@@ -31,3 +36,18 @@ Se utiliza para modelar la estructura del sistema y cómo los componentes se rel
 <a name="diagrama_de_despliegue"></a>
 ### Diagrama de despliegue
 Se utiliza para mostrar cómo los componentes del sistema se despliegan en el hardware y cómo se interconectan en la infraestructura de red. Proporciona una visión general de la arquitectura física del sistema.
+
+<a name="base_datos"></a>
+## Base de datos
+
+<a name="backend"></a>
+## Backend
+
+<a name="testing_backend"></a>
+### Testing
+
+<a name="frontend"></a>
+## Frontend
+
+<a name="testing_frontend"></a>
+### Testing
