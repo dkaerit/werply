@@ -3,15 +3,15 @@ Social network platform dedicated to written roleplay platform
 
 ## Table of Contents
 1. [Diagramas](#diagramas) 
-  1. [Diagrama de caso de uso](#diagrama_de_caso_de_uso)  
-  2. [Diagrama de secuencia](#diagrama_de_secuencia) 
-  3. [Diagrama de clases](#diagrama_de_clases) 
-  4. [Diagrama de componentes](#diagrama_de_componentes)
-  5. [Diagrama de despliegue](#diagrama_de_despliegue)
+    1. [Diagrama de caso de uso](#diagrama_de_caso_de_uso)  
+    2. [Diagrama de secuencia](#diagrama_de_secuencia) 
+    3. [Diagrama de clases](#diagrama_de_clases) 
+    4. [Diagrama de componentes](#diagrama_de_componentes)
+    5. [Diagrama de despliegue](#diagrama_de_despliegue)
 2. [Base de datos](#base_datos)
 3. [Backend (nestjs)](https://github.com/dkaerit/nest-api-rest)
 4. [Frontend](#fronted)
-  1. [Testing](testing)
+    1. [Testing](testing)
 
 <a name="diagramas"></a>
 ## 1. Diagramas
