@@ -16,7 +16,7 @@ El objetivo de Werply es proporcionar un entorno seguro y amigable para los jueg
 2. [Base de datos](#base_datos)
 3. [Backend (nestjs)](https://github.com/dkaerit/nest-api-rest)
 4. [Frontend](#fronted)
-    1. [Testing](testing)
+    1. [Testing](#testing_frontend)
 
 <a name="diagramas"></a>
 ## 1. Diagramas
