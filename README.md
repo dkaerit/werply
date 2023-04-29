@@ -49,4 +49,4 @@ Se utiliza para mostrar cómo los componentes del sistema se despliegan en el ha
 ## 4. Frontend
 
 <a name="testing_frontend"></a>
-### 4.1. Testing
+###   4.1. Testing
