@@ -24,6 +24,8 @@ El objetivo de Werply es proporcionar un entorno seguro y amigable para los jueg
 ###   1.1. Diagrama de caso de uso
 Se utiliza para describir los requisitos funcionales del sistema desde el punto de vista del usuario. Proporciona una visión general de las funcionalidades del sistema y las interacciones entre el usuario y el sistema.
 
+![fgdfg drawio](https://user-images.githubusercontent.com/24440929/235325075-bcf15f11-827c-4f35-8be7-7b85a12b07a3.png)
+
 <a name="diagrama_de_secuencia"></a>
 ###   1.2. Diagrama de secuencia
 Se utiliza para modelar la interacción entre los objetos y las acciones que ocurren en un proceso. Proporciona una visión detallada de cómo se realizan las tareas dentro del sistema.
