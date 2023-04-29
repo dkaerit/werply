@@ -1,6 +1,6 @@
 # Werply (We roleplay!)
 
-<div style="display: flex; border: 1px solid var(--color-border-muted); border-radius: 10px; padding: 20px 20px 0px 20px;">
+<div style="display: flex; border: 1px solid #000; border-radius: 10px; padding: 20px 20px 0px 20px;">
 <div><img src="https://i.imgur.com/EYdeHbu.png"></img></div>
 <div>Werply is a web platform that aims to be a solution for those users interested in written roleplay, offering tools and services specifically designed to meet their needs. The platform will allow users to create and customize characters, develop stories in collaboration with other users, and join roleplay communities with specific themes and customized rules.
 
