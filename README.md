@@ -22,7 +22,7 @@ El objetivo de Werply es proporcionar un entorno seguro y amigable para los jueg
 ## 1. Diagramas
 <a name="diagrama_de_caso_de_uso"></a>
 ###   1.1. Diagrama de caso de uso
-Se utiliza para describir los requisitos funcionales del sistema desde el punto de vista del usuario. Proporciona una visión general de las funcionalidades del sistema y las interacciones entre el usuario y el sistema.
+Los usuarios pueden iniciar y cerrar sesión en su cuenta, crear, eliminar y administrar personajes y comunidades de rol. Además, los usuarios pueden conectarse con otros personajes (segurise mutuamente) y ver y responder temas de rol iniciados en las comunidades a las que pertenecen. También pueden ver y añadir respuestas de rol en los espacios comunes de las comunidades. 
 
 <div align="center"><img src="https://user-images.githubusercontent.com/24440929/235325075-bcf15f11-827c-4f35-8be7-7b85a12b07a3.png"/></div>
 
