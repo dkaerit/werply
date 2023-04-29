@@ -24,7 +24,7 @@ El objetivo de Werply es proporcionar un entorno seguro y amigable para los jueg
 ###   1.1. Diagrama de caso de uso
 Los usuarios pueden iniciar y cerrar sesión en su cuenta, crear, eliminar y administrar personajes y comunidades de rol. Además, los usuarios pueden conectarse con otros personajes (segurise mutuamente) y ver y responder temas de rol iniciados en las comunidades a las que pertenecen. También pueden ver y añadir respuestas de rol en los espacios comunes de las comunidades. 
 
-<div align="center"><img src="https://user-images.githubusercontent.com/24440929/235325075-bcf15f11-827c-4f35-8be7-7b85a12b07a3.png"/></div>
+<div align="center"><img src="https://user-images.githubusercontent.com/24440929/235326567-4a305984-f24e-469c-8dc5-3601acca1d08.png"/></div>
 
 <a name="diagrama_de_secuencia"></a>
 ###   1.2. Diagrama de secuencia
