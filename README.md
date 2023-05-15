@@ -1,6 +1,6 @@
 # Werply (We roleplay!)
 
-Werply es una plataforma web que pretende ser una solución para aquellos usuarios interesados en los juegos de rol escritos, ofreciendo herramientas y servicios específicamente diseñados para satisfacer sus necesidades. La plataforma permitirá a los usuarios crear y personalizar personajes, desarrollar historias en colaboración con otros usuarios y unirse a comunidades de juegos de rol con temas específicos y reglas personalizadas.
+Werply es una plataforma web que pretende ser una solución para aquellos usuarios interesados en los juegos de rol escrito, ofreciendo herramientas y servicios específicamente diseñados para satisfacer sus necesidades. La plataforma permitirá a los usuarios crear y personalizar personajes, desarrollar historias en colaboración con otros usuarios y unirse a comunidades de juegos de rol con temas específicos y reglas personalizadas.
 
 La idea de Werply es ofrecer un entorno especializado para los juegos de rol escritos, que permita a los usuarios escribir respuestas más largas y detalladas sin tener que fragmentarlas en trozos más pequeños. La plataforma también ofrecerá características especiales para los juegos de rol, como la posibilidad de utilizar dados y otras mecánicas de juego.
 
