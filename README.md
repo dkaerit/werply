@@ -4,7 +4,7 @@ Werply es una plataforma web que pretende ser una solución para aquellos usuari
 
 La idea de Werply es ofrecer un entorno especializado para los juegos de rol escritos, que permita a los usuarios escribir respuestas más largas y detalladas sin tener que fragmentarlas en trozos más pequeños. La plataforma también ofrecerá características especiales para los juegos de rol, como la posibilidad de utilizar dados y otras mecánicas de juego.
 
-El objetivo de Werply es proporcionar un entorno seguro y amigable para los juegos de rol escritos, fomentando la creación de historias emocionantes y la conexión entre los usuarios en una comunidad dinámica y en constante evolución. Aunque la plataforma aún no se ha desarrollado como producto final, estamos trabajando en su desarrollo con una arquitectura de microservicios y tecnologías modernas, para garantizar un rendimiento rápido y fiable, así como funciones de seguridad y privacidad para proteger la información de los usuarios.
+El objetivo de Werply es proporcionar un entorno seguro y amigable para los juegos de rol escrito, fomentando la creación de historias y la conexión entre los usuarios en una comunidad dinámica y en constante evolución. Aunque la plataforma aún no se ha desarrollado como producto final, estamos trabajando en su desarrollo con una arquitectura de microservicios y tecnologías modernas, para garantizar un rendimiento rápido y fiable, así como funciones de seguridad y privacidad para proteger la información de los usuarios.
 
 ## Tabla de contenidos
 1. [Diagramas](#diagramas) 
