@@ -12,10 +12,12 @@ El objetivo de Werply es proporcionar un entorno seguro y amigable para los jueg
     2. [Diagrama de secuencia](#diagrama_de_secuencia) 
     3. [Diagrama de componentes](#diagrama_de_componentes)
     4. [Diagrama de despliegue](#diagrama_de_despliegue)
-2. [Base de datos](#base_datos)
-3. [Backend (nestjs)](https://github.com/dkaerit/nest-api-rest)
-4. [Frontend](#fronted)
-    1. [Testing](#testing_frontend)
+2. [Frontend](#fronted)
+    1. [Vistas](#views_frontend) 
+    2. [Testing](#testing_frontend)
+3. [Base de datos](#base_datos)
+4. [Backend (nestjs)](https://github.com/dkaerit/nest-api-rest)
+
 
 <a name="diagramas"></a>
 ## 1. Diagramas
