@@ -7,7 +7,8 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../components/HelloWorld.vue')
+    redirect: (to:any) => ({ path: '/login', query: { q: to.params.searchText }})
+    //component: () => import('../components/HelloWorld.vue')
   },
   {
     path: '/login',

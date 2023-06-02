@@ -7,7 +7,7 @@ export default {
 </script>
 
 <template>
-  <div>essentials</div>
+  <div></div>
 </template>
 
 <style scoped lang="scss"></style>

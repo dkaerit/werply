@@ -1,15 +1,27 @@
-<script lang="ts"> 
-export default {
-  props: { 
-    msg: String
-  },
-  data: () => ({ 
-    count: 0 
-  }),
-  setup: () => {
+<script setup lang="ts"> 
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'; let store = useStore()
 
-  }
+// data
+//let count = computed(() => store.state.count)
+let another = ref('')
+
+// props
+const props = defineProps({
+  msg: String
+})
+
+// methods
+/** #brief incrementa el contadir */
+function increment() {
+  //store.commit('INCREMENT')
 }
+
+/** #brief incrementa el contadir */
+function decrement() {
+  //store.commit('DECREMENT')
+}
+
 </script>
 
 <template>
@@ -18,7 +30,7 @@ export default {
     <h1>{{ msg }}</h1>
 
     <div class="card">
-      <button type="button" @click="count++">count is {{ count }}</button>
+      <button type="button" @click="increment">count is {{ count }} </button>
     </div>
   </div>
 

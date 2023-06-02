@@ -1,16 +1,17 @@
 import { createStore } from 'vuex'
 import VuexPersistence from 'vuex-persist'
 
-const vuexLocal:any = new VuexPersistence({
+// modulos
+import AUTH from './auth/auth.module';
+
+const vuexLocal = new VuexPersistence({
   storage: window.localStorage
 })
 
 export const store = createStore({
-  state: () => ({
-    count: 1
-  }),
+  state: () => ({}),
   mutations: {},
   actions: {},
-  modules: {},
-  plugins: [vuexLocal]
+  modules: { AUTH },
+  plugins: [vuexLocal.plugin]
 })
