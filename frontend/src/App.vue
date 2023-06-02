@@ -4,13 +4,6 @@
 
 <template>
 <div>
-  <header>
-    <a href="#" class="logo">Logo</a>
-    <ul id="nav">
-      <li><router-link to="/login" class-active="active">Login</router-link></li>
-      <li><router-link to="/essentials" class-active="active">Essentials</router-link></li>
-    </ul>
-  </header>
   <router-view/>
 </div>
 </template>
@@ -33,7 +26,9 @@ html:focus-within {
 body {
   min-height: 100vh;
   //background: #0c2433;
-  background: #0c0f11;
+  //background: #0c0f11;
+  background: #07080c;
+  
   //background: black;
 }
 
