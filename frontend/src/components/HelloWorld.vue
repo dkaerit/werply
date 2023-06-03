@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { useStore } from 'vuex'; let store = useStore()
 
 // data
-//let count = computed(() => store.state.count)
+let count = computed(() => store.state.count)
 let another = ref('')
 
 // props
