@@ -3,16 +3,35 @@
 </script>
 
 <template>
-<div>
   <router-view/>
-</div>
 </template>
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800&display=swap');
 
-html:focus-within {
-  scroll-behavior: smooth;
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 400;
+  color-scheme: dark;
+  //color: rgba(255, 255, 255, 0.87);
+  color:#a8aa9b;
+  background-color: #050608; // d) mezcla de a y c
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  align-items: stretch;
+  min-width: 320px;
+  min-height: 100vh;
+  justify-content: center;
 }
 
 * {
@@ -23,69 +42,41 @@ html:focus-within {
   scroll-behavior: smooth;
 }
 
-body {
-  min-height: 100vh;
-  //background: #0c2433;
-  //background: #0c0f11;
-  background: #07080c;
+html {
+  &:focus-within { scroll-behavior: smooth; }
+} 
+
+button {
+  border-radius: 31px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  //font-size: 1em;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  margin: 8px 0px 8px 0px;
+  cursor: pointer;
   
-  //background: black;
+  transition: border-color 0.25s;
+  &:hover { border-color: #64eaff; }
+  &:focus, &:focus-visible { outline: 4px auto -webkit-focus-ring-color; }
+  &.primary { background: rgb(255, 255, 255); color: #000; }
+  &.secondary { background: transparent; border-color: rgb(83, 112, 113); color: #fff; }
 }
 
-header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 30px 100px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 6;
-
-  .logo {
-    color: #fff;
-    font-weight:700;
-    text-decoration: none;
-    font-size: 2em;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-  }
-
-  ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    li {
-      list-style: none;
-      margin-left: 20px;
-
-      a {
-        text-decoration: none;
-        padding: 6px 15px;
-        color: #fff;
-        border-radius: 20px;
-      }
-
-      a:hover, a.router-link-active.router-link-exact-active {
-        background: #fff;
-        color: #0c2433;
-      }
-    }
-  }
+a {
+  font-weight: 300;
+  color: #64eaff;
+  text-decoration: inherit;
+  padding: 0px 5px;
+  transition: 0.5s;
+  &:hover { color: #97edfa; }
 }
 
-/*
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
+h1 {
+  color: rgb(255 255 255 / 93%);
+  line-height: 1.1;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}*/
+
+
 </style>

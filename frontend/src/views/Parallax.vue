@@ -10,16 +10,16 @@ onMounted(() => {
 
   window.addEventListener('scroll', () => {
     let value = window.scrollY;
-    capa3.style.left = `${value*0.075}px`;
-    capa2.style.top = `${(value*-0.075)}px`;
+    //capa3.style.left = `${value*0.075}px`;
+    //capa2.style.top = `${(value*-0.075)}px`;
 
-    let ml = text.style.marginLeft;
-    text.style.marginLeft = `${950-value*1.075}px`;
+    //let ml = text.style.marginLeft;
+   // text.style.marginLeft = `${950-value*1.075}px`;
     
   });
 
   setTimeout(() => {
-    text.style.marginLeft = `950px`;
+    //text.style.marginLeft = `950px`;
   }, 750);
 })
 
