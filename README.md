@@ -39,8 +39,8 @@ Se utiliza para modelar la estructura del sistema y cómo los componentes se rel
 Se utiliza para mostrar cómo los componentes del sistema se despliegan en el hardware y cómo se interconectan en la infraestructura de red. Proporciona una visión general de la arquitectura física del sistema.
 
 <a name="frontend"></a>
-## 3. Frontend
+## 2. Frontend
 
 <a name="testing_frontend"></a>
-###   3.1. Endpoints
+###   2.1. Vistas
 ###   3.2. Testing
