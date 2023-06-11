@@ -21,7 +21,8 @@ const actionsMap = {
  * #returns void
  */
  const login = (): void => {
-  const [action] = Object.entries(actionsMap)
+  const [action] = Object
+  .entries(actionsMap)
   .find(([, regex]) => regex.test(loginIdentifier.value)) || ['authenticationActionUsername'];
 
   store.dispatch(action, { value: loginIdentifier.value });

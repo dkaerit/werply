@@ -45,7 +45,7 @@ export default {
          * #param commit - Función de commit de Vuex
          */
 
-        async dismissAction({commit}:Triggers): Promise<void> {
+        async dismissAction({ commit }: Triggers): Promise<void> {
             await commit('setToken', undefined);
             location.reload();
         },
@@ -57,7 +57,7 @@ export default {
          */
 
         async authenticationActionEmail({ commit }: Triggers, loginIdentifier: string): Promise<void> {
-            const response = await axios.post(`${uri}/login`, { email: loginIdentifier });
+            const response = await axios.post(`${uri}/auth/login/email`, { email: loginIdentifier });
             commit('setToken', response.data.token);
         },
 
@@ -68,7 +68,7 @@ export default {
          */
 
         async authenticationActionTelefono({ commit }: Triggers, loginIdentifier: string): Promise<void> {
-            const response = await axios.post(`${uri}/login`, { telefono: loginIdentifier });
+            const response = await axios.post(`${uri}/auth/login/tlfn`, { telefono: loginIdentifier });
             commit('setToken', response.data.token);
         },
 
@@ -79,7 +79,7 @@ export default {
          */
 
         async authenticationActionUsername({ commit }: Triggers, loginIdentifier: string): Promise<void> {
-            const response = await axios.post(`${uri}/login`, { username: loginIdentifier });
+            const response = await axios.post(`${uri}/auth/login/username`, { username: loginIdentifier });
             commit('setToken', response.data.token);
         },
     },   
