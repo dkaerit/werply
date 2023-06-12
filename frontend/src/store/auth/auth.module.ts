@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { Commit, Dispatch } from 'vuex'
+import { uri } from '../index';
 interface Triggers { commit:Commit, dispatch:Dispatch }
-const uri:string = "http://localhost:3000"
+
 
 export default {
     namespathed: true, 
