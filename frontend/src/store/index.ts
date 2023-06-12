@@ -1,5 +1,7 @@
 import { createStore } from 'vuex'
 import VuexPersistence from 'vuex-persist'
+import * as dotenv from 'dotenv';
+dotenv.config(); // Cargar las variables de entorno
 
 // modulos
 import AUTH from './auth/auth.module';
