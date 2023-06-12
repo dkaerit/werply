@@ -60,7 +60,7 @@ label.form-label {
       outline: none;
       transition: 0.1s; 
       &:valid ~ span, &:focus ~ span  {
-          transform: translate(10px,-19px);
+          transform: translate(10px,-20px);
           font-size: 0.65em;
           padding: 0 5px;
           
@@ -76,8 +76,19 @@ label.form-label {
       margin: 9px 9px 9px 15px;
       pointer-events: none;
       transition: 0.1s; 
-      background: #050608;
+      //background: #050608;
       border-radius: 20px;
+      &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        width: 100%;
+        height: 3px;
+        background-color: #050608;
+        z-index: -1;
+      }
   }
 }
 
