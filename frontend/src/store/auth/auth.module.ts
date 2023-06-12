@@ -1,8 +1,14 @@
 import axios from 'axios'
 import { Commit, Dispatch } from 'vuex'
 import { uri } from '../index';
+import { LoginPayload, EndpointWithPayload } from "./auth.interfaces"
 interface Triggers { commit:Commit, dispatch:Dispatch }
 
+const fieldMapping: { [key: string]: string } = {
+    '/auth/login/email': 'email',
+    '/auth/login/tlfn': 'tlfn',
+    '/auth/login/username': 'username',
+  };
 
 export default {
     namespathed: true, 
@@ -40,7 +46,8 @@ export default {
     //                                                                                             //
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    actions: {   
+    actions: { 
+
         /**
          * Acción para desautenticar al usuario.
          * #param commit - Función de commit de Vuex
@@ -52,36 +59,47 @@ export default {
         },
 
         /**
-         * Acción de autenticación con email.
+         * Acción para autenticar al usuario.
          * #param commit - Función de commit de Vuex
-         * #param loginIdentifier - Email para autenticación
+         * #param endpoint - Endpoint para la autenticación
+         * #param payload - Carga útil para la autenticación
+         */
+        
+        async authenticate(commit: Commit, { endpoint, payload }: EndpointWithPayload): Promise<void> {
+            const field = fieldMapping[endpoint]; // fields "email", "tlfn" or "username"
+            const response = await axios.post(`${uri}${endpoint}`, 
+            {[field]: payload.identifier, "passwd": payload.password});
+            commit('setToken', response.data.token);
+        },
+
+        /**
+         * Acción de autenticación con email.
+         * #param dispatch - Función de dispatch de Vuex
+         * #param payload - Carga útil para la autenticación
          */
 
-        async authenticationActionEmail({ commit }: Triggers, loginIdentifier: string): Promise<void> {
-            const response = await axios.post(`${uri}/auth/login/email`, { email: loginIdentifier });
-            commit('setToken', response.data.token);
+        async authenticationActionEmail({ dispatch }: Triggers, payload: LoginPayload): Promise<void> {
+            await dispatch('authenticate', { endpoint: '/auth/login/email', payload });
         },
 
         /**
          * Acción de autenticación con teléfono.
-         * #param commit - Función de commit de Vuex
-         * #param loginIdentifier - Teléfono para autenticación
+         * #param dispatch - Función de dispatch de Vuex
+         * #param payload - Carga útil para la autenticación
          */
 
-        async authenticationActionTelefono({ commit }: Triggers, loginIdentifier: string): Promise<void> {
-            const response = await axios.post(`${uri}/auth/login/tlfn`, { telefono: loginIdentifier });
-            commit('setToken', response.data.token);
+        async authenticationActionTelefono({ dispatch }: Triggers, payload: LoginPayload): Promise<void> {
+            await dispatch('authenticate', { endpoint: '/auth/login/tlfn', payload });
         },
 
         /**
          * Acción de autenticación con nombre de usuario.
-         * #param commit - Función de commit de Vuex
-         * #param loginIdentifier - Nombre de usuario para autenticación
+         * #param dispatch - Función de dispatch de Vuex
+         * #param payload - Carga útil para la autenticación
          */
 
-        async authenticationActionUsername({ commit }: Triggers, loginIdentifier: string): Promise<void> {
-            const response = await axios.post(`${uri}/auth/login/username`, { username: loginIdentifier });
-            commit('setToken', response.data.token);
+        async authenticationActionUsername({ dispatch }: Triggers, payload: LoginPayload): Promise<void> {
+            await dispatch('authenticate', { endpoint: '/auth/login/username', payload });
         },
     },   
 }

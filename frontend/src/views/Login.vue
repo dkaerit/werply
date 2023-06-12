@@ -11,9 +11,9 @@ const loginIdentifier = ref('');
 
 // Mapa de expresiones regulares y nombres de acciones
 const actionsMap = {
-  authenticationActionEmail: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  authenticationActionTelefono: /^\d+$/,
-  authenticationActionUsername: /.*/
+  "authenticationActionEmail": /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  "authenticationActionTelefono": /^\d+$/,
+  "authenticationActionUsername": /.*/
 };
 
 /**
@@ -24,8 +24,7 @@ const actionsMap = {
   const [action] = Object
   .entries(actionsMap)
   .find(([, regex]) => regex.test(loginIdentifier.value)) || ['authenticationActionUsername'];
-
-  store.dispatch(action, { value: loginIdentifier.value });
+  store.dispatch(action, {"identifier": loginIdentifier.value, "password": ""});
 };
 
 </script>

@@ -52,6 +52,7 @@ label.form-label {
 
   input {
       width:100%;
+      min-width: 250px;
       padding: 10px;
       background: transparent;
       border: 1px solid #4c5c5d;
@@ -59,7 +60,7 @@ label.form-label {
       outline: none;
       transition: 0.1s; 
       &:valid ~ span, &:focus ~ span  {
-          transform: translate(10px,-20px);
+          transform: translate(10px,-19px);
           font-size: 0.65em;
           padding: 0 5px;
           
