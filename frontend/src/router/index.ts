@@ -14,12 +14,6 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login.vue')
-  },
-  {
-    path: '/essentials',
-    name: 'Essentials',
-    //beforeEnter: guard,
-    component: () => import('../views/Essentials.vue')
   }
 ]
 

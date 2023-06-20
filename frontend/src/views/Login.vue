@@ -8,6 +8,7 @@ const store = useStore();
 
 // Getter y setter para el valor de userEmailOrTlfn en la store
 const loginIdentifier = ref('');
+const password = ref('');
 
 // Mapa de expresiones regulares y nombres de acciones
 const actionsMap = {
@@ -39,14 +40,17 @@ const actionsMap = {
 
     <div class="row" id="login-form">
       <h1 class="title">Inicia sesión en Werply</h1>
-      <p>Desata tu creatividad narrativa y construye historias inolvidables junto a otros personajes.</p>
+      <!--<p>Desata tu creatividad narrativa y construye historias inolvidables junto a otros personajes.</p>-->
 
       <div class="buttons">
         <SocialButton provider="google" type="primary" />
         <SocialButton provider="microsoft" type="primary" />
         <br/>
+        <hr/>
+        <br/>
         <form class="form" id="alternative-login" @submit.prevent="login">
-          <InputBox label="Teléfono, email o nombre de usuario" name="username" autocomplete="user" v-model="loginIdentifier" />
+          <InputBox label="Teléfono, email o nombre de usuario" name="username" v-model="loginIdentifier" />
+          <InputBox type="password" label="Password" name="password" v-model="password" />
           <button type="submit" class="primary">Siguiente</button>
           <button class="secondary" id="forgot-password">¿Olvidaste tu contraseña?</button>
         </form>
@@ -108,6 +112,10 @@ form#alternative-login {
     flex-direction: column;
     padding: 15px 7%;
     width: fit-content;
+}
+
+#additional-info {
+    min-width: max-content;
 }
 
 </style>

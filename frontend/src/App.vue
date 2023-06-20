@@ -54,6 +54,7 @@ button {
   font-size: 14px;
   font-weight: 500;
   font-family: inherit;
+  min-width: max-content;
   margin: 8px 0px 8px 0px;
   cursor: pointer;
   
@@ -78,5 +79,11 @@ h1 {
   line-height: 1.1;
 }
 
+hr {
+    border-bottom: 1px solid #292929;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+}
 
 </style>

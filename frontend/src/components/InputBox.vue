@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, defineEmits } from 'vue';
+import { computed, defineProps, defineEmits, onMounted } from 'vue';
 
 interface FormGroupProps {
   label: string;
@@ -59,11 +59,10 @@ label.form-label {
       border-radius:10px;
       outline: none;
       transition: 0.1s; 
-      &:valid ~ span, &:focus ~ span  {
+      &:valid ~ span, &:focus ~ span {
           transform: translate(10px,-20px);
           font-size: 0.65em;
-          padding: 0 5px;
-          
+          padding: 0 3px; // o 5px    
       }
       &:valid ~ span  { color: #28aaaa; }
       &:valid { border-color: #28aaaa;  }
@@ -85,9 +84,10 @@ label.form-label {
         left: 0;
         transform: translateY(-50%);
         width: 100%;
-        height: 3px;
+        height: 2px;
         background-color: #050608;
         z-index: -1;
+        border-radius: 10px;
       }
   }
 }
@@ -95,6 +95,18 @@ label.form-label {
 .form-control {
   /* Agrega tus estilos personalizados aquí */
   display: auto;
+}
+
+input[type="password"]::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 80px; /* Ajusta el tamaño de los círculos */
+  height: 80px; /* Ajusta el tamaño de los círculos */
+  border-radius: 50%;
+  background-color: #000; /* Cambia el color de los círculos */
 }
 </style>
   
