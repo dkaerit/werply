@@ -4,7 +4,7 @@ export interface AuthState {
 
 export interface LoginPayload {
     identifier: string;
-    passwd: string;
+    password: string;
 }
 
 export interface EndpointWithPayload { 

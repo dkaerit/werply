@@ -1,55 +1,18 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
-    "target": "esnext",
+    "target": "ESNext",
     "useDefineForClassFields": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "isolatedModules": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "strict": true,
     "jsx": "preserve",
-    "jsxFactory": "h",
-    "jsxFragmentFactory": "Fragment",
-    "sourceMap": true,
     "resolveJsonModule": true,
+    "isolatedModules": true,
     "esModuleInterop": true,
-    "paths": {
-      "@/*": ["src/*"],
-      "@layouts/*": ["src/@layouts/*"],
-      "@plugins/*": ["src/@plugins/*"],
-      "@layouts": ["src/@layouts"],
-      "@core/*": ["src/@core/*"],
-      "@core": ["src/@core"],
-      "@images/*": ["src/images/*"],
-      "@styles/*": ["src/styles/*"],
-      "@core-scss/*": ["src/styles/@core"]
-    },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ],
+    "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
-    "types": [
-      "vite/client",
-      "vite-plugin-pages/client",
-      "vite-plugin-vue-layouts/client"
-    ]
+    "noEmit": true
   },
-  "include": [
-    "vite.config.*",
-    "env.d.ts",
-    "shims.d.ts",
-    "resources/ts/**/*",
-    "resources/ts/**/*.vue",
-    "themeConfig.ts",
-    "auto-imports.d.ts",
-    "components.d.ts"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "resources/ts/@iconify/*"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
