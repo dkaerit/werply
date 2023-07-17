@@ -7,7 +7,9 @@
         :id="inputId"
         class="form-control"
         :name="name"
-        :autocomplete="autocomplete"
+        autocomplete="off"
+        onfocus="this.removeAttribute('readonly');"
+        readonly
         :value="modelValue"
         @input="updateValue($event)"
       />
@@ -23,7 +25,6 @@ interface FormGroupProps {
   label: string;
   type?: string;
   name?: string;
-  autocomplete?: string;
   modelValue?: string;
 }
 
@@ -60,7 +61,7 @@ label.form-label {
       outline: none;
       transition: 0.1s; 
       &:valid ~ span, &:focus ~ span {
-          transform: translate(10px,-20px);
+          transform: translate(0px,-20px);
           font-size: 0.65em;
           padding: 0 3px; // o 5px    
       }

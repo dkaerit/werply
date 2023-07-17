@@ -65,10 +65,10 @@ export default {
          * #param payload - Carga útil para la autenticación
          */
         
-        async authenticate(commit: Commit, { endpoint, payload }: EndpointWithPayload): Promise<void> {
+        async authenticate({ commit }: Triggers, { endpoint, payload }: EndpointWithPayload): Promise<void> {
             const field = fieldMapping[endpoint]; // fields "email", "tlfn" or "username"
             const response = await axios.post(`${uri}${endpoint}`, 
-            {[field]: payload.identifier, "passwd": payload.password});
+            {[field]: payload.identifier, "passwd": payload.passwd});
             commit('setToken', response.data.token);
         },
 

@@ -1,121 +1,112 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import InputBox from "../components/InputBox.vue";
-import SocialButton from "../components/SocialButton.vue";
-import { useStore } from 'vuex';
+import { ref, computed } from 'vue';
+import { useTheme } from 'vuetify'
 
-const store = useStore();
+const form = ref({
+  email: '',
+  password: '',
+  remember: false,
+})
 
-// Getter y setter para el valor de userEmailOrTlfn en la store
-const loginIdentifier = ref('');
-const password = ref('');
+const vuetifyTheme = useTheme()
+const authThemeMask = computed(() => vuetifyTheme.global.name.value === 'light'? '' : '');
 
-// Mapa de expresiones regulares y nombres de acciones
-const actionsMap = {
-  "authenticationActionEmail": /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  "authenticationActionTelefono": /^\d+$/,
-  "authenticationActionUsername": /.*/
-};
-
-/**
- * Función para manejar el evento de inicio de sesión
- * #returns void
- */
- const login = (): void => {
-  const [action] = Object
-  .entries(actionsMap)
-  .find(([, regex]) => regex.test(loginIdentifier.value)) || ['authenticationActionUsername'];
-  store.dispatch(action, {"identifier": loginIdentifier.value, "password": ""});
-};
+const isPasswordVisible = ref(false)
 
 </script>
 
 <template>
-  <div class="box" id="login-container">
-    <div class="row" id="logo-row">
-      <div class="logo-col col-xs-12">
-        <img src="/logo.svg" alt="Logo" class="logo"/>
-      </div>
+    <div class="auth-wrapper d-flex align-center justify-center pa-4">
+      <VCard
+        class="auth-card pa-4 pt-7"
+        max-width="448"
+      >
+        <VCardItem class="justify-center">
+          <template #prepend>
+            <div class="d-flex">
+              <div name="logo"></div>
+            </div>
+          </template>
+  
+          <VCardTitle class="font-weight-semibold text-2xl text-uppercase">Materio</VCardTitle>
+        </VCardItem>
+  
+        <VCardText class="pt-2">
+          <h5 class="text-h5 font-weight-semibold mb-1">Welcome to Materio! 👋🏻</h5>
+          <p class="mb-0">Please sign-in to your account and start the adventure</p>
+        </VCardText>
+  
+        <VCardText>
+          <VForm @submit.prevent="() => {}">
+            <VRow>
+              <!-- email -->
+              <VCol cols="12">
+                <VTextField v-model="form.email" label="Email" type="email"/>
+              </VCol>
+  
+              <!-- password -->
+              <VCol cols="12">
+                <VTextField
+                  v-model="form.password"
+                  label="Password"
+                  :type="isPasswordVisible ? 'text' : 'password'"
+                  :append-inner-icon="isPasswordVisible ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
+                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                />
+  
+                <!-- remember me checkbox -->
+                <div class="d-flex align-center justify-space-between flex-wrap mt-1 mb-4">
+                  <VCheckbox v-model="form.remember" label="Remember me"/>
+                  <a class="ms-2 mb-1" href="javascript:void(0)">Forgot Password?</a>
+                </div>
+  
+                <!-- login button -->
+                <VBtn block type="submit" to="/">Login</VBtn>
+              </VCol>
+  
+              <!-- create account -->
+              <VCol
+                cols="12"
+                class="text-center text-base"
+              >
+                <span>New on our platform?</span>
+                <RouterLink
+                  class="text-primary ms-2"
+                  to="/register"
+                >
+                  Create an account
+                </RouterLink>
+              </VCol>
+  
+              <VCol
+                cols="12"
+                class="d-flex align-center"
+              >
+                <VDivider />
+                <span class="mx-4">or</span>
+                <VDivider />
+              </VCol>
+  
+              <!-- auth providers -->
+              <VCol
+                cols="12"
+                class="text-center"
+              >
+                <AuthProvider />
+              </VCol>
+            </VRow>
+          </VForm>
+        </VCardText>
+      </VCard>
+  
+      <VImg class="auth-footer-start-tree d-none d-md-block" src="" :width="250"/>
+      <VImg src="" class="auth-footer-end-tree d-none d-md-block" :width="350"/>
+  
+      <!-- bg img -->
+      <VImg class="auth-footer-mask d-none d-md-block" :src="authThemeMask"/>
     </div>
-
-    <div class="row" id="login-form">
-      <h1 class="title">Inicia sesión en Werply</h1>
-      <!--<p>Desata tu creatividad narrativa y construye historias inolvidables junto a otros personajes.</p>-->
-
-      <div class="buttons">
-        <SocialButton provider="google" type="primary" />
-        <SocialButton provider="microsoft" type="primary" />
-        <br/>
-        <hr/>
-        <br/>
-        <form class="form" id="alternative-login" @submit.prevent="login">
-          <InputBox label="Teléfono, email o nombre de usuario" name="username" v-model="loginIdentifier" />
-          <InputBox type="password" label="Password" name="password" v-model="password" />
-          <button type="submit" class="primary">Siguiente</button>
-          <button class="secondary" id="forgot-password">¿Olvidaste tu contraseña?</button>
-        </form>
-        <div class="box" id="additional-info">
-          <span class="text">¿No tienes una cuenta?</span>
-          <a href="#" class="link">Regístrate</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
-
-<style scoped lang="scss">
-img.logo {
-  height: 35px;
-  margin: 15px;
-}
-
-.box#login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.logo-col {
-    display: flex;
-    justify-content: center;
-}
-
-#login-form {
-  display: flex;
-  justify-content: center;
-  padding: 0px 35px 35px 35px;
-  margin: 40px 0px 40px 0px;
-  flex-direction: column;
-  text-align: center;
-  max-width: 600px;
-  align-items: center;
-}
-
-#logo-row {
-    display: flex;
-    justify-content: center;
-}
-
-h1.title {
-  margin: 19px 0px 19px 0px;
-  font-size: 25px;
-}
-
-form#alternative-login {
-    display: flex;
-    flex-direction: column;
-}
-
-.buttons {
-    display: flex;
-    flex-direction: column;
-    padding: 15px 7%;
-    width: fit-content;
-}
-
-#additional-info {
-    min-width: max-content;
-}
-
-</style>
+  </template>
+  
+  <style lang="scss">
+  @use "@core-scss/pages/page-auth.scss";
+  </style>

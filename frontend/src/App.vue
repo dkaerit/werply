@@ -17,7 +17,9 @@
   color-scheme: dark;
   //color: rgba(255, 255, 255, 0.87);
   color:#a8aa9b;
-  background-color: #050608; // d) mezcla de a y c
+  //background-color: #050608; // darker++
+  background-color: #08090b;
+  // background-color: #0b0c0e;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -49,7 +51,7 @@ html {
 button {
   border-radius: 31px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  padding: 0.5em 1.2em;
   //font-size: 1em;
   font-size: 14px;
   font-weight: 500;
@@ -59,10 +61,11 @@ button {
   cursor: pointer;
   
   transition: border-color 0.25s;
-  &:hover { border-color: #64eaff; }
-  &:focus, &:focus-visible { outline: 4px auto -webkit-focus-ring-color; }
+  &:hover { border-color: #5cbfc9; }
+  //&:focus, &:focus-visible { outline: 4px auto -webkit-focus-ring-color; }
   &.primary { background: rgb(255, 255, 255); color: #000; }
   &.secondary { background: transparent; border-color: rgb(83, 112, 113); color: #fff; }
+  &.terciary { background: #4a9492; color: #fff; }
 }
 
 a {
