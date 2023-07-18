@@ -45,9 +45,7 @@ const actionsMap = {
       <div class="buttons">
         <SocialButton provider="google" type="primary" />
         <SocialButton provider="microsoft" type="primary" />
-        <br/>
         <hr/>
-        <br/>
         <form class="form" id="alternative-login" @submit.prevent="login">
           <InputBox label="Teléfono, email o nombre de usuario" name="username" v-model="loginIdentifier" />
           <InputBox type="password" label="Password" name="password" v-model="password" />

@@ -65,14 +65,14 @@ button {
   &.secondary { background: transparent; border-color: rgb(83, 112, 113); color: #fff; }
 }
 
-a {
+/*a {
   font-weight: 300;
   color: #64eaff;
   text-decoration: inherit;
   padding: 0px 5px;
   transition: 0.5s;
   &:hover { color: #97edfa; }
-}
+}*/
 
 h1 {
   color: rgb(255 255 255 / 93%);
@@ -86,5 +86,17 @@ hr {
     border-right: 0px;
 }
 
+button:focus, button:focus-visible {
+    outline: none;
+}
 
+// vuetify
+.v-btn {
+  text-transform: none!important;
+  letter-spacing: normal!important;
+}
+
+.v-btn__content {
+    padding-top: 1px;
+}
 </style>
