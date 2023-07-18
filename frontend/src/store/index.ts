@@ -14,8 +14,6 @@ const vuexLocal = new VuexPersistence({
 
 export const store = createStore({
   state: () => ({}),
-  mutations: {},
-  actions: {},
   modules: { AUTH },
   plugins: [vuexLocal.plugin]
 })
