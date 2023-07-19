@@ -1,5 +1,29 @@
 <script setup lang="ts">
+  import { ref, onMounted, onBeforeUnmount } from 'vue';
 
+  const isPhone = ref(true);
+  const isTablet = ref(false);
+  const isNetbook = ref(false);
+  const isLaptop = ref(false);
+  const isDesktop = ref(false);
+
+  const handleResize = () => {
+    const width = window.innerWidth;
+    isPhone.value = width >= 0;
+    isTablet.value = width >= 768;
+    isNetbook.value = width >= 992;
+    isLaptop.value = width >= 1200;
+    isDesktop.value = width >= 1820;
+  };
+
+  onMounted(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+  });
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('resize', handleResize);
+  });
 </script>
 
 <template>
@@ -12,86 +36,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800&display=swap');
 
 :root {
-  //color:var(--color-text);
-  //background-color: var(--color-background); // d) mezcla de a y c
-
-  //font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  //font-size: 15px;
-  //line-height: 24px;
-  //font-weight: 400;
-  //color-scheme: dark;
-  //color: rgba(255, 255, 255, 0.87);
-  
-  //font-synthesis: none;
-  //text-rendering: optimizeLegibility;
-  //-webkit-font-smoothing: antialiased;
-  //-moz-osx-font-smoothing: grayscale;
-  //-webkit-text-size-adjust: 100%;
-}
-
-body {
-  //margin: 0;
-  //display: flex;
-  //align-items: stretch;
-  //min-width: 320px;
-  //min-height: 100vh;
-  //justify-content: center;
-}
-
-* {
-  //font-family: 'Poppins', sans-serif;
-  //margin: 0;
-  //padding: 0;
-  //box-sizing: border-box;
-  //scroll-behavior: smooth;
-}
-
-html {
-  //&:focus-within { scroll-behavior: smooth; }
-} 
-
-button {
-  //border-radius: 31px;
-  //border: 1px solid transparent;
-  //padding: 0.6em 1.2em;
-  //font-size: 1em;
-  //font-size: 14px;
-  //font-weight: 500;
-  //font-family: inherit;
-  //min-width: max-content;
-  //margin: 8px 0px 8px 0px;
-  //cursor: pointer;
-  
-  //transition: border-color 0.25s;
-  //&:hover { border-color: #64eaff; }
-  //&:focus, &:focus-visible { outline: 4px auto -webkit-focus-ring-color; }
-  //&.primary { background: rgb(255, 255, 255); color: #000; }
-  //&.secondary { background: transparent; border-color: rgb(83, 112, 113); color: #fff; }
-}
-
-/*a {
-  font-weight: 300;
-  color: #64eaff;
-  text-decoration: inherit;
-  padding: 0px 5px;
-  transition: 0.5s;
-  &:hover { color: #97edfa; }
-}*/
-
-h1 {
-  //color: rgb(255 255 255 / 93%);
-  //line-height: 1.1;
-}
-
-hr {
-    //border-bottom: 1px solid #292929;
-    //border-top: 0px;
-    //border-left: 0px;
-    //border-right: 0px;
+  --v-theme-overlay-multiplier: 0.25!important;
 }
 
 button:focus, button:focus-visible {
-    outline: none;
+  outline: none;
+}
+
+.outlined {
+  border-color: rgba(var(--v-border-color), var(--v-border-opacity))!important;
+  &.ol-bottom { border-bottom-width: 1px!important; }
+  &.ol-top { border-top-width: 1px!important; }
+  &.ol-left { border-left-width: 1px!important; }
+  &.ol-right { border-right-width: 1px!important; }
 }
 
 // vuetify
@@ -102,5 +59,30 @@ button:focus, button:focus-visible {
 
 .v-btn__content {
     padding-top: 1px;
+}
+
+.neatify {
+  box-shadow: 
+  0 0px 9px -2px rgba(50, 71, 92, 0.02), 
+  0 0px 9px 1px rgba(50, 71, 92, 0.02), 
+  0 0px 6px 4px rgba(50, 71, 92, 0.02)!important;
+    border-radius: 16px;
+}
+
+.rounded-xl {
+  border-radius: 100%;
+}
+
+.v-list-item--variant-plain, 
+.v-list-item--variant-outlined, 
+.v-list-item--variant-text, 
+.v-list-item--variant-tonal {
+    padding-left: 14px!important;
+    &.v-list-item--variant-plain, 
+    &.v-list-item--variant-outlined, 
+    &.v-list-item--variant-text, 
+    &.v-list-item--variant-tonal {
+      font-size: 10px!important;
+    }
 }
 </style>

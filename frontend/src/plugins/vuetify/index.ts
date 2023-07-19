@@ -12,8 +12,7 @@ import { aliases as faAliases, fa } from 'vuetify/iconsets/fa'
 
 // Themes
 import 'vuetify/styles'
-import { darkTheme } from './themes/dark.theme'
-import { lightTheme } from './themes/light.theme'
+import { darkTheme, lightTheme } from './themes'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({

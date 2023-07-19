@@ -8,13 +8,13 @@ export default createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      redirect: (to:any) => ({ path: '/login', query: { q: to.params.searchText }})
+      name: 'root',
+      redirect: (to:any) => ({ path: '/home', query: { q: to.params.searchText }})
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/Login.vue')
+      path: '/home',
+      name: 'home',
+      component: () => import('../templates/views/Home.vue')
     }
   ]
 });
