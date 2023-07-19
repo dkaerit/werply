@@ -57,7 +57,7 @@ const getValidationRules = (identifier: string) => {
           <v-btn prepend-icon="fa:fa-brands fa-google" variant="flat" rounded xl>Iniciar sesión con Google</v-btn>
           <v-btn prepend-icon="fa:fa-brands fa-microsoft" variant="flat" rounded xl>Iniciar sesión con Microsoft</v-btn>
 
-          <hr/>
+          <!-- <hr/> -->
   
           <v-form class="form" id="alternative-login" @submit.prevent="login">
             <v-text-field v-model="loginIdentifier" :rules="getValidationRules(loginIdentifier)" label="Teléfono, email o nombre de usuario" name="username" variant="outlined"></v-text-field>
