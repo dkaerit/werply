@@ -1,6 +1,30 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useTheme } from 'vuetify'
+
+const isPhone = ref(true);
+const isTablet = ref(false);
+const isNetbook = ref(false);
+const isLaptop = ref(false);
+const isDesktop = ref(false);
+
+const handleResize = () => {
+  const width = window.innerWidth;
+  isPhone.value = width >= 0;
+  isTablet.value = width >= 768;
+  isNetbook.value = width >= 992;
+  isLaptop.value = width >= 1200;
+  isDesktop.value = width >= 1820;
+};
+
+onMounted(() => {
+  handleResize();
+  window.addEventListener('resize', handleResize);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
 
 // Función para sincronizar los desplazamientos
 const syncScroll = async () => {
@@ -50,7 +74,7 @@ const toggleTheme = () => theme.global.name.value = theme.global.current.value.d
         <v-container fluid>
           <v-row>
             <!-- Column 1 -->
-            <v-col id="col1" cols="8" class="pl-4 overflow-y-auto scrollable-container" 
+            <v-col id="col1" cols="sm-8 xs-12" class="pl-4 overflow-y-auto scrollable-container" 
             style="max-height: 90vh;" @scroll="syncScroll">
                 <v-sheet text="" class="neatify pa-5" color="surface" rounded xl>
                   <h3 class="mb-3">Card title</h3>
@@ -79,7 +103,7 @@ const toggleTheme = () => theme.global.name.value = theme.global.current.value.d
             </v-col>
 
             <!-- Column 2 -->
-            <v-col id="col2" cols="4" class="pr-4 overflow-y-auto scrollable-container" 
+            <v-col v-if="isDesktop" id="col2" cols="4" class="pr-4 overflow-y-auto scrollable-container" 
             style="max-height: 90vh;" @scroll="syncScroll">
             </v-col>
           </v-row>
