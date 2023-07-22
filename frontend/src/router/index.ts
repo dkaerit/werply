@@ -8,13 +8,17 @@ export default createRouter({
   routes: [
     {
       path: '/',
-      name: 'root',
-      redirect: (to:any) => ({ path: '/home', query: { q: to.params.searchText }})
+      redirect: '/home'
     },
     {
-      path: '/home',
-      name: 'home',
-      component: () => import('../templates/views/Home.vue')
+      path: '/',
+      component: () => import('../templates/layouts/WrappedLayout.vue'),
+      children: [
+        {
+          path: 'home',
+          component: () => import('../templates/views/Home.vue')
+        }
+      ]
     }
   ]
 });
