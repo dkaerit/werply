@@ -1,4 +1,10 @@
+@import '../variables/typography';
+
 .v-list-item {
 	padding-left: 14px !important;
 	font-size: 10px !important;
+}
+
+.v-list-item-title {
+	font-size: $text-default-px !important;
 }

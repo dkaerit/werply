@@ -1,62 +1,48 @@
-// Define the border color and opacity variables
-$prefix: 'outline';
-$directions: 'bot', 'top', 'lef', 'rig';
-$border-color: 0, 0, 0;
-$border-opacity: 0.5;
-
 // Mixin for setting border properties
-@mixin set-border($top, $rig, $bot, $lef) {
-  @if $top { border-top-width: 1px !important; }
-  @if $rig { border-right-width: 1px !important; }
-  @if $bot { border-bottom-width: 1px !important; }
-  @if $lef { border-left-width: 1px !important; }
-  border-color: rgba(var(--v-border-color, #{$border-color}), var(--v-border-opacity, #{$border-opacity})) !important;
-}
+@use '../reusables/border-mixin' as *;
+
+// Define the border color and opacity variables
+$prefix: "outline";
+$directions: "bot", "top", "lef", "rig";
 
 // Loop for unarias: top, bot, lef or rig
-@each $direction in $directions {
-  .#{$prefix}-#{$direction} {
-    @include set-border(
-      $direction == "top", 
-      $direction == "rig", 
-      $direction == "bot", 
-      $direction == "lef");
-  }
-}
-
-// Loop for binarias: top-lef, top-bot, top-rig, ... lef-rig, ...
 @each $dir1 in $directions {
-  @each $dir2 in $directions {
-    @if $dir1 != $dir2 {
-      .#{$prefix}-#{$dir1}-#{$dir2} {
-        @include set-border(
-         $dir1 == "top" or $dir2 == "top", 
-         $dir1 == "rig" or $dir2 == "rig", 
-         $dir1 == "bot" or $dir2 == "bot", 
-         $dir1 == "lef" or $dir2 == "lef");
-      }
-    }
-  }
-}
+	.#{$prefix}-#{$dir1} {
+		@include set-border(
+      $dir1 == "top", 
+      $dir1 == "rig", 
+      $dir1 == "bot", 
+      $dir1 == "lef");
+	}
 
-// Loop for ternarias: bot-lef-top, ... rig-top-lef, ...
-@each $dir1 in $directions {
-  @each $dir2 in $directions {
-    @each $dir3 in $directions {
-      @if $dir1 != $dir2 and $dir2 != $dir3 and $dir1 != $dir3 {
-        .#{$prefix}-#{$dir1}-#{$dir2}-#{$dir3} {
-          @include set-border(
-            $dir1 == "top" or $dir2 == "top" or $dir3 == "top", 
-            $dir1 == "rig" or $dir2 == "rig" or $dir3 == "rig",
-            $dir1 == "bot" or $dir2 == "bot" or $dir3 == "bot", 
-            $dir1 == "lef" or $dir2 == "lef" or $dir3 == "lef");
+  // Loop for binarias: top-lef, top-bot, top-rig, ... lef-rig, ...
+	@each $dir2 in $directions {
+		@if $dir1 != $dir2 {
+			.#{$prefix}-#{$dir1}-#{$dir2} {
+				@include set-border(
+          $dir1 == "top" or $dir2 == "top", 
+          $dir1 == "rig" or $dir2 == "rig", 
+          $dir1 == "bot" or $dir2 == "bot", 
+          $dir1 == "lef" or $dir2 == "lef");
+			}
+
+      // Loop for ternarias: bot-lef-top, ... rig-top-lef, ...
+      @each $dir3 in $directions {
+        @if $dir2 != $dir3 and $dir1 != $dir3 {
+          .#{$prefix}-#{$dir1}-#{$dir2}-#{$dir3} {
+            @include set-border(
+              $dir1 == "top" or $dir2 == "top" or $dir3 == "top", 
+              $dir1 == "rig" or $dir2 == "rig" or $dir3 == "rig", 
+              $dir1 == "bot" or $dir2 == "bot" or $dir3 == "bot", 
+              $dir1 == "lef" or $dir2 == "lef" or $dir3 == "lef");
+          }
         }
-      }
-    }
-  }
-}
+      } // end ternarias
+		} // end-if
+	} // end binarias
+} // end unarias
 
 // cuaternarias: bot-top-lef-rig, top-bot-lef-rig, rig-bot-lef-top, ...
 .#{$prefix}-all {
-   @include set-border(true, true, true, true);
- }
+	@include set-border(true, true, true, true);
+}
