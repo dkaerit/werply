@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import HorizontalNavbar from "./sublayouts/HorizontalNavbar.vue";
-import NavigationDrawer from "./sublayouts/NavigationDrawer.vue";
+import HorizontalNavbar from "./partials/HorizontalNavbar.vue";
+import NavigationDrawer from "./partials/NavigationDrawer.vue";
 </script>
 
 <template>

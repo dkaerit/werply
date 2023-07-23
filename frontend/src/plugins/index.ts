@@ -3,19 +3,15 @@
  * Automatically included in `./src/main.ts`
  */
 
-// Plugins
+import type { App } from 'vue'
 import { loadFonts } from './webfontloader'
 import vuetify from './vuetify'
 import router from '../router'
 //import pinia from '../store'
 
-// Types
-import type { App } from 'vue'
-
 export function registerPlugins (app: App) {
   loadFonts()
-  app
-  .use(vuetify)
-  .use(router)
+  app.use(vuetify)
+  app.use(router)
 //.use(pinia)
 }

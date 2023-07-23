@@ -7,7 +7,7 @@ const toggleTheme = () => (theme.global.name.value = theme.global.current.value.
 
 <template>
 	<!-- HORIZONTAL NAVBAR -->
-	<v-app-bar class="outlined ol-bottom" color="transparent" flat app fixed>
+	<v-app-bar class="outline-bot" color="transparent" flat app fixed>
 		<template v-slot:prepend>
 			<v-app-bar-nav-icon></v-app-bar-nav-icon>
 		</template>
