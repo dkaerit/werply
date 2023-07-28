@@ -3,16 +3,16 @@
 
 // Define the border color and opacity variables
 $prefix: "outline";
-$directions: "bot", "top", "lef", "rig";
+$directions: "bot", "top", "left", "right";
 
 // Loop for unarias: top, bot, lef or rig
 @each $dir1 in $directions {
 	.#{$prefix}-#{$dir1} {
 		@include set-border(
       $dir1 == "top", 
-      $dir1 == "rig", 
+      $dir1 == "right", 
       $dir1 == "bot", 
-      $dir1 == "lef");
+      $dir1 == "left");
 	}
 
   // Loop for binarias: top-lef, top-bot, top-rig, ... lef-rig, ...
@@ -21,9 +21,9 @@ $directions: "bot", "top", "lef", "rig";
 			.#{$prefix}-#{$dir1}-#{$dir2} {
 				@include set-border(
           $dir1 == "top" or $dir2 == "top", 
-          $dir1 == "rig" or $dir2 == "rig", 
+          $dir1 == "right" or $dir2 == "right", 
           $dir1 == "bot" or $dir2 == "bot", 
-          $dir1 == "lef" or $dir2 == "lef");
+          $dir1 == "left" or $dir2 == "left");
 			}
 
       // Loop for ternarias: bot-lef-top, ... rig-top-lef, ...
@@ -32,9 +32,9 @@ $directions: "bot", "top", "lef", "rig";
           .#{$prefix}-#{$dir1}-#{$dir2}-#{$dir3} {
             @include set-border(
               $dir1 == "top" or $dir2 == "top" or $dir3 == "top", 
-              $dir1 == "rig" or $dir2 == "rig" or $dir3 == "rig", 
+              $dir1 == "right" or $dir2 == "right" or $dir3 == "right", 
               $dir1 == "bot" or $dir2 == "bot" or $dir3 == "bot", 
-              $dir1 == "lef" or $dir2 == "lef" or $dir3 == "lef");
+              $dir1 == "left" or $dir2 == "left" or $dir3 == "left");
           }
         }
       } // end ternarias

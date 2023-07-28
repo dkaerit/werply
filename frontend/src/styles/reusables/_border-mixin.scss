@@ -2,9 +2,9 @@
 
 // Mixin for setting border properties
 @mixin set-border($top, $rig, $bot, $lef) {
-   @if $top { border-top-width: 1px !important; }
-   @if $rig { border-right-width: 1px !important; }
-   @if $bot { border-bottom-width: 1px !important; }
-   @if $lef { border-left-width: 1px !important; }
+   @if $top { border-top: 1px solid !important; }
+   @if $rig { border-right: 1px solid !important; }
+   @if $bot { border-bottom: 1px solid !important; }
+   @if $lef { border-left: 1px solid !important; }
    border-color: rgba(var(--v-border-color, #{$border-color}), var(--v-border-opacity, #{$border-opacity})) !important;
  }

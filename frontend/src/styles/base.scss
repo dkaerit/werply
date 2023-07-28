@@ -2,9 +2,12 @@
 @forward './overrides/v-sheet';
 @forward './overrides/v-btn';
 @forward './overrides/v-list';
+@forward './overrides/v-container';
+@forward './overrides/v-row';
 
 // utils
 @forward './utils/outlineds';
+@forward './utils/shapes';
 
 :root {
 	--v-theme-overlay-multiplier: 0.25 !important;

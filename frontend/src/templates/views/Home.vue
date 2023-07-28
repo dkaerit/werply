@@ -15,23 +15,25 @@ const syncScroll = async () => {
 </script>
 
 <template>
-	<v-container fluid>
+	<v-container class="pa-0">
 		<v-row>
 			<!-- Column 1 -->
-			<v-col id="col1" cols="md-8 12" class="pl-4 overflow-y-auto scrollable-container" style="max-height: 90vh" @scroll="syncScroll">
+			<v-col id="col1" cols="md-8 12" class="pa-0 overflow-y-auto scrollable-container" style="max-height: 90vh" @scroll="syncScroll">
 				<template v-for="index in 9">
-					<v-sheet class="shadowed pa-5 med-rounded" color="surface" xl>
+					<div fluid class="pa-5 outline-bot">
 						<h3 class="mb-3">Card title</h3>
 						Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!
-						<v-divider class="mt-3 mb-3"></v-divider>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem! </v-sheet
-					><br />
+						<br/><br/>
+						Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem! 
+					</div>
 				</template>
 			</v-col>
 
 			<!-- Column 2 -->
-			<v-col id="col2" class="d-none d-md-flex pr-4 overflow-y-auto scrollable-container" style="max-height: 90vh" @scroll="syncScroll">
-
+			<v-col id="col2" class="d-none outline-left d-md-flex pr-4 overflow-y-auto scrollable-container" style="min-height: 91.5vh" @scroll="syncScroll">
+				<v-container>
+					zxczczxc
+				</v-container>
 			</v-col>
 		</v-row>
 	</v-container>
