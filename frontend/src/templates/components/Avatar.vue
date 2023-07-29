@@ -1,17 +1,17 @@
 <template>
-	<svg class="squircle" viewBox="0 0 200 200">
+	<svg class="squircle" :width="size" :height="size" viewBox="0 0 200 200">
 		<defs>
-			<pattern id="squircle" patternUnits="userSpaceOnUse" width="200" height="200">
-				<image :xlink:href="gravatarUrl" x="0" y="0" width="200" height="200" />
+			<pattern :id="id.toString()" patternUnits="userSpaceOnUse" width="200" height="200">
+				<image :href="image" x="0" y="0" width="200" height="200" />
 			</pattern>
 		</defs>
 
-		<path d="M100,200c43.8,0,68.2,0,84.1-15.9C200,168.2,200,143.8,200,100s0-68.2-15.9-84.1C168.2,0,143.8,0,100,0S31.8,0,15.9,15.9C0,31.8,0,56.2,0,100s0,68.2,15.9,84.1C31.8,200,56.2,200,100,200z" fill="url(#squircle)" />
+		<path d="M100,200c43.8,0,68.2,0,84.1-15.9C200,168.2,200,143.8,200,100s0-68.2-15.9-84.1C168.2,0,143.8,0,100,0S31.8,0,15.9,15.9C0,31.8,0,56.2,0,100s0,68.2,15.9,84.1C31.8,200,56.2,200,100,200z" :fill="`url(#${id})`" />
 	</svg>
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, onMounted } from "vue";
+import { ref, defineProps, onBeforeMount } from "vue";
 
 const props = defineProps({
 	size: {
@@ -20,22 +20,49 @@ const props = defineProps({
 	},
 });
 
-const patternId = ref("");
-const gravatarUrl = ref("");
+const id = ref("");
+const image = ref("");
 
-function generateRandomId() {
-  var res = "";
-  for (let i = 0; i < 6; i++) {
-    res += Math.random().toString(36).substring(2, 8);
-  }
-  return res;
+async function generateRandomAlphanumeric() {
+  const minLength = 1;
+  const maxLength = 36;
+  const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
+
+  const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  return Array.from(
+    { length }, 
+    () => characters[Math.floor(Math.random() * characters.length)]
+  ).join('');
 }
 
-onMounted(() => {
-	patternId.value = generateRandomId();
-	//gravatarUrl.value = `https://www.gravatar.com/avatar/${patternId.value}?d=retro&f=y&s=128`;
-   gravatarUrl.value = `https://avatar.marktion.cn//api/avatar/${patternId.value}?t=window`;
-   
+async function generateRandomId() {
+	var res = "";
+	for (let i = 0; i < 6; i++) {
+		res += Math.random().toString(36).substring(2, 8);
+	}
+	return res;
+}
+
+function calculateNumericId(str:String, arrayLength:number) {
+  let numericId = 0;
+  for (let i = 0; i < str.length; i++) 
+    numericId += str.charCodeAt(i);
+
+  numericId %= arrayLength;
+  return numericId;
+}
+
+
+async function loadImages() {
+	const imageArray = Object.values(import.meta.glob("@/assets/avatares/*.png"));
+  id.value = await generateRandomAlphanumeric();
+  const nid = calculateNumericId(id.value, imageArray.length)
+	const loadedImage = await imageArray[nid]();
+	return (loadedImage as any)?.default || "";
+}
+
+onBeforeMount(async () => {
+	image.value = await loadImages();
 });
 </script>
 

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import HorizontalNavbar from "../layouts/sublayouts/HorizontalNavbar.vue";
 import NavigationDrawer from "../layouts/sublayouts/NavigationDrawer.vue";
+import Avatar from "../components/Avatar.vue";
+import Post from "@/templates/components/Post.vue";
 
 // Función para sincronizar los desplazamientos
 const syncScroll = async () => {
@@ -20,19 +22,17 @@ const syncScroll = async () => {
 			<!-- Column 1 -->
 			<v-col id="col1" cols="md-8 12" class="pa-0 overflow-y-auto scrollable-container" style="max-height: 90vh" @scroll="syncScroll">
 				<template v-for="index in 9">
-					<div fluid class="pa-5 outline-bot">
-						<h3 class="mb-3">Card title</h3>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!
-						<br/><br/>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem! 
-					</div>
+					<Post />
 				</template>
 			</v-col>
 
 			<!-- Column 2 -->
 			<v-col id="col2" class="d-none outline-left d-md-flex pr-4 overflow-y-auto scrollable-container" style="min-height: 91.5vh" @scroll="syncScroll">
 				<v-container>
-					zxczczxc
+					<div class="text-disabled text-body-2">
+						Condiciones de Servicio Política de Privacidad Política de cookies Accesibilidad Información de anuncios Más opciones<br />
+						© 2023 Werply.
+					</div>
 				</v-container>
 			</v-col>
 		</v-row>

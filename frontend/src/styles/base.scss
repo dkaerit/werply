@@ -9,6 +9,9 @@
 @forward './utils/outlineds';
 @forward './utils/shapes';
 
+// media
+@forward './media/media.default';
+
 :root {
 	--v-theme-overlay-multiplier: 0.25 !important;
 }
