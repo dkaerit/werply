@@ -12,11 +12,6 @@ El objetivo de Werply es proporcionar un entorno seguro y amigable para los jueg
     2. [Diagrama de secuencia](#diagrama_de_secuencia) 
     3. [Diagrama de componentes](#diagrama_de_componentes)
     4. [Diagrama de despliegue](#diagrama_de_despliegue)
-2. [Frontend](#fronted)
-    1. [Vistas](#views_frontend) 
-    2. [Testing](#testing_frontend)
-3. [Backend (nestjs)](https://github.com/dkaerit/nest-api-rest)
-
 
 <a name="diagramas"></a>
 ## 1. Diagramas
@@ -37,10 +32,3 @@ Se utiliza para modelar la estructura del sistema y cómo los componentes se rel
 <a name="diagrama_de_despliegue"></a>
 ###   1.4. Diagrama de despliegue
 Se utiliza para mostrar cómo los componentes del sistema se despliegan en el hardware y cómo se interconectan en la infraestructura de red. Proporciona una visión general de la arquitectura física del sistema.
-
-<a name="frontend"></a>
-## 2. Frontend
-
-<a name="testing_frontend"></a>
-###   2.1. Vistas
-###   3.2. Testing
