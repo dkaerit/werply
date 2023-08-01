@@ -7,6 +7,7 @@ export const darkTheme: ThemeDefinition = {
         surface: '#17181b',
         primary: '#47a6b6',
         secondary: '#ffffff',
+        inside: '#1a1b1f'
     }
 }
 
@@ -16,5 +17,6 @@ export const lightTheme: ThemeDefinition = {
        background: '#f4f5f5',
        surface: '#fcfcfc',
        primary: '#47a6b6',
+       inside: '#e6e7e9'
     }
 }
