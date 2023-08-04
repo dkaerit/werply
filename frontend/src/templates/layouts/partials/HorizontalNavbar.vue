@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import ToggleThemeButton from "@/templates/components/ToggleThemeButton.vue";
-import Avatar from "@/templates/components/Avatar.vue";
 import BtnMenu from "@/templates/components/BtnMenu.vue";
 import Searcher from "@/templates/components/Searcher.vue";
-
-import { ref } from "vue";
+import {ref} from 'vue';
 
 const drawer = ref(false);
-const tab = ref(null);
-const items = ref(['web', 'shopping', 'videos', 'images', 'news']);
+
 </script>
 
 <template>
@@ -18,7 +15,7 @@ const items = ref(['web', 'shopping', 'videos', 'images', 'news']);
 			<v-app-bar-nav-icon></v-app-bar-nav-icon>
 		</template>-->
 		<v-app-bar-nav-icon 
-		@click="drawer = true" 
+		@click="drawer = true"
 		class="d-flex d-sm-none" 
 		icon="fa:fa-solid fa-bars"
 		screen>
