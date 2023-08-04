@@ -14,7 +14,7 @@ export const darkTheme: ThemeDefinition = {
 export const lightTheme: ThemeDefinition = {
     dark: false,
     colors: {
-       background: '#f4f5f5',
+       background: '#f9fafa', // #f4f5f5
        surface: '#fcfcfc',
        primary: '#47a6b6',
        inside: '#e6e7e9'

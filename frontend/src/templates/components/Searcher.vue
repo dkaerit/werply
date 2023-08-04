@@ -8,7 +8,7 @@ const data = ["Manzana", "Banana", "Naranja", "Pera", "Uva"];
 <template>
   <v-autocomplete 
   clearable
-  class="searchbar" 
+  class="searchbar d-none d-sm-block" 
   prepend-inner-icon="mdi-magnify" 
   variant="flat"
   density="compact" 

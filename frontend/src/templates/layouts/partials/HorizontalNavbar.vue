@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { useTheme } from "vuetify";
+import ToggleThemeButton from "@/templates/components/ToggleThemeButton.vue";
 import Avatar from "@/templates/components/Avatar.vue";
 import BtnMenu from "@/templates/components/BtnMenu.vue";
 import Searcher from "@/templates/components/Searcher.vue";
 
-const theme = useTheme();
-const toggleTheme = () => (theme.global.name.value = theme.global.current.value.dark ? "lightTheme" : "darkTheme");
+import { ref } from "vue";
+
+const drawer = ref(false);
+const tab = ref(null);
+const items = ref(['web', 'shopping', 'videos', 'images', 'news']);
 </script>
 
 <template>
@@ -14,14 +17,23 @@ const toggleTheme = () => (theme.global.name.value = theme.global.current.value.
 		<!--<template v-slot:prepend>
 			<v-app-bar-nav-icon></v-app-bar-nav-icon>
 		</template>-->
+		<v-app-bar-nav-icon 
+		@click="drawer = true" 
+		class="d-flex d-sm-none" 
+		icon="fa:fa-solid fa-bars"
+		screen>
+		</v-app-bar-nav-icon>
+
 		<v-app-bar-title>Inicio</v-app-bar-title>
 		<v-spacer></v-spacer>
 		<Searcher />
 
 		<template v-slot:append>
-			<v-btn @click="toggleTheme" icon="fa:fa-solid fa-circle-half-stroke"></v-btn>
-			<!--<v-btn icon="mdi-dots-vertical"></v-btn>-->
-			<BtnMenu />
+			<BtnMenu>
+				<template #toogle-theme>
+					<ToggleThemeButton />
+				</template>
+			</BtnMenu>
 		</template>
 	</v-app-bar>
 </template>
@@ -30,5 +42,9 @@ const toggleTheme = () => (theme.global.name.value = theme.global.current.value.
 svg.iOS-svg {
 	height: 100px;
 	width: 100px;
+}
+
+i.fa-solid.fa-bars.v-icon.notranslate.v-icon--size-default {
+    font-size: 17px;
 }
 </style>
