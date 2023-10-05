@@ -9,22 +9,8 @@ El objetivo de Werply es proporcionar un entorno seguro y amigable para los jueg
 ## Tabla de contenidos
 1. [Diagrama de caso de uso](#diagrama_de_caso_de_uso)  
 
-<a name="diagramas"></a>
-## 1. Diagramas
 <a name="diagrama_de_caso_de_uso"></a>
-###   1.1. Diagrama de caso de uso
+##   1.1. Diagrama de caso de uso
 Los usuarios pueden iniciar y cerrar sesión en su cuenta, crear, eliminar y administrar personajes y comunidades de rol. Además, los usuarios pueden conectarse con otros personajes (segurise mutuamente) y ver y responder temas de rol iniciados en las comunidades a las que pertenecen. También pueden ver y añadir respuestas de rol en los espacios comunes de las comunidades. 
 
 <div align="center"><img src="https://user-images.githubusercontent.com/24440929/235326567-4a305984-f24e-469c-8dc5-3601acca1d08.png"/></div>
-
-<a name="diagrama_de_secuencia"></a>
-###   1.2. Diagrama de secuencia
-Se utiliza para modelar la interacción entre los objetos y las acciones que ocurren en un proceso. Proporciona una visión detallada de cómo se realizan las tareas dentro del sistema.
-
-<a name="diagrama_de_componentes"></a>
-###   1.3. Diagrama de componentes
-Se utiliza para modelar la estructura del sistema y cómo los componentes se relacionan entre sí. Proporciona una visión general de los componentes del sistema y cómo se interconectan.
-
-<a name="diagrama_de_despliegue"></a>
-###   1.4. Diagrama de despliegue
-Se utiliza para mostrar cómo los componentes del sistema se despliegan en el hardware y cómo se interconectan en la infraestructura de red. Proporciona una visión general de la arquitectura física del sistema.
