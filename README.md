@@ -7,11 +7,7 @@ La idea de Werply es ofrecer un entorno especializado para los juegos de rol esc
 El objetivo de Werply es proporcionar un entorno seguro y amigable para los juegos de rol escrito, fomentando la creación de historias y la conexión entre los usuarios en una comunidad dinámica y en constante evolución. Aunque la plataforma aún no se ha desarrollado como producto final, estamos trabajando en su desarrollo con una arquitectura de microservicios y tecnologías modernas, para garantizar un rendimiento rápido y fiable, así como funciones de seguridad y privacidad para proteger la información de los usuarios.
 
 ## Tabla de contenidos
-1. [Diagramas](#diagramas) 
-    1. [Diagrama de caso de uso](#diagrama_de_caso_de_uso)  
-    2. [Diagrama de secuencia](#diagrama_de_secuencia) 
-    3. [Diagrama de componentes](#diagrama_de_componentes)
-    4. [Diagrama de despliegue](#diagrama_de_despliegue)
+1. [Diagrama de caso de uso](#diagrama_de_caso_de_uso)  
 
 <a name="diagramas"></a>
 ## 1. Diagramas
