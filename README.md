@@ -4,8 +4,6 @@ Werply es una plataforma web que se propone como una solución integral para los
 
 La esencia de Werply se centra en el roleplay escrito, donde los usuarios pueden encarnar personajes y narrar acciones y diálogos en forma de publicaciones. Las interacciones ocurren cuando los personajes de diferentes usuarios responden y reaccionan a las acciones y diálogos de otros personajes, llevando a cabo una narrativa compartida. La plataforma también incorporará características especiales, como la posibilidad de utilizar dados y otras mecánicas de juego para enriquecer la experiencia de roleplay.
 
-El objetivo fundamental de Werply es proporcionar un entorno seguro y amigable que fomente la creatividad y la conexión entre los usuarios, en una comunidad dinámica y en constante evolución. Aunque la plataforma todavía se encuentra en desarrollo, se está trabajando en su implementación utilizando una arquitectura de microservicios y tecnologías modernas. Esto garantizará un rendimiento rápido y fiable, así como medidas de seguridad y privacidad para proteger la información de los usuarios.
-
 ## Tabla de contenidos
 1. [Diagrama de caso de uso](#diagrama_de_caso_de_uso)  
 
