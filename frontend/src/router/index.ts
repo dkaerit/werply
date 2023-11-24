@@ -16,7 +16,7 @@ export default createRouter({
       children: [
         {
           path: 'home',
-          component: () => import('../templates/views/Home.vue')
+          component: () => import('../templates/views/Home.vue'),
         }
       ]
     }

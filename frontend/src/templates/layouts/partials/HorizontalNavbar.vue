@@ -25,13 +25,14 @@ const drawer = ref(false);
 		<v-spacer></v-spacer>
 		<Searcher />
 
-		<template v-slot:append>
+		<!--<template v-slot:append>
 			<BtnMenu>
 				<template #toogle-theme>
 					<ToggleThemeButton />
 				</template>
 			</BtnMenu>
-		</template>
+		</template>-->
+		<ToggleThemeButton />
 	</v-app-bar>
 </template>
 

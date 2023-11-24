@@ -1,0 +1,8 @@
+.v-overlay__scrim {
+   background: #000000!important;
+   opacity: 0.75!important;
+ }
+
+ .v-overlay {
+  backdrop-filter: blur(5px);
+}
