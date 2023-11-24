@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from "vue";
+import { useStore } from "vuex";
 
 const isPhone = ref(true);
 const isTablet = ref(false);
 const isNetbook = ref(false);
 const isLaptop = ref(false);
 const isDesktop = ref(false);
+const store = useStore();
 
 const handleResize = () => {
 	const width = window.innerWidth;
@@ -19,6 +21,7 @@ const handleResize = () => {
 onMounted(() => {
 	handleResize();
 	window.addEventListener("resize", handleResize);
+	console.log(`Token de sesión: ${store.state.AUTH.token}`);
 });
 
 onBeforeUnmount(() => {

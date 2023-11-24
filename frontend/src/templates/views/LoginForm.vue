@@ -16,7 +16,12 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn class="closer-login rounded-xl" @click="closeLogin(); isActive.value = false"
+          <v-btn
+            class="closer-login rounded-xl"
+            @click="
+              closeLogin();
+              isActive.value = false;
+            "
             ><i class="fa-solid fa-xmark"></i
           ></v-btn>
         </v-card-actions>
@@ -101,7 +106,12 @@
               variant="text"
               density="compact"
               class="text-decoration-none text-cyan-lighten-3"
-              @click="{ isActive.value = false; $emit('toRegister'); }"
+              @click="
+                {
+                  isActive.value = false;
+                  $emit('toRegister');
+                }
+              "
               >Regístrate</v-btn
             >
           </v-col>
@@ -113,20 +123,40 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from "vue";
 import { useStore } from "vuex";
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter, useRoute } from "vue-router";
 
 // Define el estado isActive utilizando ref
 const email = ref("");
 const password = ref("");
 const router = useRouter();
 const route = useRoute();
+const store = useStore(); // Agrega esta línea para obtener acceso al store de Vuex
 
-const login = () => {
-  // Lógica de inicio de sesión con correo electrónico/usuario y contraseña
-  console.log("Iniciar sesión con:", email.value, "Contraseña:", password.value);
-  // Aquí debes agregar la lógica real de inicio de sesión
+// Mapa de expresiones regulares y nombres de acciones
+const actionsMap = {
+  AUTHENTICATION_ACTION_EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  AUTHENTICATION_ACTION_TELEFONO: /^\d+$/,
+  AUTHENTICATION_ACTION_USERNAME: /.*/,
+};
+
+const login = async () => {
+  try {
+    // Lógica de inicio de sesión con correo electrónico/usuario y contraseña
+
+    // Llama a la acción de autenticación del módulo de Vuex
+    await store.dispatch("AUTH/AUTHENTICATION_ACTION_EMAIL", {
+      identifier: email.value,
+      password: password.value,
+    });
+
+    // Muestra un alert con el token
+    //console.log(`Token de sesión: ${store.state.AUTH.token}`);
+  } catch (error) {
+    // Manejo de errores, por ejemplo, mostrar un mensaje de error
+    console.error("Error al iniciar sesión:", error);
+  }
 };
 
 const closeLogin = () => {

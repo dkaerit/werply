@@ -2,16 +2,16 @@ import axios from 'axios'
 import { Commit, Dispatch } from 'vuex'
 import { uri } from '../index';
 import { LoginPayload, EndpointWithPayload } from "./auth.interfaces"
-interface Triggers { commit:Commit, dispatch:Dispatch }
+interface Triggers { commit: Commit, dispatch: Dispatch }
 
 const fieldMapping: { [key: string]: string } = {
     '/auth/login/email': 'email',
     '/auth/login/tlfn': 'tlfn',
     '/auth/login/username': 'username',
-  };
+};
 
 export default {
-    namespaced: true, 
+    namespaced: true,
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                             //
@@ -31,13 +31,15 @@ export default {
 
     mutations: {
 
-       /**
-        * Mutación para establecer el token en el estado de la store.
-        * #param state - Estado de la store
-        * #param token - Token de autenticación
-        */
+        /**
+         * Mutación para establecer el token en el estado de la store.
+         * #param state - Estado de la store
+         * #param token - Token de autenticación
+         */
 
-       setToken: (state:any, token:string) => { state.token = token } 
+        setToken: (state: any, token: string) => {
+            state.token = token
+        }
     },
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,14 +48,14 @@ export default {
     //                                                                                             //
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    actions: { 
+    actions: {
 
         /**
          * Acción para desautenticar al usuario.
          * #param commit - Función de commit de Vuex
          */
 
-        async dismissAction({ commit }: Triggers): Promise<void> {
+        async DISMISS_ACTION({ commit }: Triggers): Promise<void> {
             await commit('setToken', undefined);
             location.reload();
         },
@@ -64,12 +66,15 @@ export default {
          * #param endpoint - Endpoint para la autenticación
          * #param payload - Carga útil para la autenticación
          */
-        
-        async authenticate({ commit }: Triggers, { endpoint, payload }: EndpointWithPayload): Promise<void> {
+
+        async AUTHENTICATE({ commit }: Triggers, { endpoint, payload }: EndpointWithPayload): Promise<void> {
             const field = fieldMapping[endpoint]; // fields "email", "tlfn" or "username"
-            const response = await axios.post(`${uri}${endpoint}`, 
-            {[field]: payload.identifier, "passwd": payload.password});
-            commit('setToken', response.data.token);
+            const response = await axios.post(`${uri}${endpoint}`,
+                { [field]: payload.identifier, "passwd": payload.password });
+
+            const token = response.data.token
+            //console.log("token(AUTHENTICATE)", token);
+            await commit('setToken', token);
         },
 
         /**
@@ -78,8 +83,8 @@ export default {
          * #param payload - Carga útil para la autenticación
          */
 
-        async authenticationActionEmail({ dispatch }: Triggers, payload: LoginPayload): Promise<void> {
-            await dispatch('authenticate', { endpoint: '/auth/login/email', payload });
+        async AUTHENTICATION_ACTION_EMAIL({ dispatch }: Triggers, payload: LoginPayload): Promise<void> {
+            await dispatch('AUTHENTICATE', { endpoint: '/auth/login/email', payload });
         },
 
         /**
@@ -88,8 +93,8 @@ export default {
          * #param payload - Carga útil para la autenticación
          */
 
-        async authenticationActionTelefono({ dispatch }: Triggers, payload: LoginPayload): Promise<void> {
-            await dispatch('authenticate', { endpoint: '/auth/login/tlfn', payload });
+        async AUTHENTICATION_ACTION_TELEFONO({ dispatch }: Triggers, payload: LoginPayload): Promise<void> {
+            await dispatch('AUTHENTICATE', { endpoint: '/auth/login/tlfn', payload });
         },
 
         /**
@@ -98,8 +103,8 @@ export default {
          * #param payload - Carga útil para la autenticación
          */
 
-        async authenticationActionUsername({ dispatch }: Triggers, payload: LoginPayload): Promise<void> {
-            await dispatch('authenticate', { endpoint: '/auth/login/username', payload });
+        async AUTHENTICATION_ACTION_USERNAME({ dispatch }: Triggers, payload: LoginPayload): Promise<void> {
+            await dispatch('AUTHENTICATE', { endpoint: '/auth/login/username', payload });
         },
-    },   
+    },
 }
