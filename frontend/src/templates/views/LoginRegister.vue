@@ -1,5 +1,5 @@
 <template>
-  <v-container class="login-register-poster">
+  <v-container v-if="!tokenSession" class="login-register-poster">
     <v-container class="login-register-poster">
       <v-row align="center">
         <v-col cols="0" md="8" class="login-register-caption hidden-sm-and-down text-left">
@@ -17,9 +17,11 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useStore } from "vuex";
+//import { useStore } from "vuex";
 import LoginForm from "./LoginForm.vue";
 import RegisterForm from "./RegisterForm.vue";
+
+const tokenSession = ref(localStorage.TokenSession);
 
 const toRegister = () => {
   document.getElementById('registerBtn')?.click();

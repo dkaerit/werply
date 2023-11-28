@@ -144,7 +144,6 @@ const actionsMap = {
 const login = async () => {
   try {
     // Lógica de inicio de sesión con correo electrónico/usuario y contraseña
-
     // Llama a la acción de autenticación del módulo de Vuex
     await store.dispatch("AUTH/AUTHENTICATION_ACTION_EMAIL", {
       identifier: email.value,

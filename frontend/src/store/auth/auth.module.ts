@@ -20,7 +20,7 @@ export default {
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     state: () => ({ // variables globales de la aplicación
-        token: undefined,
+        //token: undefined,
     }),
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,20 @@ export default {
          */
 
         setToken: (state: any, token: string) => {
-            state.token = token
+            //state.token = token
+            localStorage.setItem("TokenSession", token); //console.log("localStirage token sesion:", localStorage.TokenSession);
+            location.reload();
+        },
+
+        /**
+         * Mutación para desautenticar al usuario.
+         * #param commit - Función de commit de Vuex
+         */
+
+        dismissToken: (state: any) => {
+            //await commit('setToken', undefined);
+            localStorage.removeItem("TokenSession");
+            location.reload();
         }
     },
 
@@ -50,14 +63,17 @@ export default {
 
     actions: {
 
-        /**
-         * Acción para desautenticar al usuario.
-         * #param commit - Función de commit de Vuex
-         */
+        async DISMISS_TOKEN({ commit }: Triggers): Promise<void> {
+            await commit('dismissToken');
+        },
 
-        async DISMISS_ACTION({ commit }: Triggers): Promise<void> {
-            await commit('setToken', undefined);
-            location.reload();
+        async CHECK_TOKEN_EXPIRATION({ commit }: Triggers): Promise<void> {
+            const token = localStorage.TokenSession;
+            //console.log("CHECK_TOKEN_EXPIRATION (token)", token);
+            if (!token) return;
+            const response = await axios.get(`${uri}/auth/expiration`, { headers: { authorization: token } } );
+            //console.log("CHECK_TOKEN_EXPIRATION (response)", response.data);
+            if (response.data.expired) commit('dismissToken'); // if expired dismiss token
         },
 
         /**
