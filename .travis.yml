@@ -1,7 +1,7 @@
 # entorno de ejecución y versión
 language: node_js
 node_js:
-  - "20.9.0"
+  - node
 
 # aceleración de los procesos npm por caché
 cache:
@@ -12,6 +12,11 @@ cache:
 # No esperar a que todas las ejecuciones terminen
 matrix:
   - fast_finish: true
+
+before_install:
+  - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+  - nvm install 20
+  - nvm use 20
 
 include:
   # Backend setup
