@@ -39,7 +39,7 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-        working-directory: ${{pwd}}/${{ matrix.path }}
+        working-directory: ${{ matrix.path }}
 
       - name: Run Tests
         run: npm run test
