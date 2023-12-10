@@ -1,7 +1,7 @@
 # entorno de ejecución y versión
 language: node_js
 node_js:
-  - node@20
+  - "20.9.0"
 
 # aceleración de los procesos npm por caché
 cache:
