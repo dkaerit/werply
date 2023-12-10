@@ -2,13 +2,17 @@
   <v-container v-if="!tokenSession" class="login-register-poster">
     <v-container class="login-register-poster">
       <v-row align="center">
-        <v-col cols="0" md="8" class="login-register-caption hidden-sm-and-down text-left">
+        <v-col
+          cols="0"
+          md="8"
+          class="login-register-caption hidden-sm-and-down text-left"
+        >
           <h2>¡A qué esperas para unirte!</h2>
           <p>Los usuarios de werply siempre encuentran con quien rolear</p>
         </v-col>
         <v-col cols="12" md="4" class="col-buttons-login-register">
-          <LoginForm @to-register="toRegister()"/>
-          <RegisterForm @to-login="toLogin()"/>
+          <LoginForm @to-register="toRegister()" />
+          <RegisterForm @to-login="toLogin()" />
         </v-col>
       </v-row>
     </v-container>
@@ -20,16 +24,20 @@ import { ref } from "vue";
 //import { useStore } from "vuex";
 import LoginForm from "./LoginForm.vue";
 import RegisterForm from "./RegisterForm.vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const tokenSession = ref(localStorage.TokenSession);
 
 const toRegister = () => {
-  document.getElementById('registerBtn')?.click();
-}
+  document.getElementById("registerBtn")?.click();
+  router.push({ query: { form: "register" } });
+};
 
 const toLogin = () => {
-  document.getElementById('loginBtn')?.click();
-}
+  document.getElementById("loginBtn")?.click();
+  router.push({ query: { form: "login" } });
+};
 </script>
 
 <style scoped lang="scss">

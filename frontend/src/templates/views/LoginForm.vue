@@ -6,6 +6,8 @@
         variant="outlined"
         v-bind="props"
         class="w-auto ma-2 rounded-xl flex-grow-1"
+        data-testid="open-login-form-btn"
+        @click="toLogin"
         >Iniciar sesión</v-btn
       >
     </template>
@@ -34,6 +36,7 @@
             <v-text-field
               v-model="email"
               label="Correo electrónico, nombre de usuario o teléfono"
+              data-test="id-login"
               variant="outlined"
               required
             ></v-text-field>
@@ -41,6 +44,7 @@
               v-model="password"
               label="Contraseña"
               type="password"
+              data-test="password-login"
               variant="outlined"
               required
             ></v-text-field>
@@ -133,6 +137,10 @@ const password = ref("");
 const router = useRouter();
 const route = useRoute();
 const store = useStore(); // Agrega esta línea para obtener acceso al store de Vuex
+
+const toLogin = () => {
+  router.push({ query: { form: "login" } });
+};
 
 // Mapa de expresiones regulares y nombres de acciones
 const actionsMap = {

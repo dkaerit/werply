@@ -4,13 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "vite",
     "start:dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "cypress run",
+    "test:open": "cypress open"
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
     "axios": "^1.1.3",
+    "cypress": "^13.6.1",
     "dotenv": "^16.1.4",
     "roboto-fontface": "*",
     "vue": "^3.2.41",

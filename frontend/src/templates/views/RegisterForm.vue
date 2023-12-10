@@ -5,6 +5,7 @@
         id="registerBtn"
         variant="flat"
         v-bind="props"
+        @click="toRegister"
         class="w-auto ma-2 rounded-xl bg-white flex-grow-1"
         >Registrarse</v-btn
       >
@@ -18,7 +19,10 @@
 
           <v-btn
             class="closer-login-register rounded-xl"
-            @click="{ isActive.value = false; }"
+            @click="
+              closeRegister();
+              isActive.value = false;
+            "
             ><i class="fa-solid fa-xmark"></i
           ></v-btn>
         </v-card-actions>
@@ -88,7 +92,12 @@
               ariant="text"
               density="compact"
               class="text-decoration-none text-cyan-lighten-3"
-              @click="{ isActive.value = false;  $emit('toLogin');}"
+              @click="
+                {
+                  isActive.value = false;
+                  $emit('toLogin');
+                }
+              "
               >Inicia sesión</v-btn
             >
           </v-col>
@@ -100,10 +109,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, } from "vue";
+import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
 const email = ref("");
 const password = ref("");
+const router = useRouter();
+const route = useRoute();
+
+const toRegister = () => {
+  router.push({ query: { form: "register" } });
+};
 
 const login = () => {
   // Lógica de inicio de sesión con correo electrónico/usuario y contraseña
@@ -115,6 +131,12 @@ const loginWithGoogle = () => {
   // Lógica de inicio de sesión con Google
   console.log("Iniciar sesión con Google");
   // Aquí debes agregar la lógica real de inicio de sesión con Google
+};
+
+const closeRegister = () => {
+  const currentParams = { ...route.query }; // Copia de los parámetros actuales
+  delete currentParams.form; // Elimina el parámetro 'form' (puede ser 'register' o 'login')
+  router.push({ query: currentParams, replace: true });
 };
 </script>
 
