@@ -29,7 +29,11 @@ jobs:
 
       - name: Install Backend Dependencies
         working-directory: 'backend'
-        run: npm install
+        run: |
+          ls
+          ls ..
+          ls ../..
+          npm install
 
       - name: Run Backend Tests
         run: npm run test
@@ -48,8 +52,16 @@ jobs:
 
       - name: Install Frontend Dependencies
         working-directory: 'frontend'
-        run: npm install
+        run: |
+          ls
+          ls ..
+          ls ../..
+          npm install
 
       - name: Run Frontend Tests
         working-directory: 'frontend'
-        run: npm run test:e2e
+        run: |
+          ls
+          ls ..
+          ls ../..
+          npm run test:e2e
