@@ -28,7 +28,9 @@ jobs:
 
       - name: Install Backend Dependencies
         run: |
+          pwd
           cd backend
+          pwd
           npm install
 
       - name: Run Backend Tests
@@ -48,7 +50,9 @@ jobs:
 
       - name: Install Frontend Dependencies
         run: |
+          pwd
           cd frontend
+          pwd
           npm install
 
       - name: Run Frontend Tests
