@@ -1,4 +1,0 @@
-# entorno de ejecución y versión
-language: node_js
-node_js:
-  - node
