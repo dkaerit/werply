@@ -24,14 +24,12 @@ jobs:
           node-version: 20
 
       - name: Install NestJS CLI
+        working-directory: 'backend'
         run: npm install -g @nestjs/cli
 
       - name: Install Backend Dependencies
-        run: |
-          pwd
-          cd backend
-          pwd
-          npm install
+        working-directory: 'backend'
+        run: npm install
 
       - name: Run Backend Tests
         run: npm run test
@@ -49,11 +47,9 @@ jobs:
           node-version: 20
 
       - name: Install Frontend Dependencies
-        run: |
-          pwd
-          cd frontend
-          pwd
-          npm install
+        working-directory: 'frontend'
+        run: npm install
 
       - name: Run Frontend Tests
+        working-directory: 'frontend'
         run: npm run test:e2e
