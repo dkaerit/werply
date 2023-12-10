@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout (Copy) repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Debug Directory Structure
         run: |
@@ -31,7 +31,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - name: Install NestJS CLI
         if: matrix.path == 'backend'
