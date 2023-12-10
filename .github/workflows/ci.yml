@@ -1,4 +1,4 @@
-name: CI (jest & cypress)
+name: CI/CD (jest & cypress)
 
 on:
   push:
@@ -30,10 +30,10 @@ jobs:
       - name: Install Backend Dependencies
         working-directory: 'backend'
         run: |
+          pwd
           ls
-          ls ..
-          ls ../..
-          npm install
+          cd ..
+          ls
 
       - name: Run Backend Tests
         run: npm run test
@@ -53,10 +53,10 @@ jobs:
       - name: Install Frontend Dependencies
         working-directory: 'frontend'
         run: |
+          pwd
           ls
-          ls ..
-          ls ../..
-          npm install
+          cd ..
+          ls
 
       - name: Run Frontend Tests
         working-directory: 'frontend'
