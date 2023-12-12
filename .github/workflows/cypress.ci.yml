@@ -24,10 +24,7 @@ jobs:
         run: npm install -g @nestjs/cli
 
       - name: Debug Environment Variables
-        run: |
-          echo "TOKEN_SECRET=${{ secrets.TOKEN_SECRET }}"
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}"
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
+        run: env
 
       - name: Install Backend Dependencies and Start 
         working-directory: nest-api-rest
