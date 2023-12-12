@@ -55,7 +55,6 @@ jobs:
         uses: cypress-io/github-action@v3
         with:
           working-directory: frontend
-          project: ./frontend
           browser: chrome
           start: npm run start
           wait-on: "http://localhost:8080"
@@ -63,3 +62,4 @@ jobs:
       - name: Run Tests
         working-directory: frontend
         run: npm run test
+
