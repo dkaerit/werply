@@ -27,10 +27,12 @@ jobs:
         run: npm install
 
       - name: Clone or Update Backend Repository
-        run: git clone https://github.com/dkaerit/nest-api-rest.git:backend
+        run: |
+          git clone https://github.com/dkaerit/nest-api-rest.git
+          ls
 
       - name: Start Backend
-        working-directory: backend
+        working-directory: nest-api-rest
         run: npm run start
 
       - name: Wait for Backend
