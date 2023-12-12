@@ -9,7 +9,7 @@ env:
   NODE_VERSION: 20
 
 jobs:
-  install_dependencies:
+  backend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout/Copy Repository
@@ -29,43 +29,26 @@ jobs:
       - name: Install Backend Dependencies
         working-directory: nest-api-rest
         run: npm install
+          
+      - name: Start Backend Server
+        working-directory: nest-api-rest
+        run: npm run start &
+
+  frontend:
+    needs: backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout/Copy Repository
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Frontend Dependencies
         working-directory: frontend
         run: npm install
-
-      - name: Archive Dependencies
-        uses: actions/upload-artifact@v2
-        with:
-          name: dependencies
-          path: |
-            nest-api-rest/node_modules
-            frontend/node_modules
-
-  backend:
-    needs: install_dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Dependencies
-        uses: actions/download-artifact@v2
-        with:
-          name: dependencies
-          
-      - name: Start Backend Server
-        working-directory: nest-api-rest
-        run: npm run start
-
-  frontend:
-    needs: install_dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for Backend
-        run: wait-for-it -t 0 localhost:3000
-
-      - name: Download Dependencies
-        uses: actions/download-artifact@v2
-        with:
-          name: dependencies
 
       - name: Cypress run
         uses: cypress-io/github-action@v3
