@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  cypress-unit-testing:
+  backend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -17,25 +17,42 @@ jobs:
         with:
           node-version: 20
 
-      - name: Clone or Update Backend Repository
+      - name: Clone Backend Repository
         run: git clone https://github.com/dkaerit/nest-api-rest.git
 
       - name: Install NestJS CLI
         run: npm install -g @nestjs/cli
 
-      - name: Install Backend Dependencies and Start 
+      - name: Install Backend Dependencies
         working-directory: nest-api-rest
         env:
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: | 
-          npm install
-          npm run start
+        run: npm install
+
+      - name: Start Backend Server
+        working-directory: nest-api-rest
+        run: npm run start
+
+  frontend:
+    needs: backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 14
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14
 
       - name: Install Frontend Dependencies
         working-directory: frontend
         run: npm install
+
+      - name: Wait for Backend
+        run: wait-for-it -t 0 localhost:3000
 
       - name: Cypress run
         uses: cypress-io/github-action@v3
@@ -47,6 +64,5 @@ jobs:
 
       - name: Run Tests
         working-directory: frontend
-        run: 
-          wait-for-it -t 0 localhost:3000
-          npm run test
+        run: npm run test
+
