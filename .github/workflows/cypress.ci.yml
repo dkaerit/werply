@@ -23,9 +23,6 @@ jobs:
       - name: Install NestJS CLI
         run: npm install -g @nestjs/cli
 
-      - name: Debug Environment Variables
-        run: env.Database
-
       - name: Install Backend Dependencies and Start 
         working-directory: nest-api-rest
         env:
