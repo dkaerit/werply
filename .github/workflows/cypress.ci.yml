@@ -8,13 +8,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        path: ['frontend']
+    env:
+      TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
     steps:
-      - name: Checkout (Copy) repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Set up Node.js
@@ -22,10 +22,31 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Dependencies
+      - name: Install Frontend Dependencies
+        working-directory: frontend
         run: npm install
-        working-directory: ${{ matrix.path }}
+
+      - name: Clone or Update Backend Repository
+        working-directory: backend
+        run: git pull
+
+      - name: Start Backend
+        working-directory: backend
+        run: npm run start
+
+      - name: Wait for Backend
+        working-directory: frontend
+        run: wait-for-it -t 0 localhost:3000
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v3
+        with:
+          project: ./frontend
+          browser: chrome
+          start: npm run start
+          wait-on: "http://localhost:8080"
 
       - name: Run Tests
+        working-directory: frontend
         run: npm run test
-        working-directory: ${{ matrix.path }}
+
