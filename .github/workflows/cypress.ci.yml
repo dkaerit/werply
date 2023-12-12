@@ -5,17 +5,24 @@ on:
     branches:
       - main
 
+env:
+  NODE_VERSION: 20
+
 jobs:
-  backend:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Use Node.js 20
+  install_dependencies:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Clone Backend Repository
         run: git clone https://github.com/dkaerit/nest-api-rest.git
@@ -23,36 +30,37 @@ jobs:
       - name: Install NestJS CLI
         run: npm install -g @nestjs/cli
 
-      - name: Install Backend Dependencies
-        working-directory: nest-api-rest
-        env:
-          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      - name: Install Dependencies
         run: npm install
+        working-directory: ${{ github.job == 'backend' && 'nest-api-rest' || 'frontend' }}
 
+      - name: Archive Dependencies
+        uses: actions/upload-artifact@v2
+        with:
+          name: dependencies
+          path: |
+            nest-api-rest/node_modules
+            frontend/node_modules
+
+  backend:
+    needs: install_dependencies
+    runs-on: ubuntu-latest
+    steps:
       - name: Start Backend Server
         working-directory: nest-api-rest
         run: npm run start
 
   frontend:
-    needs: backend
+    needs: install_dependencies
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Use Node.js 14
-        uses: actions/setup-node@v4
-        with:
-          node-version: 14
-
-      - name: Install Frontend Dependencies
-        working-directory: frontend
-        run: npm install
-
       - name: Wait for Backend
         run: wait-for-it -t 0 localhost:3000
+
+      - name: Download Dependencies
+        uses: actions/download-artifact@v2
+        with:
+          name: dependencies
 
       - name: Cypress run
         uses: cypress-io/github-action@v3
@@ -65,4 +73,3 @@ jobs:
       - name: Run Tests
         working-directory: frontend
         run: npm run test
-
