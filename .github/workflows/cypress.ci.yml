@@ -28,7 +28,11 @@ jobs:
         run: git clone https://github.com/dkaerit/nest-api-rest.git
 
       - name: Install NestJS CLI
-        run: npm install -g @nestjs/cli
+        run: |
+          npm install -g @nestjs/cli
+          ls
+          ls nest-api-rest
+          ls frontend
 
       - name: Install Dependencies
         run: npm install
