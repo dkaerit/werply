@@ -24,9 +24,10 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v3
         with:
-          project: ./frontend
           browser: chrome
-          start: npm run start
+          start: |
+            cd frontend
+            npm run start
           wait-on: "http://localhost:8080"
 
       - name: Run Tests
