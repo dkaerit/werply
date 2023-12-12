@@ -48,11 +48,6 @@
               variant="outlined"
               required
             ></v-text-field>
-            <!--<p class="login-caption mb-5 text-center">
-               Al hacer clic en el botón para seguir adelante con el resto de opciones a
-               continuación, aceptas las Condiciones de uso y confirmas que has leído la
-               Política de privacidad de Werply
-             </p>-->
             <v-btn type="submit" class="w-100" color="primary">Siguiente</v-btn>
             <!-- Forgot Password Link -->
             <v-row class="mt-2">

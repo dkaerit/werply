@@ -65,10 +65,6 @@ const logout = async () => {
         value="Configuration"
         class="rounded-xl"
       />
-
-      <!--<v-lit-item>
-				<v-btn prepend-icon="fa:fa-regular fa-pen-to-square" color="primary" variant="flat" block rounded xl> Button </v-btn>
-			</v-lit-item>-->
     </v-list>
   </v-navigation-drawer>
 </template>

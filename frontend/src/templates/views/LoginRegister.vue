@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-//import { useStore } from "vuex";
 import LoginForm from "./LoginForm.vue";
 import RegisterForm from "./RegisterForm.vue";
 import { useRouter } from "vue-router";

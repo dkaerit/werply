@@ -39,7 +39,7 @@ export default {
 
         setToken: (state: any, token: string) => {
             //state.token = token
-            localStorage.setItem("TokenSession", token); //console.log("localStirage token sesion:", localStorage.TokenSession);
+            localStorage.setItem("TokenSession", token); 
             location.reload();
         },
 
@@ -49,7 +49,6 @@ export default {
          */
 
         dismissToken: (state: any) => {
-            //await commit('setToken', undefined);
             localStorage.removeItem("TokenSession");
             location.reload();
         }
@@ -69,10 +68,8 @@ export default {
 
         async CHECK_TOKEN_EXPIRATION({ commit }: Triggers): Promise<void> {
             const token = localStorage.TokenSession;
-            //console.log("CHECK_TOKEN_EXPIRATION (token)", token);
             if (!token) return;
             const response = await axios.get(`${uri}/auth/expiration`, { headers: { authorization: token } } );
-            //console.log("CHECK_TOKEN_EXPIRATION (response)", response.data);
             if (response.data.expired) commit('dismissToken'); // if expired dismiss token
         },
 
@@ -89,7 +86,6 @@ export default {
                 { [field]: payload.identifier, "passwd": payload.password });
 
             const token = response.data.token
-            //console.log("token(AUTHENTICATE)", token);
             await commit('setToken', token);
         },
 
