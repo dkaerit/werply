@@ -5,66 +5,21 @@ on:
     branches:
       - main
 
-env:
-  NODE_VERSION: 20
-
 jobs:
-  setup:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-  install_dependencies:
-    runs-on: ubuntu-latest
-    needs: setup
-    steps:
-      - name: Use Node.js ${{ env.NODE_VERSION }}
+      - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 20
 
-      - name: Clone Backend Repository
-        run: git clone https://github.com/dkaerit/nest-api-rest.git
-
-      - name: Install NestJS CLI
-        run: |
-          npm install -g @nestjs/cli
-          ls
-          ls nest-api-rest
-          ls frontend
-
-      - name: Install Dependencies
+      - name: Install Frontend Dependencies
+        working-directory: frontend
         run: npm install
-        working-directory: ${{ github.job == 'backend' && 'nest-api-rest' || 'frontend' }}
-
-      - name: Archive Dependencies
-        uses: actions/upload-artifact@v2
-        with:
-          name: dependencies
-          path: |
-            nest-api-rest/node_modules
-            frontend/node_modules
-
-  backend:
-    needs: install_dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: Start Backend Server
-        working-directory: nest-api-rest
-        run: npm run start
-
-  frontend:
-    needs: install_dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for Backend
-        run: wait-for-it -t 0 localhost:3000
-
-      - name: Download Dependencies
-        uses: actions/download-artifact@v2
-        with:
-          name: dependencies
 
       - name: Cypress run
         uses: cypress-io/github-action@v3
@@ -76,4 +31,8 @@ jobs:
 
       - name: Run Tests
         working-directory: frontend
-        run: npm run test
+        run: 
+          wait-for-it -t 0 localhost:3000
+          npm run test
+
+
