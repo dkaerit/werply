@@ -26,6 +26,14 @@ jobs:
       - name: Install Backend Dependencies
         working-directory: nest-api-rest
         run: npm install
+
+      - name: Run Tests
+        working-directory: nest-api-rest
+        env:
+          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: npm run test
           
       - name: Start Backend Server
         working-directory: nest-api-rest
