@@ -8,21 +8,14 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
-
 
       - name: Clone or Update Backend Repository
         run: git clone https://github.com/dkaerit/nest-api-rest.git
@@ -30,8 +23,18 @@ jobs:
       - name: Install NestJS CLI
         run: npm install -g @nestjs/cli
 
+      - name: Debug Environment Variables
+        run: |
+          echo "TOKEN_SECRET=${{ secrets.TOKEN_SECRET }}"
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}"
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
+
       - name: Install Backend Dependencies and Start 
         working-directory: nest-api-rest
+        env:
+          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: | 
           npm install
           npm run start
