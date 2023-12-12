@@ -9,9 +9,8 @@ env:
   NODE_VERSION: 20
 
 jobs:
-  install-dependencies:
+  install_dependencies:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Checkout/Copy Repository
         uses: actions/checkout@v3
