@@ -28,7 +28,7 @@ jobs:
 
       - name: Clone or Update Backend Repository
         working-directory: backend
-        run: git pull
+        run: git clone git@github.com:dkaerit/nest-api-rest.git .
 
       - name: Start Backend
         working-directory: backend
