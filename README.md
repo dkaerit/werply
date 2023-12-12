@@ -1,6 +1,5 @@
 # Werply (We roleplay!)
 
-[![Coverage Status](https://coveralls.io/repos/github/dkaerit/werply/badge.svg?branch=main)](https://coveralls.io/github/dkaerit/werply?branch=main)
 ![Tests: Jest & Cypress](https://github.com/dkaerit/werply/actions/workflows/cypress.ci.yml/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dkaerit_werply&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=dkaerit_werply)
 
