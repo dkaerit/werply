@@ -1,9 +1,5 @@
 name: CI Cypress - Testing e2e
-
-on:
-  push:
-    branches:
-      - main
+on: ["push"]
 
 jobs:
   backend:
@@ -70,4 +66,7 @@ jobs:
       - name: Run Tests
         working-directory: frontend
         run: npm run test
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
 

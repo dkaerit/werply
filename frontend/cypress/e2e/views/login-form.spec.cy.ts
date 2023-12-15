@@ -3,6 +3,7 @@ const testUser = {
   password: 'testpassword',
 };
 
+// @ts-ignore-start
 describe('LoginForm', () => {
   it('should login successfully', () => {
     cy.visit('/'); // Ajusta la ruta según la configuración de tu proyecto
@@ -22,6 +23,6 @@ describe('LoginForm', () => {
       const params = new URLSearchParams(url);
       expect(params.get('form')).to.be.null; // Asegúrate de que 'form' ya no esté presente
     });
-    
   });
 });
+// @ts-ignore-end
