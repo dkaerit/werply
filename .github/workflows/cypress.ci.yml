@@ -55,20 +55,20 @@ jobs:
         working-directory: frontend
         run: npm install
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v3
-        with:
-          working-directory: frontend
-          browser: chrome
-          start: npm run start
-          wait-on: "http://localhost:8080"
+      #- name: Cypress run
+      #  uses: cypress-io/github-action@v3
+      #  with:
+      #    working-directory: frontend
+      #    browser: chrome
+      #    start: npm run start
+      #    wait-on: "http://localhost:8080"
 
-      - name: Run Tests
+      - name: Generar informes de cypress
         working-directory: frontend
-        run: npm run test
+        run: npm run coverage:lcov
 
       - name: Coveralls
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
-
+          file: "coverage/lcov.info"

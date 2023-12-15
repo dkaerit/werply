@@ -1,10 +1,15 @@
 import { defineConfig } from 'cypress'
 
 export default defineConfig({
+  env: { "cypress-plugin-snapshots": {} },
   e2e: {
+    async setupNodeEvents(on, config) {
+      // e2e testing node events setup code
+      (await import('@cypress/code-coverage/task')).default(on, config);
+      return config;
+    },
     baseUrl: 'http://localhost:8080',
-    supportFile: false,
-    // setupNodeEvents can be defined in either
-    // the e2e or component configuration
+    //reporter: 'cypress-mochawesome-reporter',
+    //supportFile: false,
   },
 })
