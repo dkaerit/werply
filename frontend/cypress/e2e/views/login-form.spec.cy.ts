@@ -3,7 +3,6 @@ const testUser = {
   password: 'testpassword',
 };
 
-// @ts-ignore-start
 describe('LoginForm', () => {
   it('should login successfully', () => {
     cy.visit('/'); // Ajusta la ruta según la configuración de tu proyecto
@@ -25,4 +24,3 @@ describe('LoginForm', () => {
     });
   });
 });
-// @ts-ignore-end
