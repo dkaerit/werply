@@ -68,6 +68,8 @@ jobs:
         run: | 
           npm run coverage:lcov || true
           ls -al
+          echo ""
+          ls -al coverage
 
       - name: Coveralls
         uses: coverallsapp/github-action@v2
