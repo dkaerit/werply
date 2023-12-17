@@ -65,10 +65,10 @@ jobs:
 
       - name: Generar informes de cypress
         working-directory: frontend
-        run: npm run coverage:lcov
+        run: npm run coverage:lcov || true
 
-      #- name: Coveralls
-      #  uses: coverallsapp/github-action@v2
-      #  with:
-      #    github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
-      #    file: "coverage/lcov.info"
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          file: "coverage/lcov.info"
