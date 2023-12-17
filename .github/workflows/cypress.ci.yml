@@ -65,7 +65,9 @@ jobs:
 
       - name: Generar informes de cypress
         working-directory: frontend
-        run: npm run coverage:lcov || true
+        run: | 
+          npm run coverage:lcov || true
+          ls -al
 
       - name: Coveralls
         uses: coverallsapp/github-action@v2
