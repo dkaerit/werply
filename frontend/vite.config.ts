@@ -1,7 +1,7 @@
 // plugins
 import vue from '@vitejs/plugin-vue'
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import istanbul from 'vite-plugin-istanbul';
+import svgLoader from 'vite-svg-loader'
 
 // utilities
 import { defineConfig } from 'vite'
@@ -14,8 +14,7 @@ export default defineConfig({
     port: 8080,
   },
   plugins: [
-    vue({ template: {transformAssetUrls} }),
-    vuetify({ autoImport: true, }),
+    vue(), 
     istanbul({
       include: 'src/*',
       exclude: ['node_modules', 'test/'],
@@ -24,6 +23,7 @@ export default defineConfig({
       cypress: true,
       forceBuildInstrument: true
     }),
+    svgLoader({ svgoConfig: {} })
   ],
   define: { 'process.env': {} },
   resolve: {

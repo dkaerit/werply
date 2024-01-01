@@ -1,7 +1,27 @@
-import Vue from 'vue'
 import { createRouter, createWebHistory } from "vue-router";
-//import store from '../store/index'
-//const guard = (to, from, next) => { (store.state.token)? next(): next('/') }
+
+const isAuthenticated = () => {
+  const token = localStorage.getItem("TokenSession");
+  return token !== null;
+};
+
+const redirectToHomeIfAuthenticated = (to:any, from:any, next:any) => {
+  // Si el usuario está autenticado, redirige a /home
+  if (isAuthenticated()) {
+    next('/home');
+  } else {
+    next();
+  }
+};
+
+const redirectToLoginIfNotAuthenticated = (to:any, from:any, next:any) => {
+  // Si el usuario no está autenticado, redirige a /login
+  if (!isAuthenticated()) {
+    next('/login');
+  } else {
+    next();
+  }
+};
 
 export default createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,12 +31,23 @@ export default createRouter({
       redirect: '/home',
     },
     {
+      path: '/register',
+      component: () => import('../components/views/Register.vue'),
+      beforeEnter: redirectToHomeIfAuthenticated,
+    },
+    {
+      path: '/login',
+      component: () => import('../components/views/Login.vue'),
+      beforeEnter: redirectToHomeIfAuthenticated,
+    },
+    {
       path: '/',
-      component: () => import('../templates/layouts/WrappedLayout.vue'),
+      component: () => import('../components/layouts/NavWrapLayout.vue'),
       children: [
         {
           path: 'home',
-          component: () => import('../templates/views/Home.vue'),
+          component: () => import('../components/views/Dashboard.vue'),
+          beforeEnter: redirectToLoginIfNotAuthenticated,
         }
       ]
     }

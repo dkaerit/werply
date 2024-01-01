@@ -37,7 +37,7 @@ export default {
          * #param token - Token de autenticación
          */
 
-        setToken: (state: any, token: string) => {
+        setToken: (token: string) => {
             //state.token = token
             localStorage.setItem("TokenSession", token); 
             location.reload();
@@ -48,7 +48,7 @@ export default {
          * #param commit - Función de commit de Vuex
          */
 
-        dismissToken: (state: any) => {
+        dismissToken: () => {
             localStorage.removeItem("TokenSession");
             location.reload();
         }

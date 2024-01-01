@@ -1,19 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import { useStore } from "vuex";
-import {
-  useRouter,
-  RouteLocationNormalizedLoaded,
-  NavigationGuardNext,
-} from "vue-router";
+import { ref, onMounted } from "vue";
 
 const isPhone = ref(true);
 const isTablet = ref(false);
 const isNetbook = ref(false);
 const isLaptop = ref(false);
 const isDesktop = ref(false);
-const store = useStore();
-const router = useRouter();
+
+// 1280
 
 const handleResize = () => {
   const width = window.innerWidth;
@@ -24,26 +18,57 @@ const handleResize = () => {
   isDesktop.value = width >= 1820;
 };
 
-onMounted(async () => {
+onMounted(() => {
   handleResize();
-  window.addEventListener("resize", handleResize);
-
-  try {
-    await store.dispatch("AUTH/CHECK_TOKEN_EXPIRATION"); // Llama a la acción CHECK_TOKEN_EXPIRATION antes de cargar la ruta.
-    //next(); // Continúa con la navegación.
-  } catch (error) {
-    console.error("Error checking token expiration:", error);
-    router.push({ path: "home" }); // En caso de error, redirige a la página de inicio de sesión
-  }
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", handleResize);
+  document.documentElement.classList.add("dark");
 });
 </script>
 
 <template>
-  <v-app>
+  <div class="flex justify-center">
     <router-view />
-  </v-app>
+  </div>
 </template>
+
+<style lang="scss">
+.hugeicon {
+  stroke: hsl(var(--foreground));
+}
+
+.gray-text {
+  color: #3c403b
+}
+
+.svgstroke-gray {
+  stroke: #3c403b;
+}
+
+.svgfill-gray {
+  fill: #3c403b;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  border: 10px solid var(--background);
+}
+::-webkit-scrollbar-thumb {
+  //background-color: color-mix(in hsl shorter hue, hsl(0, 0%, 10%) 50%, hsl(var(--border)));
+  background-color: hsl(var(--border));
+  border-radius: 2px;
+  border: 1px solid hsl(var(--background));
+}
+
+.svgfill-foreground {
+  fill: hsl(var(--foreground));
+}
+
+.svgstroke-foreground {
+  stroke: hsl(var(--foreground));
+}
+
+.bg-lat {
+  background: url("@/assets/bg/bg-a.png");
+  background-size: cover;
+  background-position: center;
+}
+</style>
