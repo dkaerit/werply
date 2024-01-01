@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { Commit, Dispatch } from 'vuex'
 import { uri } from '../index';
 import { LoginPayload, EndpointWithPayload } from "./auth.interfaces"
@@ -80,13 +80,22 @@ export default {
          * #param payload - Carga útil para la autenticación
          */
 
-        async AUTHENTICATE({ commit }: Triggers, { endpoint, payload }: EndpointWithPayload): Promise<void> {
-            const field = fieldMapping[endpoint]; // fields "email", "tlfn" or "username"
-            const response = await axios.post(`${uri}${endpoint}`,
-                { [field]: payload.identifier, "passwd": payload.password });
+        async AUTHENTICATE({ commit }: Triggers, { endpoint, payload }: EndpointWithPayload): Promise<void | { error: string }> {
+            const field = fieldMapping[endpoint];
 
-            const token = response.data.token
-            await commit('setToken', token);
+            try {
+                const response = await axios.post(`${uri}${endpoint}`, { [field]: payload.identifier, "passwd": payload.password });
+                const token = response.data.token;
+                await commit('setToken', token);
+            } catch (error) {
+                if (axios.isAxiosError(error)) {
+                    const axiosError = error as AxiosError;
+                    if(error.code == "ERR_NETWORK") throw new Error('Servidor no disponible');
+                    if (axiosError.response?.status === 401 || axiosError.response?.status === 404) throw new Error('Usuario o contraseña incorrectos'); 
+                }
+
+                throw new Error('Error desconocido'); 
+            }
         },
 
         /**

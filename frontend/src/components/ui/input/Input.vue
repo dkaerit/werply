@@ -26,7 +26,6 @@ const modelValue = useVModel(props, "modelValue", emits, {
   passive: true,
   defaultValue: props.defaultValue,
 });
-
 </script>
 
 <template>
@@ -35,14 +34,13 @@ const modelValue = useVModel(props, "modelValue", emits, {
       v-if="props.type === 'search'"
       class="hugeicon absolute w-11 pl-[10px] mt-[2px]"
     />
-    <div class="label-float w-full" :class="[
-        { 'pt-[4px]': props.type !== 'search' },
-      ]">
+    <div class="label-float w-full" :class="[{ 'pt-[4px]': props.type !== 'search' }]">
       <input
         v-model="modelValue"
         :type="type"
         :class="[
-          cn(`
+          cn(
+            `
           flex h-9 w-full rounded-md border 
           border-input bg-transparent px-3 py-1 text-sm shadow-sm 
           transition-colors 
@@ -54,7 +52,8 @@ const modelValue = useVModel(props, "modelValue", emits, {
           
           disabled:cursor-not-allowed disabled:opacity-50
           
-          placeholder:text-muted-border`, className ?? ''
+          placeholder:text-muted-border`,
+            className ?? ''
           ),
           { 'pl-[35px]': props.type === 'search' },
           { 'transparent-placeholder': label },
@@ -62,7 +61,10 @@ const modelValue = useVModel(props, "modelValue", emits, {
         v-bind="rest"
         :placeholder="label ? '' : String(rest.placeholder)"
       />
-      <label><div class="bg"/><span>{{ label }}</span></label>
+      <label
+        ><div class="bg" />
+        <span>{{ label }}</span></label
+      >
     </div>
   </div>
 </template>
@@ -93,9 +95,15 @@ const modelValue = useVModel(props, "modelValue", emits, {
     -webkit-transition: all 0.1s linear;
     -moz-transition: all 0.1s linear;
 
-    &:required:invalid + label { color: red; }
-    &:required:invalid + label:before { content: "*";}
-    &:focus:required:invalid { border: 2px solid red; }
+    &:required:invalid + label {
+      color: red;
+    }
+    &:required:invalid + label:before {
+      content: "*";
+    }
+    &:focus:required:invalid {
+      border: 2px solid red;
+    }
 
     &:-webkit-autofill {
       -webkit-box-shadow: 0 0 0 30px #2c3b1d inset !important;
@@ -103,22 +111,35 @@ const modelValue = useVModel(props, "modelValue", emits, {
       border: 1px solid #ccff55;
     }
 
-    &:focus { 
+    &:focus {
       border: 1px solid #b1b3ae;
-      --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) hsl(var(--foreground));
-      --tw-ring-color: hsl(var(--foreground)); }
+      --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width))
+        hsl(var(--foreground));
+      --tw-ring-color: hsl(var(--foreground));
+    }
+
     &:focus + label,
-    &:not(:placeholder-shown) + label, &:-webkit-autofill ~ label {
+    &:not(:placeholder-shown) + label,
+    &:-webkit-autofill ~ label {
       font-size: 13px;
       top: -7px;
       color: hsl(var(--foreground));
-      font-weight: 400;
+      font-weight: 500;
 
       .bg {
         background: hsl(var(--background));
         transition: 0.1s;
-        width: 100%; 
+        width: 100%;
       }
+    }
+
+    &:focus + label,
+    &:not(:placeholder-shown) + label {
+      color: hsl(var(--foreground));
+    }
+
+    &:-webkit-autofill ~ label {
+      color: #ccff55;
     }
   }
 
@@ -137,12 +158,12 @@ const modelValue = useVModel(props, "modelValue", emits, {
     z-index: 1;
     padding: 0px 4px;
 
-    .bg { 
-      margin-top: 4px;
-      background-color: transparent; 
-      height: 2px;
+    .bg {
+      margin-top: 3px;
+      background-color: transparent;
+      height: 1.9px;
       position: absolute;
-      width: 90%; 
+      width: 90%;
       z-index: -1;
       transition: 0.1s;
     }
