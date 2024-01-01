@@ -2,6 +2,7 @@
 
 ![Tests: Jest & Cypress](https://github.com/dkaerit/werply/actions/workflows/cypress.ci.yml/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dkaerit_werply&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=dkaerit_werply)
+[![Coverage Status](https://coveralls.io/repos/github/dkaerit/werply/badge.svg?branch=main)](https://coveralls.io/github/dkaerit/werply?branch=main)
 
 Werply es una plataforma web que se propone como una solución integral para los entusiastas del roleplay escrito. En contraposición a las redes sociales convencionales, Werply se presenta como un espacio diseñado específicamente para la creación y el disfrute de historias de roleplay escritas en colaboración con otros usuarios. Ofrecerá herramientas y servicios diseñados para satisfacer las necesidades particulares de esta comunidad, incluyendo la capacidad de crear y personalizar personajes, desarrollar tramas interactivas y unirse a comunidades de roleplay con temáticas y reglas personalizadas.
 
