@@ -127,5 +127,21 @@ export default {
         async AUTHENTICATION_ACTION_USERNAME({ dispatch }: Triggers, payload: LoginPayload): Promise<void> {
             await dispatch('AUTHENTICATE', { endpoint: '/auth/login/username', payload });
         },
-    },
+
+        /**
+         * Acción para verificar si un usuario o email ya existe en la base de datos.
+         * #param dispatch - Función de dispatch de Vuex
+         * #param payload - Carga útil para la verificación
+         * #returns {Promise<boolean>} - Devuelve true si el usuario o email existe, false en caso contrario.
+         */
+        async CHECK_USER_EXISTENCE(payload: { email?: string; username?: string }): Promise<{ email?: string; username?: string }> {
+            try {
+                const response = await axios.post(`${uri}/users/check-existence`, payload);
+                return response.data; // Devolver {email, username} con los conflictos
+            } catch (error) {
+                console.error('Error al verificar la existencia del usuario o email', error);
+                throw new Error('Error al verificar la existencia del usuario o email');
+            }
+        },
+        },
 }

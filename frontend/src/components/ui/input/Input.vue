@@ -14,6 +14,7 @@ const props = defineProps<{
   modelValue?: string | number;
   type?: string;
   label?: string;
+  valid?: boolean;
 }>();
 
 const emits = defineEmits<{
@@ -57,6 +58,10 @@ const modelValue = useVModel(props, "modelValue", emits, {
           ),
           { 'pl-[35px]': props.type === 'search' },
           { 'transparent-placeholder': label },
+          {
+            invalid:
+              (rest['aria-invalid'] === props.valid) != undefined ? !props.valid : false,
+          },
         ]"
         v-bind="rest"
         :placeholder="label ? '' : String(rest.placeholder)"
@@ -70,10 +75,12 @@ const modelValue = useVModel(props, "modelValue", emits, {
 </template>
 
 <style scoped lang="scss">
+/* escalar hugeicon */
 .hugeicon {
   transform: scale(0.52);
 }
 
+/* referido a l placeholder */
 ::placeholder {
   color: #3c403b;
   opacity: 1; /* Firefox */
@@ -83,6 +90,7 @@ const modelValue = useVModel(props, "modelValue", emits, {
   color: transparent;
 }
 
+/* Estilos para el efecto de etiqueta flotante en campos de entrada */
 .label-float {
   position: relative;
 
@@ -92,40 +100,29 @@ const modelValue = useVModel(props, "modelValue", emits, {
     min-width: 250px;
     font-size: 16px;
     transition: all 0.1s linear;
-    -webkit-transition: all 0.1s linear;
-    -moz-transition: all 0.1s linear;
 
-    &:required:invalid + label {
-      color: red;
-    }
-    &:required:invalid + label:before {
-      content: "*";
-    }
-    &:focus:required:invalid {
-      border: 2px solid red;
+    /* Estilos para la etiqueta flotante al enfocar o cuando hay contenido en el campo */
+    &:focus + label,
+    &:not(:placeholder-shown) + label {
+      color: hsl(var(--foreground));
     }
 
-    &:-webkit-autofill {
-      -webkit-box-shadow: 0 0 0 30px #2c3b1d inset !important;
-      -webkit-text-fill-color: #cce9af !important;
-      border: 1px solid #ccff55;
-    }
-
+    /* Estilos al enfocar en el campo */
     &:focus {
-      border: 1px solid #b1b3ae;
-      --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width))
-        hsl(var(--foreground));
-      --tw-ring-color: hsl(var(--foreground));
+      border: 1px solid #ccff55;
+      --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 0px #ccff55;
+      //--tw-ring-color: #ccff55;
     }
 
+    /* Estilos para la etiqueta flotante al enfocar o cuando hay contenido en el campo */
     &:focus + label,
     &:not(:placeholder-shown) + label,
     &:-webkit-autofill ~ label {
       font-size: 13px;
       top: -7px;
-      color: hsl(var(--foreground));
       font-weight: 500;
 
+      /* Estilo de fondo para la etiqueta flotante */
       .bg {
         background: hsl(var(--background));
         transition: 0.1s;
@@ -133,24 +130,30 @@ const modelValue = useVModel(props, "modelValue", emits, {
       }
     }
 
-    &:focus + label,
-    &:not(:placeholder-shown) + label {
-      color: hsl(var(--foreground));
+    &:focus + label {
+      color: #ccff55;
     }
 
+    /* Estilos para el autocompletado de navegadores */
+    &:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 30px #2c3b1d inset !important;
+      -webkit-text-fill-color: #cce9af !important;
+      border: 1px solid #ccff55;
+    }
+
+    /* Estilos para la etiqueta flotante en caso de autocompletado de navegadores */
     &:-webkit-autofill ~ label {
       color: #ccff55;
     }
   }
 
+  /* Estilos para la etiqueta flotante */
   & label {
     pointer-events: none;
     position: absolute;
     top: calc(50% - 10px);
     left: 15px;
     transition: all 0.1s linear;
-    -webkit-transition: all 0.1s linear;
-    -moz-transition: all 0.1s linear;
     color: #3c403b;
     display: flex;
     align-items: center;
@@ -158,6 +161,7 @@ const modelValue = useVModel(props, "modelValue", emits, {
     z-index: 1;
     padding: 0px 4px;
 
+    /* Estilo de fondo para la etiqueta flotante */
     .bg {
       margin-top: 3px;
       background-color: transparent;
@@ -167,6 +171,25 @@ const modelValue = useVModel(props, "modelValue", emits, {
       z-index: -1;
       transition: 0.1s;
     }
+  }
+}
+
+.invalid {
+  &:not(:placeholder-shown) + label {
+    color: red !important;
+  }
+
+  &:not(:placeholder-shown) {
+    border-color: red !important;
+  }
+
+  &:focus {
+    border-color: red !important;
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 0px red !important;
+  }
+
+  &:focus + label {
+    color: red !important;
   }
 }
 </style>

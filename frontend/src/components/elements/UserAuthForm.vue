@@ -67,7 +67,6 @@ const login = async () => {
   try {
     // Lógica de inicio de sesión con correo electrónico/usuario y contraseña
     // Llama a la acción de autenticación del módulo de Vuex
-    console.log(`dispatch ${getLoginAction(identifier.value)}`);
     await store.dispatch(getLoginAction(identifier.value), {
       identifier: identifier.value,
       password: password.value,
