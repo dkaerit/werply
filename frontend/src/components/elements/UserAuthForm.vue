@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useStore } from "vuex";
-import { toTypedSchema } from "@vee-validate/zod";
-import { useForm } from "vee-validate";
-import * as z from "zod";
 
 import Loading from "@/components/elements/Loading.vue";
 import GoogleIcon from "@/assets/svg/fill/google.svg";
@@ -14,24 +11,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast/use-toast";
 import Toaster from "@/components/ui/toast/Toaster.vue";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-
-// zod
-const authFormSchema = toTypedSchema(
-  z.object({
-    username: z
-      .string()
-      .min(2, { message: "El nombre de usuario debe tener al menos 2 caracteres." })
-      .max(30, { message: "El nombre de usuario no debe tener más de 30 caracteres." }),
-    // ...
-  })
-);
+import { Form, FormField, FormMessage } from "@/components/ui/form";
 
 // Proceso de autenticación
 const store = useStore();
@@ -57,9 +37,9 @@ const actionsMap = {
 };
 
 const getLoginAction = (identifier: string) => {
-  for (const [action, config] of Object.entries(actionsMap)) {
+  for (const [action, config] of Object.entries(actionsMap))
     if (config.regex.test(identifier)) return action;
-  }
+
   return loginActions.email; // Por defecto email
 };
 
@@ -68,7 +48,7 @@ const login = async () => {
     // Lógica de inicio de sesión con correo electrónico/usuario y contraseña
     // Llama a la acción de autenticación del módulo de Vuex
     await store.dispatch(getLoginAction(identifier.value), {
-      identifier: identifier.value,
+      identifier: identifier.value, // email o username
       password: password.value,
     });
 
@@ -94,7 +74,6 @@ const login = async () => {
 };
 
 const onSubmit = async (event: Event) => {
-  console.log("Form submitted!", event);
   event.preventDefault();
   isLoading.value = true;
 
@@ -104,8 +83,6 @@ const onSubmit = async (event: Event) => {
     isLoading.value = false;
   }
 };
-
-const handlePasswordInput = () => {};
 </script>
 
 <template>
@@ -115,21 +92,15 @@ const handlePasswordInput = () => {};
         <div class="grid gap-1 mb-1">
           <!-- Email or username -->
           <FormField name="username">
-            <FormItem>
-              <FormControl>
-                <Input
-                  label="Email o Usuario"
-                  id="identifier"
-                  type="text"
-                  auto-capitalize="none"
-                  auto-complete="email"
-                  auto-correct="off"
-                  v-model="identifier"
-                  :disabled="isLoading"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <Input
+              label="Email o Usuario"
+              id="identifier"
+              type="text"
+              v-model="identifier"
+              :disabled="isLoading"
+              :valid="true"
+            />
+            <FormMessage />
           </FormField>
 
           <FormField name="password">
@@ -137,12 +108,9 @@ const handlePasswordInput = () => {};
               label="Password"
               id="password"
               type="password"
-              auto-capitalize="none"
-              auto-complete="password"
-              auto-correct="off"
               :disabled="isLoading"
               v-model="password"
-              @input="handlePasswordInput"
+              :valid="true"
             />
           </FormField>
         </div>

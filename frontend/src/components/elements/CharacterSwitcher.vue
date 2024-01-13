@@ -1,4 +1,6 @@
 <script setup lang="ts">
+// @ts-ignore
+import { useStore } from "vuex";
 import { Check, ChevronsUpDown } from "lucide-vue-next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlusCircledIcon } from "@radix-icons/vue";
@@ -7,14 +9,7 @@ import { LogOut } from "lucide-vue-next";
 
 import { ref, computed } from "vue";
 import { cn } from "@/lib/utils";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -26,11 +21,11 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
 
-import { useStore } from "vuex";
+import NewCharacterForm from "@/components/elements/NewCharacterForm.vue";
 
 const store = useStore();
+
 const logout = async () => {
   await store.dispatch("AUTH/DISMISS_TOKEN"); // Realizar acciones necesarias para cerrar sesión
 };
@@ -40,19 +35,26 @@ type Team = {
   value: string;
 };
 
+const nickname = computed(() => store.state["USERS"].user.nickname);
+//const character = computed(() => store.state["USERS"].user.pjs);
+
 const groups = [
   {
     label: "Personal Account",
     teams: [
       {
-        label: "Alicia Koch",
+        label: nickname.value || "���",
         value: "personal",
       },
     ],
   },
   {
     label: "Characters",
-    teams: [
+    teams: /* characters.value.map((character: any) => ({
+      label: character.name,
+      value: character.name,
+    })), 
+    */ [
       {
         label: "Kisame Hoshigaki",
         value: "Kisame Hoshigaki",
@@ -192,26 +194,7 @@ const shouldShowSecondImage = computed(() => {
     </Popover>
 
     <!-- Create character -->
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>Crear persoanje</DialogTitle>
-        <DialogDescription>
-          Crea un nuevo personaje vinculado a tu cuenta.
-        </DialogDescription>
-      </DialogHeader>
-      <div>
-        <div class="space-y-4 py-2 pb-4">
-          <div class="grid gap-1.5">
-            <Input label="Nombre" id="name" placeholder="Nombre" />
-            <Input label="Nickname" id="nickname" placeholder="Nickname" />
-          </div>
-        </div>
-      </div>
-      <DialogFooter>
-        <Button variant="outline" @click="showNewTeamDialog = false"> Cancel </Button>
-        <Button type="submit"> Continue </Button>
-      </DialogFooter>
-    </DialogContent>
+    <NewCharacterForm />
   </Dialog>
 </template>
 

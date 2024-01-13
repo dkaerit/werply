@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAttrs, ref } from "vue";
+import { useAttrs } from "vue";
 import { useVModel } from "@vueuse/core";
 import { cn } from "@/lib/utils";
 
@@ -136,8 +136,9 @@ const modelValue = useVModel(props, "modelValue", emits, {
 
     /* Estilos para el autocompletado de navegadores */
     &:-webkit-autofill {
-      -webkit-box-shadow: 0 0 0 30px #2c3b1d inset !important;
+      -webkit-box-shadow: 0 0 0 30px #2c3b1d inset;
       -webkit-text-fill-color: #cce9af !important;
+      color: #cce9af !important;
       border: 1px solid #ccff55;
     }
 
@@ -175,6 +176,11 @@ const modelValue = useVModel(props, "modelValue", emits, {
 }
 
 .invalid {
+  &:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px #3b1d1d inset !important;
+    -webkit-text-fill-color: #e9afaf !important;
+  }
+
   &:not(:placeholder-shown) + label {
     color: red !important;
   }
@@ -191,5 +197,9 @@ const modelValue = useVModel(props, "modelValue", emits, {
   &:focus + label {
     color: red !important;
   }
+}
+
+input:focus {
+  color: white;
 }
 </style>

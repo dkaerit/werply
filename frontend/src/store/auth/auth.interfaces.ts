@@ -11,3 +11,12 @@ export interface EndpointWithPayload {
     endpoint: string, 
     payload: LoginPayload 
 }
+
+export interface RegistrationData {
+    avatar: string;
+    email: string;
+    nickname: string;
+    username: string;
+    passwd: string;
+    pjs: string[]; // Puedes ajustar el tipo según tus necesidades
+  }

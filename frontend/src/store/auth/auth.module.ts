@@ -1,7 +1,8 @@
-import axios, { AxiosError } from 'axios'
+// @ts-ignore
 import { Commit, Dispatch } from 'vuex'
-import { uri } from '../index';
-import { LoginPayload, EndpointWithPayload } from "./auth.interfaces"
+import axios, { AxiosError } from 'axios'
+import { uri, store } from '../index';
+import { LoginPayload, EndpointWithPayload, RegistrationData } from "./auth.interfaces"
 interface Triggers { commit: Commit, dispatch: Dispatch }
 
 const fieldMapping: { [key: string]: string } = {
@@ -87,6 +88,7 @@ export default {
                 const response = await axios.post(`${uri}${endpoint}`, { [field]: payload.identifier, "passwd": payload.password });
                 const token = response.data.token;
                 await commit('setToken', token);
+                await store.dispatch("USERS/FETCH_USER", payload.identifier);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     const axiosError = error as AxiosError;
@@ -97,6 +99,33 @@ export default {
                 throw new Error('Error desconocido'); 
             }
         },
+
+        async REGISTER_USER({ dispatch }: Triggers, user: RegistrationData): Promise<void | { error: string }> {
+            console.log(user)
+            try {
+              // Lógica de registro de usuario
+              if (await dispatch('CHECK_EMAIL_EXISTENCE', user.email))
+              throw new Error('El correo electrónico ya está registrado');
+
+              if (await dispatch('CHECK_USERNAME_EXISTENCE', user.username))
+              throw new Error('El nombre de usuario ya está registrado');
+
+              await axios.post(`${uri}/users/create`, user, {
+                    headers: { 'Content-Type': 'application/json' } // Asegúrate de enviar el tipo de contenido correcto
+                });
+              
+            } catch (error) {
+              if (axios.isAxiosError(error)) {
+                if(error.code == "ERR_NETWORK") throw new Error('Servidor no disponible');
+                if(error.code == "ERR_BAD_RESPONSE") throw new Error('El servidor encontró una condición inesperada que le impidió cumplir con la solicitud (Posible mal formato).');
+                // Puedes manejar más casos específicos de errores aquí si es necesario
+                throw new Error('Error desconocido'); 
+                
+              }
+          
+              throw new Error('Error desconocido durante el registro de usuario');
+            }
+          },
 
         /**
          * Acción de autenticación con email.
@@ -129,19 +158,34 @@ export default {
         },
 
         /**
-         * Acción para verificar si un usuario o email ya existe en la base de datos.
+         * Acción para verificar si un usuario ya existe en la base de datos.
          * #param dispatch - Función de dispatch de Vuex
-         * #param payload - Carga útil para la verificación
-         * #returns {Promise<boolean>} - Devuelve true si el usuario o email existe, false en caso contrario.
+         * #param username - Carga útil para la verificación
+         * #returns {Promise<boolean>} - Devuelve true si el usuario existe, false en caso contrario.
          */
-        async CHECK_USER_EXISTENCE(payload: { email?: string; username?: string }): Promise<{ email?: string; username?: string }> {
+        async CHECK_USERNAME_EXISTENCE({}: Triggers, username: string): Promise<boolean> {
             try {
-                const response = await axios.post(`${uri}/users/check-existence`, payload);
-                return response.data; // Devolver {email, username} con los conflictos
+                const response = await axios.get(`${uri}/users/checkuser:${username}`);
+                return response.data; 
             } catch (error) {
-                console.error('Error al verificar la existencia del usuario o email', error);
-                throw new Error('Error al verificar la existencia del usuario o email');
+                throw new Error('Error al verificar la existencia del usuario');
             }
         },
+
+        /**
+         * Acción para verificar si un correo electrónico ya existe en la base de datos.
+         * #param dispatch - Función de dispatch de Vuex
+         * #param email - Carga útil para la verificación
+         * #returns {Promise<boolean>} - Devuelve true si el correo electrónico existe, false en caso contrario.
+         */
+        async CHECK_EMAIL_EXISTENCE({}: Triggers, email: any): Promise<boolean> {
+            console.log(email);
+            try {
+                const response = await axios.get(`${uri}/users/checkmail:${email}`);
+                return response.data; 
+            } catch (error) {
+                throw new Error('Error al verificar la existencia del correo electrónico');
+            }
         },
+    }   
 }
