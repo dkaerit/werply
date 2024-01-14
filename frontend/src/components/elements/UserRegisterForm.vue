@@ -1,9 +1,11 @@
 <script setup lang="ts">
+// @ts-ignore
+import { useStore } from "vuex";
 import { ref, watch, onMounted, computed } from "vue";
 
 // otros
 import GoogleIcon from "@/assets/svg/fill/google.svg";
-import { useStore } from "vuex";
+
 import { useToast } from "@/components/ui/toast/use-toast";
 
 // shadcn
@@ -22,7 +24,6 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import * as z from "zod";
 
-//const store = useStore();
 const currentStep = ref(0);
 const isLoading = ref(false);
 const slideSide = ref("right");

@@ -6,6 +6,7 @@ import VuexPersistence from 'vuex-persist'
 import AUTH from './auth/auth.module';
 import MENU from './menu/menu.module';
 import USERS from './users/users.module';
+import CHARACTERS from './characters/characters.module';
 
 const backendHost = import.meta.env.BACKEND_HOST || "localhost";
 const backendPort = import.meta.env.BACKEND_PORT || 3000;
@@ -17,6 +18,6 @@ const vuexLocal = new VuexPersistence({
 
 export const store = createStore({
   state: () => ({}),
-  modules: { AUTH, MENU, USERS },
+  modules: { AUTH, MENU, USERS, CHARACTERS },
   plugins: [vuexLocal.plugin]
 })
