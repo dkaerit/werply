@@ -22,6 +22,7 @@ import * as z from "zod";
 
 // reactivas
 const store = useStore();
+const emit = defineEmits(["submit"]);
 
 const schema = toTypedSchema(
   z.object({
@@ -55,13 +56,11 @@ const createCharacter = async () => {
           pjname: form.values.pjname,
           ownerId: store.state["USERS"].user._id,
         });
+        emit("submit");
       } catch (error) {
         form.setErrors({ nickname: "El nickname ya está en uso" });
         console.log(form.errors.value);
-        //console.log("createCharacter", error);
       }
-
-      // Continúa con la lógica para continuar después de la verificación de existencia
     }
   }
 };

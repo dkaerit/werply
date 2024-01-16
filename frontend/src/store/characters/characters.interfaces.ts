@@ -15,5 +15,6 @@ export interface Character {
  }
  
  export interface RootCharacterState {
-   characters: Character[];
+   characters: Record<string, Character>;
+   currentCharacter: Character;
  }

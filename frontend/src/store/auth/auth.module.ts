@@ -38,8 +38,9 @@ export default {
          * #param token - Token de autenticación
          */
 
-        setToken: (token: string) => {
+        setToken: (_: {}, token: string) => {
             //state.token = token
+            alert("espera")
             localStorage.setItem("TokenSession", token); 
             location.reload();
         },
@@ -68,10 +69,14 @@ export default {
         },
 
         async CHECK_TOKEN_EXPIRATION({ commit }: Triggers): Promise<void> {
-            const token = localStorage.TokenSession;
-            if (!token) return;
-            const response = await axios.get(`${uri}/auth/expiration`, { headers: { authorization: token } } );
-            if (response.data.expired) commit('dismissToken'); // if expired dismiss token
+            try {
+                const token = localStorage.TokenSession;
+                const response = await axios.get(`${uri}/auth/expiration`, { headers: { authorization: token } } );
+                if (response.data.expired) commit('dismissToken'); // if expired dismiss token
+                if (!token) return;
+            } catch(err) {
+                throw new Error("Hubo un error verificando la sesión")
+            }
         },
 
         /**
@@ -101,7 +106,6 @@ export default {
         },
 
         async REGISTER_USER({ dispatch }: Triggers, user: RegistrationData): Promise<void | { error: string }> {
-            console.log(user)
             try {
               // Lógica de registro de usuario
               if (await dispatch('CHECK_EMAIL_EXISTENCE', user.email))
@@ -179,7 +183,6 @@ export default {
          * #returns {Promise<boolean>} - Devuelve true si el correo electrónico existe, false en caso contrario.
          */
         async CHECK_EMAIL_EXISTENCE({}: Triggers, email: any): Promise<boolean> {
-            console.log(email);
             try {
                 const response = await axios.get(`${uri}/users/checkmail:${email}`);
                 return response.data; 

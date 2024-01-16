@@ -1,5 +1,4 @@
 export interface AuthState {
-    token: String | null
 }
 
 export interface LoginPayload {
@@ -18,5 +17,4 @@ export interface RegistrationData {
     nickname: string;
     username: string;
     passwd: string;
-    pjs: string[]; // Puedes ajustar el tipo según tus necesidades
   }

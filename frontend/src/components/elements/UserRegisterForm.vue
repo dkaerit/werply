@@ -127,7 +127,6 @@ const registerUser = async () => {
       nickname: form.values.username,
       username: form.values.username,
       passwd: form.values.password2,
-      pjs: [],
     });
     await store.dispatch("AUTH/AUTHENTICATION_ACTION_EMAIL", {
       identifier: form.values.email,

@@ -9,7 +9,8 @@ import { Character, RootCharacterState } from "./characters.interfaces"
 export default {
    namespaced: true,
    state: () => ({
-     characters: [],
+     characters: {} as Record<string, Character>,
+     currentCharacter: null as Character | null,
    } as RootCharacterState),
  
    mutations: {
@@ -18,17 +19,8 @@ export default {
       * #param state RootCharacterState del módulo de personajes.
       * #param characters Lista de personajes.
       */
-     setCharacters(state: RootCharacterState, characters: Character[]): void {
+     setCharacters(state: RootCharacterState, characters: Record<string, Character>): void {
        state.characters = characters;
-     },
- 
-     /**
-      * Añade un personaje al estado de la tienda.
-      * #param state RootCharacterState del módulo de personajes.
-      * #param character Personaje a añadir.
-      */
-     addCharacter(state: RootCharacterState, character: Character): void {
-       state.characters.push(character);
      },
  
      /**
@@ -37,9 +29,9 @@ export default {
       * #param updatedCharacter Personaje actualizado.
       */
      updateCharacter(state: RootCharacterState, updatedCharacter: Character): void {
-       const index = state.characters.findIndex(c => c._id === updatedCharacter._id);
-       if (index !== -1) {
-         state.characters[index] = updatedCharacter;
+       const character = state.characters[updatedCharacter._id];
+       if (character !== undefined) {
+         state.characters[updatedCharacter._id] = updatedCharacter;
        }
      },
  
@@ -49,33 +41,29 @@ export default {
       * #param characterId Identificador del personaje a eliminar.
       */
      deleteCharacter(state: RootCharacterState, characterId: string): void {
-       state.characters = state.characters.filter(c => c._id !== characterId);
+      delete state.characters[characterId];
      },
+
+     /**
+      * 
+      * 
+      * 
+      */
+     setCurrentCharacter(state:RootCharacterState, character:Character) {
+      state.currentCharacter = character;
+    },
    },
  
-   actions: {
-     /**
-      * Recupera la lista de personajes desde el servidor.
-      * #param triggers Objeto conteniendo commit y dispatch de Vuex.
-      */
-     async FETCH_CHARACTERS({ commit }: Triggers): Promise<void> {
-       try {
-         const response = await axios.get(`${uri}/characters`);
-         commit('setCharacters', response.data);
-       } catch (error) {
-         throw new Error('Error fetching characters:');
-       }
-     },
- 
+   actions: { 
      /**
       * Crea un nuevo personaje en el servidor y lo añade al estado de la tienda.
       * #param triggers Objeto conteniendo commit y dispatch de Vuex.
       * #param character Personaje a crear.
       */
-     async CREATE_CHARACTER({ commit }: Triggers, character: Character): Promise<void> {
+     async CREATE_CHARACTER({ dispatch }: Triggers, character: Character): Promise<void> {
        try {
-         const response = await axios.post(`${uri}/characters/create`, character);
-         commit('addCharacter', response.data);
+         await axios.post(`${uri}/characters/create`, character);
+         await dispatch('FETCH_CHARACTERS_BY_USER_ID', character.ownerId);
        } catch (error) {
          throw new Error('Error creating character:');
        }
@@ -89,7 +77,7 @@ export default {
      async UPDATE_CHARACTER({ commit }: Triggers, { characterId, update }: { characterId: string, update: Character }): Promise<void> {
        try {
          const response = await axios.put(`${uri}/characters/update:${characterId}`, update);
-         commit('updateCharacter', response.data);
+         await commit('updateCharacter', response.data);
        } catch (error) {
          throw new Error('Error updating character:');
        }
@@ -103,7 +91,7 @@ export default {
      async DELETE_CHARACTER({ commit }: Triggers, characterId: string): Promise<void> {
        try {
          await axios.delete(`${uri}/characters/delete/${characterId}`);
-         commit('deleteCharacter', characterId);
+         await commit('deleteCharacter', characterId);
        } catch (error) {
          throw new Error('Error deleting character:');
        }
@@ -120,9 +108,9 @@ export default {
       try {
         // Realiza una llamada al backend para verificar la existencia del nickname
         const response = await axios.get(`${uri}/characters/check:${pjname}`);
-        //console.log("response: ", response.data)
+
         // Si el nickname ya está en uso, lanza un error
-        if (response.data.exists) 
+        if (response.data) 
         throw new Error("El nickname ya está en uso");
     
         // Si no hay problemas, devuelve true indicando que el nickname no está en uso
@@ -131,6 +119,31 @@ export default {
         // Captura y relanza el error
         throw new Error("Error inesperado");
       }
-     }
+     },
+
+     /**
+     * Obtiene todos los personajes de un usuario por su userId.
+     * #param {Triggers} triggers Objeto que contiene commit y dispatch para gestionar las acciones en Vuex.
+     * #param {string} userId El _id del usuario.
+     * #throws {Error} Lanza un error si la obtención de personajes falla.
+     */
+    async FETCH_CHARACTERS_BY_USER_ID({ commit }: Triggers, userId: string): Promise<Character[]> {
+      try {
+        // Realiza la solicitud para obtener los personajes por userId
+        const response = await axios.get(`${uri}/characters/fetch:${userId}`);
+        const characters = response.data.reduce((acc: Record<string, Character>, character: Character) => {
+          acc[character._id] = character; // Utiliza el id del personaje como clave en el objeto
+          return acc;
+        }, {});
+
+        // Actualiza el estado de la store con los personajes obtenidos
+        await commit('setCharacters', characters);
+        return characters;
+
+      } catch (error) {
+        // Maneja cualquier error que pueda ocurrir durante la obtención de personajes por userId
+        throw new Error('Error al obtener los personajes por userId');
+      }
+    },
    },
  };

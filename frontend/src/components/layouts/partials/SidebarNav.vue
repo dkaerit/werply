@@ -37,15 +37,15 @@ const sidebarNavItems: Item[] = [
   <aside class="w-16 lg:w-auto">
     <div class="border-none">
       <div class="flex h-16 items-center px-4">
-        <div class="hidden lg:block mr-[-65px] tracking-tight font-bold">
+        <div class="hidden lg:block tracking-tight font-bold">
           <CharacterSwitcher />
         </div>
 
-        <MainNav class="mx-6" />
+        <!--<MainNav class="mx-6" />-->
         <div class="ml-auto flex items-center space-x-4">
           <!-- toogle button -->
-          <Search />
-          <UserNav />
+          <!--<Search />-->
+          <!--<UserNav />-->
         </div>
       </div>
     </div>
@@ -57,7 +57,12 @@ const sidebarNavItems: Item[] = [
         as="a"
         :href="item.href"
         variant="ghost"
-        :class="cn('w-full text-left justify-start', $route.path === `${item.href}.html` && 'bg-muted hover:bg-muted')"
+        :class="
+          cn(
+            'w-full text-left justify-start',
+            $route.path === `${item.href}.html` && 'bg-muted hover:bg-muted'
+          )
+        "
       >
         <component :is="item.svg" class="navicon"></component>
         <span class="hidden lg:block pl-4">{{ item.title }}</span>

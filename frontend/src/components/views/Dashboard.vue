@@ -2,10 +2,6 @@
 import { ref, watchEffect, computed } from "vue";
 
 // Importar componentes y estilos
-import Overview from "@/components/elements/Overview.vue";
-import MainNav from "@/components/elements/MainNav.vue";
-import RecentSales from "@/components/elements/RecentSales.vue";
-import UserNav from "@/components/elements/UserNav.vue";
 import PostInput from "@/components/elements/PostInput.vue";
 import LoadingIndicator from "@/components/elements/LoadingIndicator.vue";
 import PostBlock from "@/components/elements/PostBlock.vue";
@@ -269,13 +265,14 @@ const FavoritePosts = ref<
     content: string;
     date: Date;
   }>
->([  {
+>([
+  {
     _id: "post1",
     pjId: "pj4", // Naruto
-    content:
-      "SASUKEEEEEEEEEEEEEEEEEEE",
+    content: "SASUKEEEEEEEEEEEEEEEEEEE",
     date: new Date("December 27, 2023 23:11:00"),
-  },]);
+  },
+]);
 
 // se carga con los post correspondientes
 const currentTimeline = ref<
@@ -320,11 +317,10 @@ const changeState = (tabValue: string) => {
   activeTab.value = tabValue;
 };
 
-
 // Observar cambios en activeTab y actualizar la lista de posts
 watchEffect(() => {
   changeTimelinePosts();
-  console.log(currentTimeline.value)
+  console.log(currentTimeline.value);
 
   const container = timelineContainer.value;
   container?.addEventListener("scroll", handleScroll);
@@ -369,8 +365,12 @@ const handleScroll = () => {
 
               <div class="flex items-center">
                 <TabsList class="grid grid-flow-col justify-stretch">
-                  <TabsTrigger @click="changeState('all')" value="all"> Todo </TabsTrigger>
-                  <TabsTrigger @click="changeState('favorites')" value="favorites"> Tus favoritos </TabsTrigger>
+                  <TabsTrigger @click="changeState('all')" value="all">
+                    Todo
+                  </TabsTrigger>
+                  <TabsTrigger @click="changeState('favorites')" value="favorites">
+                    Tus favoritos
+                  </TabsTrigger>
                 </TabsList>
               </div>
             </div>
@@ -386,7 +386,7 @@ const handleScroll = () => {
 
             <!-- Bloques grandes -->
             <template v-if="currentTimeline.length !== 0">
-              <PostBlock  
+              <PostBlock
                 v-for="(post, index) in currentTimeline.slice(0, loadedPosts)"
                 :key="index"
                 :value="activeTab"

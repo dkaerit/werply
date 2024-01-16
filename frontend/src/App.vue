@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+// @ts-ignore
+import { useStore } from "vuex";
+import { ref, onMounted, onBeforeMount } from "vue";
 
+const store = useStore();
 const isPhone = ref(true);
 const isTablet = ref(false);
 const isNetbook = ref(false);
 const isLaptop = ref(false);
 const isDesktop = ref(false);
+const state = ref(store.state);
 
 // 1280
 
@@ -36,7 +40,7 @@ onMounted(() => {
 }
 
 .gray-text {
-  color: #3c403b
+  color: #3c403b;
 }
 
 .svgstroke-gray {

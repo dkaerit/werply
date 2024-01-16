@@ -7,9 +7,9 @@ import { PlusCircledIcon } from "@radix-icons/vue";
 
 import { LogOut } from "lucide-vue-next";
 
-import { ref, computed } from "vue";
+import { ref, computed, onBeforeMount } from "vue";
 import { cn } from "@/lib/utils";
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -21,6 +21,7 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Character } from "@/store/characters/characters.interfaces";
 
 import NewCharacterForm from "@/components/elements/NewCharacterForm.vue";
 
@@ -31,44 +32,42 @@ const logout = async () => {
 };
 
 type Team = {
+  id: string;
   label: string;
   value: string;
 };
 
-const nickname = computed(() => store.state["USERS"].user.nickname);
-//const character = computed(() => store.state["USERS"].user.pjs);
+const username = computed(() => store.state["USERS"].user.username);
+const userid = computed(() => store.state["USERS"].user._id);
+const characters = ref(store.state["CHARACTERS"].characters);
+const formatCharacters = computed(() =>
+  Object.values(characters.value).map((character: any) => ({
+    id: character._id,
+    label: character.pjname,
+    value: character.nickname,
+  }))
+);
 
-const groups = [
+console.log("characters.value", characters.value);
+
+const groups = ref([
   {
     label: "Personal Account",
     teams: [
       {
-        label: nickname.value || "���",
+        label: username.value || "���",
         value: "personal",
       },
     ],
   },
   {
     label: "Characters",
-    teams: /* characters.value.map((character: any) => ({
-      label: character.name,
-      value: character.name,
-    })), 
-    */ [
-      {
-        label: "Kisame Hoshigaki",
-        value: "Kisame Hoshigaki",
-      },
-      {
-        label: "Trafalgar Law",
-        value: "Trafalgar Law",
-      },
-    ],
+    teams: formatCharacters.value,
   },
-];
+]);
 
 const open = ref(false);
-const selectedTeam = ref<Team>(groups[0].teams[0]);
+const selectedTeam = ref<Team>(groups.value[0].teams[0]);
 const showNewTeamDialog = ref(false);
 
 const filterFunction = (list: Team[], search: string) =>
@@ -78,8 +77,29 @@ const filterFunction = (list: Team[], search: string) =>
 
 const shouldShowSecondImage = computed(() => {
   // Check if the selected team belongs to group[1]
-  return groups[1].teams.some((team) => team.value === selectedTeam.value?.value);
+  return groups.value[1].teams.some(
+    (team: any) => team.value === selectedTeam.value?.value
+  );
 });
+
+onBeforeMount(async () => {
+  // Cuando el componente se monta, obtén los personajes asociados al usuario
+  await store.dispatch("CHARACTERS/FETCH_CHARACTERS_BY_USER_ID", userid.value);
+});
+
+const handleSubmit = async () => {
+  showNewTeamDialog.value = !showNewTeamDialog.value;
+  window.location.reload();
+};
+
+const selectCharacter = async (character: Team) => {
+  if (character.value == "personal") store.commit("CHARACTERS/setCurrentCharacter", null);
+  else {
+    const finded = characters.value[character.id];
+    console.log("finded: ", finded);
+    await store.commit("CHARACTERS/setCurrentCharacter", finded);
+  }
+};
 </script>
 
 <template>
@@ -113,7 +133,7 @@ const shouldShowSecondImage = computed(() => {
         </Button>
       </PopoverTrigger>
       <PopoverContent class="p-0 w-[237px]">
-        <Command :filter-function="filterFunction">
+        <Command :filter-function="(filterFunction as any)">
           <CommandInput placeholder="Personaje" />
           <CommandEmpty>Sin coincidencias.</CommandEmpty>
           <CommandList>
@@ -128,8 +148,9 @@ const shouldShowSecondImage = computed(() => {
                 :key="team.value"
                 :value="team"
                 @select="(ev: any) => {
-                selectedTeam = ev.detail.value
-                open = false
+                selectedTeam = ev.detail.value;
+                open = false;
+                selectCharacter(team);
               }"
               >
                 <Avatar class="mr-2 h-5 w-5">
@@ -194,7 +215,9 @@ const shouldShowSecondImage = computed(() => {
     </Popover>
 
     <!-- Create character -->
-    <NewCharacterForm />
+    <form>
+      <NewCharacterForm @submit="handleSubmit" />
+    </form>
   </Dialog>
 </template>
 

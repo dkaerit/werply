@@ -48,7 +48,20 @@ export default createRouter({
           path: 'home',
           component: () => import('../components/views/Dashboard.vue'),
           beforeEnter: redirectToLoginIfNotAuthenticated,
-        }
+        },
+        {
+          path: 'profile',
+          children: [
+            {
+              path: 'user/:username',
+              component: () => import('../components/views/UserProfile.vue'),
+            },
+            {
+              path: 'pj/:nickname',
+              component: () => import('../components/views/CharacterProfile.vue'),
+            },
+          ],
+        },
       ]
     }
   ]
