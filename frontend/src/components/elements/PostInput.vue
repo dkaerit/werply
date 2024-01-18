@@ -1,4 +1,6 @@
 <script setup lang="ts">
+// @ts-ignore
+import { useStore } from "vuex";
 import ImageIcon from "@/assets/svg/image.svg";
 import TagIcon from "@/assets/svg/tag.svg";
 import DiceIcon from "@/assets/svg/dice.svg";
@@ -15,6 +17,8 @@ const palabras = ref(0);
 const caracteres = ref(0);
 const postContent = ref("");
 const categoria = ref("corto");
+const store = useStore();
+const emit = defineEmits(["new-post-added"]);
 
 const cotas = new AvlTree<{ cota: number; tag: string }>((a, b) => a.cota - b.cota, {
   key: "cota",
@@ -35,7 +39,27 @@ watch(postContent, (written: string) => {
   caracteres.value = characters;
 });
 
-const submitPost = async () => {};
+const submitPost = async () => {
+  try {
+    // Construir el objeto de post
+    const currentCharacter = store.state["CHARACTERS"].currentCharacter;
+    const currentUser = store.state["USERS"].user;
+    const newPost = {
+      authorId: currentCharacter ? currentCharacter._id : store.state["USERS"].user._id,
+      authorName: currentCharacter ? currentCharacter.nickname : currentUser.username,
+      authorType: currentCharacter ? "character" : "user",
+      content: postContent.value,
+    };
+
+    // Enviar la solicitud al backend para crear el post
+    const response = await store.dispatch("POSTS/CREATE_POST", newPost);
+    console.log("Post creado exitosamente:", response);
+    emit("new-post-added", newPost);
+  } catch (error) {
+    console.error("Error al crear el post:", error);
+    // Manejar el error según tus necesidades
+  }
+};
 </script>
 
 <template>
@@ -72,13 +96,16 @@ const submitPost = async () => {};
       </div>
 
       <div class="flex items-center gap-x-4">
-        <div class="flex items-center text-xs text-gray-500 gap-x-2">
+        <div class="flex items-center text-xs text-zinc-600 gap-x-2">
           <div>
             {{ palabras }} {{ palabras === 1 ? "palabra" : "palabras" }} /
             {{ caracteres }}
             {{ caracteres === 1 ? "caracter" : "caracteres" }}
           </div>
-          <Badge variant="outline" class="text-gray-500">{{ categoria }}</Badge>
+          <Badge
+            class="pt-[0px] text-[0.67rem] text-[#818181] dark:bg-[#27272a] bg-[#f1f5f9] dark:hover:bg-[#202022] hover:bg-[#f8fbff] shadow-none"
+            >{{ categoria }}</Badge
+          >
         </div>
 
         <button class="border px-4 py-1 rounded" @click="submitPost">Enviar</button>

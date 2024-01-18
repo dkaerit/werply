@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
+// @ts-ignore
 import { useStore } from "vuex";
+import { ref } from "vue";
 
 import Loading from "@/components/elements/Loading.vue";
 import GoogleIcon from "@/assets/svg/fill/google.svg";
@@ -39,7 +40,6 @@ const actionsMap = {
 const getLoginAction = (identifier: string) => {
   for (const [action, config] of Object.entries(actionsMap))
     if (config.regex.test(identifier)) return action;
-
   return loginActions.email; // Por defecto email
 };
 
@@ -47,7 +47,9 @@ const login = async () => {
   try {
     // Lógica de inicio de sesión con correo electrónico/usuario y contraseña
     // Llama a la acción de autenticación del módulo de Vuex
-    await store.dispatch(getLoginAction(identifier.value), {
+    const action = getLoginAction(identifier.value);
+    console.log("login", action, identifier.value);
+    await store.dispatch(action, {
       identifier: identifier.value, // email o username
       password: password.value,
     });

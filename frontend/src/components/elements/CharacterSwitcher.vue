@@ -7,7 +7,7 @@ import { PlusCircledIcon } from "@radix-icons/vue";
 
 import { LogOut } from "lucide-vue-next";
 
-import { ref, computed, onBeforeMount } from "vue";
+import { ref, computed, onBeforeMount, watchEffect } from "vue";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,6 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Character } from "@/store/characters/characters.interfaces";
 
 import NewCharacterForm from "@/components/elements/NewCharacterForm.vue";
 
@@ -48,13 +47,12 @@ const formatCharacters = computed(() =>
   }))
 );
 
-console.log("characters.value", characters.value);
-
 const groups = ref([
   {
     label: "Personal Account",
     teams: [
       {
+        id: userid.value,
         label: username.value || "���",
         value: "personal",
       },
@@ -67,7 +65,15 @@ const groups = ref([
 ]);
 
 const open = ref(false);
-const selectedTeam = ref<Team>(groups.value[0].teams[0]);
+
+const selectedPj = ref<Team>(
+  store.state["CHARACTERS"].currentCharacter
+    ? formatCharacters.value.find(
+        (team) => team.id === store.state["CHARACTERS"].currentCharacter?._id
+      ) || groups.value[0].teams[0]
+    : groups.value[0].teams[0]
+);
+
 const showNewTeamDialog = ref(false);
 
 const filterFunction = (list: Team[], search: string) =>
@@ -78,7 +84,7 @@ const filterFunction = (list: Team[], search: string) =>
 const shouldShowSecondImage = computed(() => {
   // Check if the selected team belongs to group[1]
   return groups.value[1].teams.some(
-    (team: any) => team.value === selectedTeam.value?.value
+    (team: any) => team.value === selectedPj.value?.value
   );
 });
 
@@ -93,13 +99,25 @@ const handleSubmit = async () => {
 };
 
 const selectCharacter = async (character: Team) => {
+  console.log(selectedPj);
   if (character.value == "personal") store.commit("CHARACTERS/setCurrentCharacter", null);
   else {
     const finded = characters.value[character.id];
     console.log("finded: ", finded);
     await store.commit("CHARACTERS/setCurrentCharacter", finded);
+    //window.location.reload();
   }
 };
+
+watchEffect(() => {
+  // Lógica para observar cambios reactivamente
+  characters.value = store.state["CHARACTERS"].characters;
+  groups.value[1].teams = Object.values(characters.value).map((character: any) => ({
+    id: character._id,
+    label: character.pjname,
+    value: character.nickname,
+  }));
+});
 </script>
 
 <template>
@@ -122,12 +140,12 @@ const selectCharacter = async (character: Team) => {
             <img
               v-if="shouldShowSecondImage"
               class="w-6 h-6 border-2 border-white rounded-full dark:border-gray-800"
-              :src="`https://avatar.vercel.sh/${selectedTeam.value}.png`"
+              :src="`https://avatar.vercel.sh/${selectedPj?.value}.png`"
               alt=""
             />
           </div>
           <span class="text-left pl-1 pr-4 truncate w-36">{{
-            selectedTeam ? selectedTeam.label : "Username"
+            selectedPj ? selectedPj.label : "Username"
           }}</span>
           <ChevronsUpDown class="h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -144,29 +162,29 @@ const selectCharacter = async (character: Team) => {
             >
               <CommandItem
                 class="cursor-pointer"
-                v-for="team in group.teams"
-                :key="team.value"
-                :value="team"
+                v-for="character in group.teams"
+                :key="character.value"
+                :value="character"
                 @select="(ev: any) => {
-                selectedTeam = ev.detail.value;
+                selectedPj = ev.detail.value;
                 open = false;
-                selectCharacter(team);
+                selectCharacter(character);
               }"
               >
                 <Avatar class="mr-2 h-5 w-5">
                   <AvatarImage
-                    :src="`https://avatar.vercel.sh/${team.value}.png`"
-                    :alt="team.label"
+                    :src="`https://avatar.vercel.sh/${character.value}.png`"
+                    :alt="character.label"
                     class="grayscale"
                   />
-                  <AvatarFallback>SC</AvatarFallback>
+                  <AvatarFallback>CH</AvatarFallback>
                 </Avatar>
-                {{ team.label }}
+                {{ character.label }}
                 <Check
                   :class="
                     cn(
                       'ml-auto h-4 w-4',
-                      selectedTeam?.value === team.value ? 'opacity-100' : 'opacity-0'
+                      selectedPj?.value === character.value ? 'opacity-100' : 'opacity-0'
                     )
                   "
                 />

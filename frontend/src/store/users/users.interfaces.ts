@@ -2,11 +2,10 @@ export interface UserState {
     avatar: string;
     nickname: string;
     username: string;
-    pjs: string[];
-    // Otras propiedades según tus necesidades
+    // Otras propiedades
 }
 
 export interface RootState {
     user: UserState;
-    // Otros estados si los tienes
+    // Otros estados si los tiene
 }

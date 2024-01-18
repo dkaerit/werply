@@ -6,9 +6,9 @@ export interface LoginPayload {
     password: string;
 }
 
-export interface EndpointWithPayload { 
-    endpoint: string, 
-    payload: LoginPayload 
+export interface EndpointWithPayload {
+    endpoint: string,
+    payload: LoginPayload
 }
 
 export interface RegistrationData {
@@ -17,4 +17,12 @@ export interface RegistrationData {
     nickname: string;
     username: string;
     passwd: string;
-  }
+}
+
+export interface UserData {
+    _id: string;
+    avatar: string;
+    email: string;
+    nickname: string;
+    username: string;
+}

@@ -3,15 +3,15 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
+  //DropdownMenuLabel,
+  //DropdownMenuSeparator,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash, BookText } from "lucide-vue-next";
 
 import MoreIcon from "@/assets/svg/more-horizontal.svg";
-import StoryPlotIcon from "@/assets/svg/fill/story-plot.svg";
+//import StoryPlotIcon from "@/assets/svg/fill/story-plot.svg";
 
 const props = defineProps(["postId"]);
 

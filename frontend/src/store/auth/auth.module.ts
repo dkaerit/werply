@@ -2,6 +2,7 @@
 import { Commit, Dispatch } from 'vuex'
 import axios, { AxiosError } from 'axios'
 import { uri, store } from '../index';
+import { UserData } from './auth.interfaces'
 import { LoginPayload, EndpointWithPayload, RegistrationData } from "./auth.interfaces"
 interface Triggers { commit: Commit, dispatch: Dispatch }
 
@@ -40,7 +41,6 @@ export default {
 
         setToken: (_: {}, token: string) => {
             //state.token = token
-            alert("espera")
             localStorage.setItem("TokenSession", token); 
             location.reload();
         },
@@ -65,6 +65,9 @@ export default {
     actions: {
 
         async DISMISS_TOKEN({ commit }: Triggers): Promise<void> {
+            store.state["USERS"].user = undefined;
+            store.state["CHARACTERS"].characters = {};
+            store.state["CHARACTERS"].currentCharacter = null;
             await commit('dismissToken');
         },
 
@@ -92,16 +95,17 @@ export default {
             try {
                 const response = await axios.post(`${uri}${endpoint}`, { [field]: payload.identifier, "passwd": payload.password });
                 const token = response.data.token;
-                await commit('setToken', token);
-                await store.dispatch("USERS/FETCH_USER", payload.identifier);
+                await commit('setToken', token);                              
             } catch (error) {
+                
                 if (axios.isAxiosError(error)) {
                     const axiosError = error as AxiosError;
                     if(error.code == "ERR_NETWORK") throw new Error('Servidor no disponible');
                     if (axiosError.response?.status === 401 || axiosError.response?.status === 404) throw new Error('Usuario o contraseña incorrectos'); 
                 }
-
-                throw new Error('Error desconocido'); 
+                
+                console.log(error)
+                throw new Error('Error desconocido al autenticar'); 
             }
         },
 
@@ -188,6 +192,21 @@ export default {
                 return response.data; 
             } catch (error) {
                 throw new Error('Error al verificar la existencia del correo electrónico');
+            }
+        },
+
+
+        async GET_USER_INFO({}: Triggers): Promise<UserData | {}> {
+            try {
+                const token = localStorage.getItem("TokenSession");
+                console.log("GET_USER_INFO-(token): ", token)
+                if(token) {
+                    const response = await axios.get(`${uri}/auth/user-info`, { headers: { authorization: token } });
+                    return response.data;
+                } else return {}
+
+            } catch (error) {
+                throw new Error("Error al obtener la información del usuario");
             }
         },
     }   
