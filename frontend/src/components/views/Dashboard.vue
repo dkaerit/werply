@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // @ts-ignore
-import { useStore } from "vuex";
-import { ref, watchEffect, onMounted, onUnmounted } from "vue";
+import { useStore, mapGetters } from "vuex";
+import { ref, watchEffect } from "vue";
 
 // Importar componentes y estilos
 import PostInput from "@/components/elements/PostInput.vue";
@@ -9,69 +9,37 @@ import LoadingIndicator from "@/components/elements/LoadingIndicator.vue";
 import PostBlock from "@/components/elements/PostBlock.vue";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DualColumnLayout from "@/components/layouts/DualColumnLayout.vue";
-import { PostData } from "@/store/posts/posts.interface";
+//import { PostData } from "@/store/posts/posts.interface";
 
 const store = useStore();
 const activeTab = ref("all");
 const allPostsLoaded = ref(false); // sabrá si se han cargado todos los post si dado un page los post devueltos es []
-const loadedPosts = ref([] as PostData[]);
 const page = ref(1);
-const pageSize = ref(10);
-const loadingMore = ref(false);
-const forLoadPosts = ref([] as PostData[]);
+const fetchPosts = (page: number) =>
+  store.dispatch("POSTS/FETCH_POSTS", { page: page, pageSize: 10 });
 
 const changeState = (tabValue: string) => {
   activeTab.value = tabValue;
-  // Reiniciar la paginación al cambiar de pestaña
-  page.value = 1;
-  loadedPosts.value = [];
-  fetchPosts();
+  page.value = 1; // Reiniciar la paginación al cambiar de pestaña
+  fetchPosts(page.value);
 };
 
 // la lista final de post cargados viene dada por la union de la lista de post propios + la de los mutuals
 const loadMore = async () => {
-  if (!loadingMore.value) {
-    loadingMore.value = true;
+  if (!allPostsLoaded.value) {
     page.value++;
-    await fetchPosts();
-    loadingMore.value = false;
+    fetchPosts(page.value); // llegará el punto en que retorne []
+    alert("espera");
   }
 };
-
-const fetchPosts = async () => {
-  loadedPosts.value = await store.dispatch("POSTS/FETCH_POSTS", { page: 1, pageSize: 6 });
-  console.log("fetchPosts-loadedposts:", loadedPosts.value);
-};
-
-// Observar cambios en activeTab y cargar la sigiente pagina
-watchEffect(() => {
-  fetchPosts();
-  allPostsLoaded.value = forLoadPosts.value.length == 0 ? true : false;
-});
-
-// controlar la altura del scroll para cargar más posts
-const handleScroll = () => {
-  const container = document.getElementById("timeline");
-  if (container) {
-    const { scrollTop, scrollHeight, clientHeight } = container;
-    if (scrollTop + clientHeight >= scrollHeight - 50 && !allPostsLoaded.value) {
-      loadMore();
-    }
-  }
-};
-
-// Manejar eventos de scroll al montar y desmontar el componente
-onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
-});
 
 const handleNewPostAdded = () => {
-  fetchPosts();
+  fetchPosts(page.value);
 };
+
+watchEffect(() => {
+  fetchPosts(page.value);
+});
 </script>
 
 <template>
@@ -100,16 +68,14 @@ const handleNewPostAdded = () => {
           <div
             id="timeline"
             class="flex-1 overflow-auto space-y-2 p-4 pt-3 h-[calc(99vh_-_4rem)]"
-            ref="timelineContainer"
-            @scroll="handleScroll"
           >
             <!-- Post input -->
             <PostInput @new-post-added="handleNewPostAdded" />
 
             <!-- Bloques grandes -->
-            <template v-if="loadedPosts.length !== 0">
+            <template v-if="store.state['POSTS'].posts.length !== 0">
               <PostBlock
-                v-for="(post, index) in loadedPosts"
+                v-for="(post, index) in store.state['POSTS'].posts"
                 :key="index"
                 :value="activeTab"
                 :post="post"
@@ -119,8 +85,10 @@ const handleNewPostAdded = () => {
               />
             </template>
 
+            <Button :click="loadMore">Cargar más</Button>
+
             <!-- begin Loading -->
-            <LoadingIndicator :allPostsLoaded="allPostsLoaded" />
+            <!--<LoadingIndicator :allPostsLoaded="allPostsLoaded" />-->
             <!-- end Loading -->
           </div>
         </Tabs>

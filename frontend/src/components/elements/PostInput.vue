@@ -43,10 +43,8 @@ const submitPost = async () => {
   try {
     // Construir el objeto de post
     const currentCharacter = store.state["CHARACTERS"].currentCharacter;
-    const currentUser = store.state["USERS"].user;
     const newPost = {
       authorId: currentCharacter ? currentCharacter._id : store.state["USERS"].user._id,
-      authorName: currentCharacter ? currentCharacter.nickname : currentUser.username,
       authorType: currentCharacter ? "character" : "user",
       content: postContent.value,
     };

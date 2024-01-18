@@ -11,22 +11,14 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import PostActionDropdown from "@/components/elements/PostActionDropdown.vue";
-import { ref, watchEffect, onMounted, onUnmounted, onBeforeMount, computed } from "vue";
-import { Character } from "@/store/characters/characters.interfaces";
-import { UserState } from "@/store/users/users.interfaces";
+import { ref, watchEffect, computed } from "vue";
 
-// Props y variales de estado
-//const { post, index, authorType,  } = defineProps(["post", "index", "author"]);
-
-interface CharacterOrUser {
+interface Author {
   _id: string;
   type: string;
-  avatar: string;
-  nickname: string;
-  username: string;
-  ownerId: string;
-  bio: string;
-  pjname: string;
+  authorName?: string;
+  authorType?: string;
+  authorPublicName?: string;
 }
 
 const props = defineProps({
@@ -50,45 +42,64 @@ const props = defineProps({
 });
 
 const store = useStore();
-const author = ref({ type: props.authorType } as CharacterOrUser); // + lo que se obtenga por hacer get
+const isLoading = ref(true);
+const getUser = computed(
+  async () => await store.dispatch("USERS/GET_USER_BY_ID", props.post.authorId)
+);
+const getPj = computed(
+  async () => await store.dispatch("CHARACTERS/GET_CHARACTER_BY_ID", props.post.authorId)
+);
 
-const getUser = async (id: string) => {
-  console.log("getUser", id);
-  return await store.dispatch("USERS/GET_USER_BY_ID", id);
-};
-const getPj = async (id: string) => {
-  console.log("getPj", id);
-  return await store.dispatch("CHARACTERS/GET_CHARACTER_BY_ID", id);
-};
-
-console.log(author, props.post);
+const author = ref({
+  _id: props.post.authorId as string,
+  type: props.post.authorType as string,
+} as Author); // + lo que se obtenga por hacer get
 
 // Methods
-const formatRelativeTime = (postDate: any) => {
-  const parsedPostDate = new Date(postDate);
-  const currentDate = Date.now();
-  const differenceInSeconds = Math.floor((currentDate - parsedPostDate.getTime()) / 1000);
-
-  if (differenceInSeconds < 86400) {
-    // Si ha pasado menos de un día, muestra la diferencia relativa en horas y minutos
-    const hours = Math.floor(differenceInSeconds / 3600);
-    const minutes = Math.floor((differenceInSeconds % 3600) / 60);
-    return `Hace ${hours > 0 ? `${hours}h ` : ""}${minutes}m`;
-  } else {
-    // Si ha pasado más de un día, muestra la fecha en formato "día mes"
-    const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
-    return new Intl.DateTimeFormat("es-ES", options).format(
-      new Date(props.post.createdAt)
+const formatRelativeTime = () => {
+  if (props.post.createdAt) {
+    const parsedPostDate = new Date(props.post.createdAt);
+    const currentDate = new Date(Date.now());
+    const differenceInSeconds = Math.floor(
+      (currentDate.getTime() - parsedPostDate.getTime()) / 1000
     );
+    if (differenceInSeconds < 86400) {
+      // Si ha pasado menos de un día, muestra la diferencia relativa en horas y minutos
+      const hours = Math.floor(differenceInSeconds / 3600);
+      const minutes = Math.floor((differenceInSeconds % 3600) / 60);
+      return `Hace ${hours > 0 ? `${hours}h ` : ""}${minutes}m`;
+    } else {
+      // Si ha pasado más de un día, muestra la fecha en formato "día mes"
+      const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
+
+      return new Intl.DateTimeFormat("es-ES", options).format(new Date(parsedPostDate));
+    }
+  } else {
+    const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
+    return new Intl.DateTimeFormat("es-ES", options).format(new Date());
   }
 };
 
-onBeforeMount(async () => {
-  author.value =
-    props.authorType == "character"
-      ? await getPj(props.authorId)
-      : await getUser(props.authorId);
-  author.value["type"] = props.authorType as string;
+watchEffect(() => {
+  isLoading.value = true;
+
+  (async () => {
+    const authorData =
+      props.authorType === "character" ? await getPj.value : await getUser.value;
+    const publicName =
+      props.authorType === "character" ? authorData.pjname : authorData.nickname;
+    const name =
+      props.authorType === "character" ? authorData.nickname : authorData.username;
+
+    author.value = {
+      _id: props.post.authorId,
+      type: props.post.authorType,
+      authorName: name,
+      authorPublicName: publicName,
+    };
+
+    isLoading.value = false;
+  })();
 });
 </script>
 
@@ -100,26 +111,19 @@ onBeforeMount(async () => {
           <div class="grid grid-cols-[auto_auto_1fr] justify-start">
             <!-- GRID POST -->
             <!-- Celda 1-1: Avatar -->
-            <SquircleAvatar
-              size="45px"
-              :name="author.type == 'character' ? author.nickname : author.username"
-            />
+            <SquircleAvatar size="45px" />
 
             <!-- Celda 2-1: Título y UserID -->
             <div class="col-start-2 pl-4 flex">
               <div>
                 <div>
-                  <CardTitle>{{
-                    author.type == "character" ? author.pjname : author.nickname
-                  }}</CardTitle>
+                  <CardTitle>{{ author.authorPublicName }}</CardTitle>
                 </div>
                 <div class="flex items-center gap-[0.275rem] text-[0.875rem]">
-                  <div class="graytext">
-                    @{{ author.type == "character" ? author.nickname : author.username }}
-                  </div>
+                  <div class="graytext">@{{ author.authorName }}</div>
                   <div class="graytext">·</div>
                   <div class="graytext">
-                    {{ formatRelativeTime(props.post.createdAt) }}
+                    {{ formatRelativeTime() }}
                   </div>
                 </div>
 
