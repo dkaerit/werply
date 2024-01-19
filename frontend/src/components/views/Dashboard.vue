@@ -85,7 +85,7 @@ watchEffect(() => {
               />
             </template>
 
-            <Button :click="loadMore">Cargar más</Button>
+            <!--<Button :click="loadMore">Cargar más</Button>-->
 
             <!-- begin Loading -->
             <!--<LoadingIndicator :allPostsLoaded="allPostsLoaded" />-->

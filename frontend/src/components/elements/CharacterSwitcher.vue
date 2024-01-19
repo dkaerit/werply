@@ -99,11 +99,9 @@ const handleSubmit = async () => {
 };
 
 const selectCharacter = async (character: Team) => {
-  console.log(selectedPj);
   if (character.value == "personal") store.commit("CHARACTERS/setCurrentCharacter", null);
   else {
     const finded = characters.value[character.id];
-    console.log("finded: ", finded);
     await store.commit("CHARACTERS/setCurrentCharacter", finded);
     //window.location.reload();
   }

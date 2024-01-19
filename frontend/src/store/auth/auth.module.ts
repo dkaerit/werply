@@ -199,7 +199,6 @@ export default {
         async GET_USER_INFO({}: Triggers): Promise<UserData | {}> {
             try {
                 const token = localStorage.getItem("TokenSession");
-                console.log("GET_USER_INFO-(token): ", token)
                 if(token) {
                     const response = await axios.get(`${uri}/auth/user-info`, { headers: { authorization: token } });
                     return response.data;

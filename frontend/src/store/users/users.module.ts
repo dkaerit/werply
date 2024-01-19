@@ -105,5 +105,17 @@ export default {
             throw new Error('Error al obtener información del usuario:');
          }
       },
+   },
+
+   /////////////////////////////////////////////////////////////////////////////////////////////////
+   //                                                                                             //
+   //                                         GETTERS                                             //
+   //                                                                                             //
+   /////////////////////////////////////////////////////////////////////////////////////////////////
+
+   getters: {
+      getCurrentUserId: (state:RootState) => {
+         return state.user ? state.user._id : null;
+       },
    }
 }

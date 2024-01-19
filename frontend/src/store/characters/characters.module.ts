@@ -180,6 +180,18 @@ export default {
 
   },
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  //                                                                                             //
+  //                                         GETTERS                                             //
+  //                                                                                             //
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+
+  getters: {
+    getCurrentCharacterId: (state:RootCharacterState) => {
+      return state.currentCharacter ? state.currentCharacter._id : null;
+    },
+  }
+
 
 
 };

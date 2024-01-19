@@ -23,7 +23,11 @@ export default {
 
       fetchPosts(state:PostsState, posts:PostData[]) {
          state.posts = posts;
-      }
+      },
+
+      removePost(state: PostsState, postId: string) {
+         state.posts = state.posts.filter(post => post._id !== postId);
+      },
    },
    actions: {
       async CREATE_POST({ commit }: Triggers, postData: PostData) {
@@ -39,11 +43,20 @@ export default {
       async FETCH_POSTS({ commit }: Triggers, { page, pageSize }: { tab: string, page: number, pageSize: number }) {
          try {
             const response = await axios.get(`${uri}/posts/read?pageSize=${pageSize}&page=${page}`);
-            console.log("FETCH_POSTS-(response.data)", response.data);
             commit('fetchPosts', response.data);
             return response.data;
          } catch (error) {
             console.error('Error fetching posts:', error);
+            throw error;
+         }
+      },
+
+      async DELETE_POST({ commit }: Triggers, postId: string) {
+         try {
+            await axios.delete(`${uri}/posts/delete/id:${postId}`);
+            commit("removePost", postId);
+         } catch (error) {
+            console.error('Error deleting post:', error);
             throw error;
          }
       },

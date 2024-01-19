@@ -1,10 +1,11 @@
 <script setup lang="ts">
+// @ts-ignore
+import { useStore } from "vuex";
+import { computed } from "vue";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  //DropdownMenuLabel,
-  //DropdownMenuSeparator,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -13,21 +14,47 @@ import { Edit, Trash, BookText } from "lucide-vue-next";
 import MoreIcon from "@/assets/svg/more-horizontal.svg";
 //import StoryPlotIcon from "@/assets/svg/fill/story-plot.svg";
 
-const props = defineProps(["postId"]);
+interface Post {
+  _id: string;
+  authorId: string;
+  authorType: string;
+  content: string;
+  createdAt: Date;
+}
 
-const editPost = () => {
-  console.log("Edit Post:", props.postId);
-};
+const store = useStore();
+const props = defineProps({
+  post: Object as () => Post,
+});
 
-const deletePost = () => {
+const editPost = () => {};
+
+const deletePost = async () => {
   // Lógica para eliminar el post con el ID props.postId
-  console.log("Delete Post:", props.postId);
+  try {
+    if (props.post) await store.dispatch("POSTS/DELETE_POST", props.post._id);
+  } catch (error) {
+    console.error("Error deleting post:", error);
+  }
 };
 
 const startPlot = () => {
   // Lógica para iniciar un hilo relacionado con el post con el ID props.postId
-  console.log("Start Thread:", props.postId);
 };
+
+//console.log("dropdown", props.post);
+
+const isPostOwnedByCurrentUser = computed(() => {
+  const currentCharacterId = store.getters["CHARACTERS/getCurrentCharacterId"];
+  const currentUserId = store.getters["USERS/getCurrentUserId"];
+  const authorId =
+    store.state["CHARACTERS"].currentCharacter != null
+      ? currentCharacterId
+      : currentUserId;
+
+  // Verificar si el post pertenece al personaje actual o al usuario actual
+  return authorId === props.post?.authorId;
+});
 </script>
 
 <template>
@@ -51,7 +78,7 @@ const startPlot = () => {
       </DropdownMenuItem>
 
       <!-- Delete Post -->
-      <DropdownMenuItem @click="deletePost">
+      <DropdownMenuItem v-if="isPostOwnedByCurrentUser" @click="deletePost">
         <Trash class="mr-2 h-4 w-4" />
         <span>Borrar</span>
       </DropdownMenuItem>

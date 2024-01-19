@@ -1,4 +1,5 @@
 export interface UserState {
+    _id:string;
     avatar: string;
     nickname: string;
     username: string;

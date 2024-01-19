@@ -16,14 +16,21 @@ import { ref, watchEffect, computed } from "vue";
 interface Author {
   _id: string;
   type: string;
-  authorName?: string;
-  authorType?: string;
+  authorName: string;
   authorPublicName?: string;
+}
+
+interface Post {
+  _id: string;
+  authorId: string;
+  authorType: string;
+  content: string;
+  createdAt: Date;
 }
 
 const props = defineProps({
   post: {
-    type: Object,
+    type: Object as () => Post,
     required: true,
   },
   index: {
@@ -140,7 +147,7 @@ watchEffect(() => {
 
             <!-- Celda 3-1: Dropdown -->
             <div class="row-start-1 col-start-3 pl-4 flex justify-end">
-              <PostActionDropdown />
+              <PostActionDropdown :post="props.post" />
             </div>
           </div>
         </CardHeader>
