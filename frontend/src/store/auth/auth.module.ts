@@ -89,12 +89,19 @@ export default {
          * #param payload - Carga útil para la autenticación
          */
 
-        async AUTHENTICATE({ commit }: Triggers, { endpoint, payload }: EndpointWithPayload): Promise<void | { error: string }> {
+        async AUTHENTICATE({ commit, dispatch }: Triggers, { endpoint, payload }: EndpointWithPayload): Promise<void | { error: string }> {
             const field = fieldMapping[endpoint];
 
             try {
                 const response = await axios.post(`${uri}${endpoint}`, { [field]: payload.identifier, "passwd": payload.password });
                 const token = response.data.token;
+
+                if(token) 
+                await dispatch('USERS/FETCH_USER', payload.identifier);
+
+                console.log(store.state["USERS"].user)
+                alert("espera");
+
                 await commit('setToken', token);                              
             } catch (error) {
                 

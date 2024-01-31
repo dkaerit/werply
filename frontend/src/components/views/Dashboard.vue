@@ -5,15 +5,15 @@ import { ref, watchEffect } from "vue";
 
 // Importar componentes y estilos
 import PostInput from "@/components/elements/PostInput.vue";
-import LoadingIndicator from "@/components/elements/LoadingIndicator.vue";
 import PostBlock from "@/components/elements/PostBlock.vue";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DualColumnLayout from "@/components/layouts/DualColumnLayout.vue";
 //import { PostData } from "@/store/posts/posts.interface";
+//import LoadingIndicator from "@/components/elements/LoadingIndicator.vue";
 
 const store = useStore();
 const activeTab = ref("all");
-const allPostsLoaded = ref(false); // sabrá si se han cargado todos los post si dado un page los post devueltos es []
+//const allPostsLoaded = ref(false); // sabrá si se han cargado todos los post si dado un page los post devueltos es []
 const page = ref(1);
 const fetchPosts = (page: number) =>
   store.dispatch("POSTS/FETCH_POSTS", { page: page, pageSize: 10 });
@@ -25,13 +25,13 @@ const changeState = (tabValue: string) => {
 };
 
 // la lista final de post cargados viene dada por la union de la lista de post propios + la de los mutuals
-const loadMore = async () => {
+/*const loadMore = async () => {
   if (!allPostsLoaded.value) {
     page.value++;
     fetchPosts(page.value); // llegará el punto en que retorne []
     alert("espera");
   }
-};
+};*/
 
 const handleNewPostAdded = () => {
   fetchPosts(page.value);

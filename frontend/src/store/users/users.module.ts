@@ -60,9 +60,11 @@ export default {
 
       async FETCH_USER({ commit, dispatch }: Triggers, identifier: string) {
          try {
+            console.log("fetch-user(identifier)", identifier);
             // Hacer una solicitud al backend para obtener la información del usuario
             const response = await axios.get(`${uri}/users/read:${identifier}`);
-            commit('setUser', response.data);
+            console.log("fetch-user(data)", response.data);
+            await commit('setUser', response.data);
             dispatch('CHARACTERS/FETCH_CHARACTERS_BY_USER_ID', response.data._id);
          } catch (error) {
             // Manejar errores (por ejemplo, usuario no autenticado)
