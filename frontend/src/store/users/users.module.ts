@@ -65,7 +65,7 @@ export default {
             const response = await axios.get(`${uri}/users/read:${identifier}`);
             console.log("fetch-user(data)", response.data);
             await commit('setUser', response.data);
-            dispatch('CHARACTERS/FETCH_CHARACTERS_BY_USER_ID', response.data._id);
+            dispatch('CHARACTERS/FETCH_CHARACTERS_BY_USER_ID', response.data._id, {root:true});
          } catch (error) {
             // Manejar errores (por ejemplo, usuario no autenticado)
             throw new Error('Error al obtener información del usuario:');

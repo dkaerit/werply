@@ -96,8 +96,10 @@ export default {
                 const response = await axios.post(`${uri}${endpoint}`, { [field]: payload.identifier, "passwd": payload.password });
                 const token = response.data.token;
 
+                console.log("AUTHENTICATE-token:", token);
+
                 if(token) 
-                await dispatch('USERS/FETCH_USER', payload.identifier);
+                await dispatch('USERS/FETCH_USER', payload.identifier, {root:true});
 
                 console.log(store.state["USERS"].user)
                 alert("espera");
