@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // @ts-ignore
 import { useStore, mapGetters } from "vuex";
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, onBeforeMount } from "vue"; // onBeforeUnmount
 
 // Importar componentes y estilos
 import PostInput from "@/components/elements/PostInput.vue";
@@ -11,34 +11,81 @@ import DualColumnLayout from "@/components/layouts/DualColumnLayout.vue";
 //import { PostData } from "@/store/posts/posts.interface";
 //import LoadingIndicator from "@/components/elements/LoadingIndicator.vue";
 
+interface Post {
+  id: string;
+  createdAt: Date; // Ajusta el tipo según el formato real de la fecha en tus posts
+}
+
 const store = useStore();
+const hasLoaded = ref(false); // Variable de control para evitar el bucle infinito
 const activeTab = ref("all");
-//const allPostsLoaded = ref(false); // sabrá si se han cargado todos los post si dado un page los post devueltos es []
-const page = ref(1);
-const fetchPosts = (page: number) =>
-  store.dispatch("POSTS/FETCH_POSTS", { page: page, pageSize: 10 });
 
-const changeState = (tabValue: string) => {
-  activeTab.value = tabValue;
-  page.value = 1; // Reiniciar la paginación al cambiar de pestaña
-  fetchPosts(page.value);
-};
+const pageSize = ref(5);
+const newestDate = ref(null as null | Date);
+const oldestDate = ref(null as null | Date);
 
-// la lista final de post cargados viene dada por la union de la lista de post propios + la de los mutuals
-/*const loadMore = async () => {
-  if (!allPostsLoaded.value) {
-    page.value++;
-    fetchPosts(page.value); // llegará el punto en que retorne []
-    alert("espera");
+const updateReferenceDates = (newPosts: Post[], side: string) => {
+  if (newPosts.length > 0) {
+    const dates = newPosts.map((post: Post) => new Date(post.createdAt).getTime());
+    if (side == "top") newestDate.value = new Date(Math.max(...dates));
+    if (side == "bottom") oldestDate.value = new Date(Math.min(...dates));
   }
-};*/
-
-const handleNewPostAdded = () => {
-  fetchPosts(page.value);
 };
 
-watchEffect(() => {
-  fetchPosts(page.value);
+const initialFetchNewerPosts = () =>
+  store
+    .dispatch("POSTS/FETCH_INITIAL_POSTS", {
+      page: 1,
+      pageSize: pageSize.value,
+      filters: {},
+    })
+    .then((newPosts: Post[]) => updateReferenceDates(newPosts, "top"));
+
+/*const fetchNewerPosts = () =>
+  store
+    .dispatch("POSTS/FETCH_ADDITIONAL_POSTS", {
+      page: 1,
+      pageSize: pageSize.value,
+      filters: { loadSide: "top", referenceDate: newestDate.value },
+    })
+    .then((newPosts: Post[]) => updateReferenceDates(newPosts, "top"));*/
+
+const fetchOlderPosts = async () => {
+  hasLoaded.value = false;
+  const currentPosts = store.state["POSTS"].posts;
+  const referenceDate =
+    currentPosts.length > 0 ? currentPosts[currentPosts.length - 1].createdAt : null; // createdAt del ultimo post o null
+
+  const olderPosts: Post[] = await store.dispatch("POSTS/FETCH_ADDITIONAL_POSTS", {
+    page: 1,
+    pageSize: pageSize.value,
+    filters: { loadSide: "bottom", referenceDate },
+  });
+
+  //store.commit("POSTS/addPosts", olderPosts, "bottom");
+  updateReferenceDates(olderPosts, "bottom");
+  hasLoaded.value = true;
+};
+
+const loadOlderPosts = () => {
+  fetchOlderPosts();
+};
+
+// cambiar de pestaña
+const changeState = (tabValue: string) => {
+  activeTab.value = tabValue; // 'all' or 'favorites'
+  initialFetchNewerPosts(); // cargar posts
+};
+
+watchEffect(() => {});
+
+const onScroll = (event: UIEvent) => {
+  const { scrollTop, clientHeight, scrollHeight } = event.target as HTMLElement;
+  if (scrollTop + clientHeight >= scrollHeight) loadOlderPosts();
+};
+
+onBeforeMount(() => {
+  initialFetchNewerPosts();
 });
 </script>
 
@@ -68,9 +115,12 @@ watchEffect(() => {
           <div
             id="timeline"
             class="flex-1 overflow-auto space-y-2 p-4 pt-3 h-[calc(99vh_-_4rem)]"
+            @scroll="onScroll"
           >
             <!-- Post input -->
-            <PostInput @new-post-added="handleNewPostAdded" />
+            <PostInput />
+
+            <Button :click="() => {}">Cargar nuevos</Button>
 
             <!-- Bloques grandes -->
             <template v-if="store.state['POSTS'].posts.length !== 0">
@@ -85,7 +135,7 @@ watchEffect(() => {
               />
             </template>
 
-            <!--<Button :click="loadMore">Cargar más</Button>-->
+            <Button @click="loadOlderPosts()">Cargar antiguos</Button>
 
             <!-- begin Loading -->
             <!--<LoadingIndicator :allPostsLoaded="allPostsLoaded" />-->

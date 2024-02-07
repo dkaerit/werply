@@ -22,13 +22,13 @@ export class MutualController {
 
   /**
    * Endpoint para obtener todos los mutuals de un usuario específico.
-   * #param userId ID del usuario para el cual se obtienen los mutuals.
+   * #param id ID del usuario para el cual se obtienen los mutuals.
    * #returns Lista de mutuals del usuario.
    */
-  @Get('id:userId')
-  getUserMutuals(@Param('userId') userId: string): Promise<Mutual[]> {
-    userId = userId.replace(':', '');
-    return this.mutualService.getUserMutuals(userId);
+  @Get('id:id')
+  getUserMutuals(@Param('id') id: string): Promise<Mutual[]> {
+    id = id.replace(':', '');
+    return this.mutualService.getUserMutuals(id);
   }
 
   /**
@@ -38,7 +38,6 @@ export class MutualController {
    */
   @Post('create')
   createMutual(@Body() createMutualDto: CreateMutualDto): Promise<Mutual> {
-    console.log(createMutualDto);
     return this.mutualService.createMutual(createMutualDto);
   }
 
@@ -59,7 +58,7 @@ export class MutualController {
    * #returns El mutual eliminado.
    */
   @Delete('delete/pair')
-  deleteMutualByPair(@Query() query: { userId1: string; userId2: string }): Promise<Mutual> {
-    return this.mutualService.deleteMutualByPair(query.userId1, query.userId2);
+  deleteMutualByPair(@Query() query: { id1: string; id2: string }): Promise<Mutual> {
+    return this.mutualService.deleteMutualByPair(query.id1, query.id2);
   }
 }

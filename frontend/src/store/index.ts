@@ -17,9 +17,7 @@ const backendPort = import.meta.env.BACKEND_PORT || 3000;
 export const uri: string = `http://${backendHost}:${backendPort}`;
 const socket = io(uri); // Inicializar el socket.io
 
-const vuexLocal = new VuexPersistence({
-  storage: window.localStorage
-})
+const vuexLocal = new VuexPersistence()
 
 export const store = createStore({
   state: () => ({}),

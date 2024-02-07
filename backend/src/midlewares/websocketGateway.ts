@@ -42,10 +42,10 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
    * #param mutualIds Lista de IDs de mutuals.
    * #returns Un ID de canal para notificaciones.
    */
-  public generateChannelId(mainUserId: string, mutualIds: string[]): string {
-    const allIds = [mainUserId, ...mutualIds].sort().join('_');
-    const hash = createHash('md5').update(allIds).digest('hex');  // Aplica MD5 para generar hash
-    return `channel_${hash}`;
+  public generateChannelId(ownerId: string, mutualIds: string[] = []): string {
+    //const allIds = [mainUserId, ...mutualIds].sort().join('_');
+    //const hash = createHash('md5').update(allIds).digest('hex');  // Aplica MD5 para generar hash
+    return `channel_${ownerId}`;
   }
   
 }

@@ -49,8 +49,8 @@ watch(
 const followUser = async () => {
   try {
     await store.dispatch("MUTUALS/CREATE_MUTUAL", {
-      userId1: store.state["USERS"].user._id,
-      userId2: userParam.value?._id,
+      id1: store.state["USERS"].user._id,
+      id2: userParam.value?._id,
       relationshipType: "user",
       status: "pending",
     });
@@ -67,8 +67,8 @@ const followUser = async () => {
 const unfollowUser = async () => {
   try {
     const params = {
-      userId1: store.state["USERS"].user._id,
-      userId2: userParam.value?._id,
+      id1: store.state["USERS"].user._id,
+      id2: userParam.value?._id,
     };
 
     const mutualRes = await store.dispatch("MUTUALS/DELETE_MUTUAL", params);
@@ -84,11 +84,11 @@ const isMutual = computed(() => {
     userParam.value &&
     (store.state["MUTUALS"].mutuals?.some(
       (mutual: MutualData) =>
-        mutual.userId2 === userParam.value?._id && mutual.status === "active"
+        mutual.id2 === userParam.value?._id && mutual.status === "active"
     ) ||
       store.state["MUTUALS"].mutuals.some(
         (mutual: MutualData) =>
-          mutual.userId1 === userParam.value?._id && mutual.status === "active"
+          mutual.id1 === userParam.value?._id && mutual.status === "active"
       ))
   );
 });
@@ -98,7 +98,7 @@ const isPending = computed(() => {
     userParam.value &&
     store.state["MUTUALS"].mutuals?.some(
       (mutual: MutualData) =>
-        mutual.userId2 === userParam.value?._id && mutual.status === "pending"
+        mutual.id2 === userParam.value?._id && mutual.status === "pending"
     )
   );
 });

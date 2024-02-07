@@ -5,8 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Schema({ versionKey: '_vk' })
 export class Mutual extends Document {
-  @Prop({ required: true, type: String }) userId1: string;
-  @Prop({ required: true, type: String }) userId2: string;
+  @Prop({ required: true, type: String }) id1: string;
+  @Prop({ required: true, type: String }) id2: string;
   @Prop({ required: true, type: String }) relationshipType: string; 
   @Prop({ default: 'pending' }) status: string;
 }
@@ -14,7 +14,7 @@ export class Mutual extends Document {
 export type MutualDocument = Mutual & Document;
 export const MutualSchema = SchemaFactory.createForClass(Mutual);
 
-MutualSchema.index({ userId1: 1, userId2: 1 }, { unique: true }); // Índice compuesto para userId1 y userId2
+MutualSchema.index({ id1: 1, id2: 1 }, { unique: true }); // Índice compuesto para userId1 y userId2
 
 export const MutualFeatured = MongooseModule.forFeature([ 
   { name: Mutual.name, schema: MutualSchema }

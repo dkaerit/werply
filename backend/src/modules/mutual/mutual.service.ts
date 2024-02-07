@@ -18,11 +18,11 @@ export class MutualService {
 
    /**
    * Obtiene todos los mutuals de un usuario específico.
-   * #param userId ID del usuario para el cual se obtienen los mutuals.
+   * #param id ID del usuario/personaje para el cual se obtienen los mutuals.
    * #returns Lista de mutuals del usuario.
    */
-   async getUserMutuals(userId: string): Promise<Mutual[]> {
-    return await this.mutualModel.find({ $or: [{ userId1: userId }, { userId2: userId }] }).exec();
+   async getUserMutuals(id: string): Promise<Mutual[]> {
+    return await this.mutualModel.find({ $or: [{ id1: id }, { id2: id }] }).exec();
   }
 
  /**
@@ -47,16 +47,16 @@ export class MutualService {
 
   /**
    * Elimina un mutual por el par de userIds.
-   * #param userId1 ID del primer usuario.
-   * #param userId2 ID del segundo usuario.
+   * #param id1 ID del primer usuario/personaje.
+   * #param id2 ID del segundo usuario/personaje.
    * #returns El mutual eliminado.
    */
-  async deleteMutualByPair(userId1: string, userId2: string): Promise<Mutual> {
+  async deleteMutualByPair(id1: string, id2: string): Promise<Mutual> {
     // Buscar el mutual por el par de userIds
     const mutual = await this.mutualModel.findOne({
       $or: [
-        { userId1: userId1, userId2: userId2 },
-        { userId1: userId2, userId2: userId1 },
+        { id1: id1, id2: id2 },
+        { id1: id2, id2: id1 },
       ],
     }).exec();
 

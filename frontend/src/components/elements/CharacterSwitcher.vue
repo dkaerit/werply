@@ -91,6 +91,14 @@ const shouldShowSecondImage = computed(() => {
 onBeforeMount(async () => {
   // Cuando el componente se monta, obtén los personajes asociados al usuario
   await store.dispatch("CHARACTERS/FETCH_CHARACTERS_BY_USER_ID", userid.value);
+  if (store.state["CHARACTERS"].currentCharacter) {
+    await store.dispatch(
+      "MUTUALS/FETCH_MUTUALS",
+      store.state["CHARACTERS"].currentCharacter._id
+    );
+  } else {
+    await store.dispatch("MUTUALS/FETCH_MUTUALS", userid.value);
+  }
 });
 
 const handleSubmit = async () => {
@@ -99,11 +107,13 @@ const handleSubmit = async () => {
 };
 
 const selectCharacter = async (character: Team) => {
-  if (character.value == "personal") store.commit("CHARACTERS/setCurrentCharacter", null);
-  else {
+  if (character.value == "personal") {
+    store.commit("CHARACTERS/setCurrentCharacter", null);
+    await store.dispatch("MUTUALS/FETCH_MUTUALS", userid.value);
+  } else {
     const finded = characters.value[character.id];
     await store.commit("CHARACTERS/setCurrentCharacter", finded);
-    //window.location.reload();
+    await store.dispatch("MUTUALS/FETCH_MUTUALS", character.id);
   }
 };
 

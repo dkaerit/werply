@@ -29,9 +29,8 @@ const currentCharacter = ref(store.state["CHARACTERS"].currentCharacter);
  */
 onBeforeMount(async () => {
   const charactername = router.currentRoute.value.params.nickname as string;
+  console.log("mount", charactername);
   pjParam.value = await store.dispatch("CHARACTERS/GET_CHARACTER", charactername);
-  console.log("pjParam.value", pjParam.value);
-  console.log("currentCharacter", store.state["CHARACTERS"].currentCharacter);
 });
 
 /**
@@ -43,7 +42,7 @@ watch(
   // @ts-ignore
   async (newCharactername: string) => {
     pjParam.value = await store.dispatch("CHARACTERS/GET_CHARACTER", newCharactername);
-    console.log("currentCharacter", store.state["CHARACTERS"].currentCharacter);
+    //console.log("currentCharacter", store.state["CHARACTERS"].currentCharacter);
   }
 );
 
@@ -54,13 +53,13 @@ watch(
 const followCharacter = async () => {
   try {
     await store.dispatch("MUTUALS/CREATE_MUTUAL", {
-      userId1: store.state["USERS"].user._id,
-      userId2: pjParam.value?._id,
+      id1: store.state["CHARACTERS"].currentCharacter._id,
+      id2: pjParam.value?._id,
       relationshipType: "pj",
       status: "pending",
     });
   } catch (error) {
-    console.error("Error al seguir al personaje:", error);
+    //console.error("Error al seguir al personaje:", error);
     throw error;
   }
 };
@@ -72,14 +71,12 @@ const followCharacter = async () => {
 const unfollowCharacter = async () => {
   try {
     const params = {
-      userId1: store.state["USERS"].user._id,
-      userId2: pjParam.value?._id,
+      id1: store.state["CHARACTERS"].currentCharacter._id,
+      id2: pjParam.value?._id,
     };
 
-    const mutualRes = await store.dispatch("MUTUALS/DELETE_MUTUAL", params);
-    console.log("Unfollow exitoso:", mutualRes);
+    await store.dispatch("MUTUALS/DELETE_MUTUAL", params);
   } catch (error) {
-    console.error("Error al dejar de seguir al personaje:", error);
     throw error;
   }
 };
@@ -89,21 +86,22 @@ const isMutual = computed(() => {
     pjParam.value &&
     (store.state["MUTUALS"].mutuals?.some(
       (mutual: MutualData) =>
-        mutual.userId2 === pjParam.value?._id && mutual.status === "active"
+        mutual.id2 === pjParam.value?._id && mutual.status === "active"
     ) ||
       store.state["MUTUALS"].mutuals.some(
         (mutual: MutualData) =>
-          mutual.userId1 === pjParam.value?._id && mutual.status === "active"
+          mutual.id1 === pjParam.value?._id && mutual.status === "active"
       ))
   );
 });
 
 const isPending = computed(() => {
+  console.log("isPending", store.state["MUTUALS"].mutuals, pjParam.value?._id);
   return (
     pjParam.value &&
     store.state["MUTUALS"].mutuals?.some(
       (mutual: MutualData) =>
-        mutual.userId2 === pjParam.value?._id && mutual.status === "pending"
+        mutual.id2 === pjParam.value?._id && mutual.status === "pending"
     )
   );
 });

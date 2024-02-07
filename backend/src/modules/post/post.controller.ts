@@ -13,10 +13,13 @@ export class PostController {
    * #param filters Filtros opcionales para la consulta.
    * #returns Array de posts paginados.
    */
-  @Get("read")
-  async getPosts(@Query('page') page: number = 1, @Query('pageSize') pageSize: number = 10, filters?: GetPostsFilterDto
+  @Post("read")
+  async getPosts(
+    @Query('page') page: number = 1, 
+    @Query('pageSize') pageSize: number = 10, 
+    @Body() filters: GetPostsFilterDto = {}
   ) {
-    return this.postService.getPosts(page, pageSize);
+    return this.postService.getPosts(page, pageSize, filters);
   }
 
   /**

@@ -21,7 +21,12 @@ export class PostService {
    * #param filters Filtros opcionales.
    * #returns Una lista de posts.
    */
-  async getPosts(page: number, pageSize: number, filters?: GetPostsFilterDto): Promise<Post[]> {
+  async getPosts(
+    page: number, 
+    pageSize: number, 
+    filters?: GetPostsFilterDto,
+    ): Promise<Post[]> {
+
     const skip = (page - 1) * pageSize;
     let query = this.postModel.find();
 
@@ -33,22 +38,33 @@ export class PostService {
       query = query.where('authorType').equals(filters.globalAuthorType);
     }
 
-    //console.log("getPosts-page-pagesize", page, pageSize)
-    //console.log("getPosts-filters-query", filters, querytext)
+    // Filtrar por fecha si se proporciona una de referencia
+    if (filters?.referenceDate) {
+      const referenceDate = filters.referenceDate instanceof Date
+      ? filters.referenceDate
+      : new Date(filters.referenceDate);
+
+      query = filters?.loadSide === 'top'
+        ? query.where('createdAt').gt(referenceDate.getTime()) // mayores que la fecha dada
+        : query.where('createdAt').lt(referenceDate.getTime()); // menores que la fecha dada
+    }
+
+    // Ordenar por fecha de creación (más reciente primero)
+    query = query.sort({ createdAt: -1 });
 
     //const query = filters ? this.postModel.find(filters) : this.postModel.find();
-    const posts = await query.sort({ createdAt: -1 }).limit(pageSize).skip(skip).exec();
+    const posts = await await query.limit(pageSize).skip(skip).exec();
     return posts;
   }
 
   /**
    * Obtiene los IDs de los mutuals de un usuario.
-   * #param userId ID del usuario.
+   * #param id ID del usuario/pj.
    * #returns Una lista de IDs de mutuals.
    */
-  async getMutuals(userId: string): Promise<string[]> {
-    const mutuals = await this.mutualService.getUserMutuals(userId);
-    const mutualIds = mutuals.map(mutual => (mutual.userId1 === userId) ? mutual.userId2 : mutual.userId1);
+  async getMutuals(id: string): Promise<string[]> {
+    const mutuals = await this.mutualService.getUserMutuals(id);
+    const mutualIds = mutuals.map(mutual => (mutual.id1 === id) ? mutual.id2 : mutual.id1);
     return mutualIds;
   }
 

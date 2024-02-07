@@ -1,6 +1,6 @@
 // create-post.dto.ts
 
-import { IsString, IsArray, IsOptional, ValidateNested, ValidateIf } from 'class-validator';
+import { IsString, IsArray, IsOptional, ValidateNested, ValidateIf, IsDate } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePostDto {
@@ -17,7 +17,9 @@ export class AuthorDto {
    @IsString() authorType: string;
  }
 
-export class GetPostsFilterDto {
-   @IsOptional() @IsString() globalAuthorType?: string; // busqueda por tipo si no se especifican autores
-   @IsOptional() @IsArray() @ValidateNested({ each: true }) authors?: AuthorDto[]; // lista de autores a buscar
+ export class GetPostsFilterDto {
+   @IsOptional() @IsString() globalAuthorType?: string;
+   @IsOptional() @IsArray() @ValidateNested({ each: true }) authors?: AuthorDto[];
+   @IsOptional() loadSide?: string;
+   @IsOptional() @IsDate() referenceDate?: Date;
  }

@@ -62,6 +62,18 @@ const author = ref({
   type: props.post.authorType as string,
 } as Author); // + lo que se obtenga por hacer get
 
+const authorLink = computed(() => {
+  if (props.authorType === "character") {
+    return {
+      path: `/profile/pj/${author.value.authorName}`,
+    };
+  } else {
+    return {
+      path: `/profile/user/${author.value.authorName}`,
+    };
+  }
+});
+
 // Methods
 const formatRelativeTime = () => {
   if (props.post.createdAt) {
@@ -124,7 +136,9 @@ watchEffect(() => {
             <div class="col-start-2 pl-4 flex">
               <div>
                 <div>
-                  <CardTitle>{{ author.authorPublicName }}</CardTitle>
+                  <router-link :to="authorLink">
+                    <CardTitle>{{ author.authorPublicName }}</CardTitle>
+                  </router-link>
                 </div>
                 <div class="flex items-center gap-[0.275rem] text-[0.875rem]">
                   <div class="graytext">@{{ author.authorName }}</div>

@@ -96,13 +96,12 @@ export default {
                 const response = await axios.post(`${uri}${endpoint}`, { [field]: payload.identifier, "passwd": payload.password });
                 const token = response.data.token;
 
-                console.log("AUTHENTICATE-token:", token);
+                //console.log("AUTHENTICATE-token:", token);
 
                 if(token) 
                 await dispatch('USERS/FETCH_USER', payload.identifier, {root:true});
 
-                console.log(store.state["USERS"].user)
-                alert("espera");
+                //console.log(store.state["USERS"].user)
 
                 await commit('setToken', token);                              
             } catch (error) {
@@ -113,7 +112,6 @@ export default {
                     if (axiosError.response?.status === 401 || axiosError.response?.status === 404) throw new Error('Usuario o contraseña incorrectos'); 
                 }
                 
-                console.log(error)
                 throw new Error('Error desconocido al autenticar'); 
             }
         },

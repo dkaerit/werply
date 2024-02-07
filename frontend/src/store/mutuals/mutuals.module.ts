@@ -31,8 +31,10 @@ export default {
       async CREATE_MUTUAL({ dispatch }: Triggers, mutualData: MutualData) {
          try {
             const response = await axios.post(`${uri}/mutuals/create`, mutualData);
-            const userid = await store.state["USERS"].user._id;
-            dispatch('FETCH_MUTUALS', userid);
+            const id = mutualData.relationshipType === 'pj'?
+            await store.state["CHARACTERS"].currentCharacter._id:
+            await store.state["USERS"].user._id;
+            dispatch('FETCH_MUTUALS', id);
             return response.data;
          } catch (error) {
             console.error('Error al crear el mutual:', error);
@@ -65,9 +67,9 @@ export default {
        * Obtiene la lista de mutuals.
        * #returns {Promise<Array>} - Promesa que se resuelve con la lista de mutuals.
        */
-      async FETCH_MUTUALS({ commit }: Triggers, userId: string) {
+      async FETCH_MUTUALS({ commit }: Triggers, id: string) {
          try {
-            const response = await axios.get(`${uri}/mutuals/id:${userId}`);
+            const response = await axios.get(`${uri}/mutuals/id:${id}`);
             commit('setMutuals', response.data);
             return response.data;
          } catch (error) {

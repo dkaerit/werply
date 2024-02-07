@@ -53,10 +53,15 @@ const submitPost = async () => {
     const response = await store.dispatch("POSTS/CREATE_POST", newPost);
     console.log("Post creado exitosamente:", response);
     emit("new-post-added", newPost);
+    clearTextarea();
   } catch (error) {
     console.error("Error al crear el post:", error);
     // Manejar el error según tus necesidades
   }
+};
+
+const clearTextarea = () => {
+  postContent.value = "";
 };
 </script>
 
