@@ -50,9 +50,11 @@ const submitPost = async () => {
     };
 
     // Enviar la solicitud al backend para crear el post
-    const response = await store.dispatch("POSTS/CREATE_POST", newPost);
-    console.log("Post creado exitosamente:", response);
-    emit("new-post-added", newPost);
+    if (postContent.value) {
+      const response = await store.dispatch("POSTS/CREATE_POST", newPost);
+      console.log("Post creado exitosamente:", response);
+      emit("new-post-added", newPost);
+    }
     clearTextarea();
   } catch (error) {
     console.error("Error al crear el post:", error);

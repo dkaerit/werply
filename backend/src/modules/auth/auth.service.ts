@@ -6,14 +6,16 @@ import { compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { JwtStrategy } from '../../streategies/jwt/jwt.strategy';
 import { omit } from 'lodash';
-import { RegisterAuthDto, LoginEmailAuthDto, LoginUsernameAuthDto, LoginTlfnAuthDto, UserTokenized } from './auth.dto';
+import { RegisterAuthDto, LoginEmailAuthDto, LoginUsernameAuthDto, LoginTlfnAuthDto, UserTokenized, TrackingInformationDto } from './auth.dto';
+import { AppGateway } from 'src/midlewares/websocketGateway';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly userService: UserService,
         private readonly jwtService: JwtService,
-        private readonly jwtStrategy: JwtStrategy
+        private readonly jwtStrategy: JwtStrategy,
+        private readonly appGateway: AppGateway,
     ) { }
 
     /**
@@ -130,5 +132,14 @@ export class AuthService {
         } catch (error) {
             throw new HttpException('Invalid token or token expired', HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    /**
+     * Actualiza la asociación entre los datos del usuario y el ID del socket en el servidor.
+     * #param data - Datos de seguimiento.
+     * #returns Una promesa que resuelve cuando la asociación se actualiza correctamente.
+     */
+    async updateSocketAssociation(data: TrackingInformationDto): Promise<void> {
+        this.appGateway.associateUserWithSocket(data);
     }
 }

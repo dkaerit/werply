@@ -11,9 +11,28 @@ import DualColumnLayout from "@/components/layouts/DualColumnLayout.vue";
 //import { PostData } from "@/store/posts/posts.interface";
 //import LoadingIndicator from "@/components/elements/LoadingIndicator.vue";
 
+import { Character } from "@/store/characters/characters.interfaces";
+import { UserState } from "@/store/users/users.interfaces";
+
+import { socket } from "@/store/index";
+
 interface Post {
   id: string;
   createdAt: Date; // Ajusta el tipo según el formato real de la fecha en tus posts
+}
+
+interface Author {
+  authorName?: string;
+  authorId?: string;
+  authorType: string;
+}
+
+// se deben tomar solo los mutuals con status active, el id del user/pj seleccionado puede estar en id1 o id2, el opuesto se´ria su mutual.
+interface Mutual {
+  id1: string;
+  id2: string;
+  relationshipType: string; //  'pj' o 'user'
+  status: string; // 'pending' o 'active'
 }
 
 const store = useStore();
@@ -24,6 +43,32 @@ const pageSize = ref(5);
 const newestDate = ref(null as null | Date);
 const oldestDate = ref(null as null | Date);
 
+const createAuthorsList = (
+  selectedActor: Character | UserState,
+  pairsOfMutuals: Mutual[]
+): Author[] => {
+  const authors: Author[] = [];
+
+  // Agregar el actor seleccionado como autor
+  const selfAuthorType = (selectedActor as Character) ? "pj" : "user";
+  authors.push({ authorId: selectedActor._id, authorType: selfAuthorType });
+
+  // filtrar
+  const mutualAuthors = pairsOfMutuals
+    .filter(
+      (mutual) =>
+        (selectedActor._id === mutual.id1 || selectedActor._id === mutual.id2) &&
+        mutual.status === "active"
+    )
+    .map((mutual) => {
+      const authorId = selectedActor._id === mutual.id1 ? mutual.id2 : mutual.id1;
+      const authorType = (selectedActor as Character) ? "pj" : "user";
+      return { authorId, authorType };
+    });
+
+  return [...authors, ...mutualAuthors];
+};
+
 const updateReferenceDates = (newPosts: Post[], side: string) => {
   if (newPosts.length > 0) {
     const dates = newPosts.map((post: Post) => new Date(post.createdAt).getTime());
@@ -32,23 +77,45 @@ const updateReferenceDates = (newPosts: Post[], side: string) => {
   }
 };
 
-const initialFetchNewerPosts = () =>
-  store
-    .dispatch("POSTS/FETCH_INITIAL_POSTS", {
-      page: 1,
-      pageSize: pageSize.value,
-      filters: {},
-    })
-    .then((newPosts: Post[]) => updateReferenceDates(newPosts, "top"));
+const initialFetchNewerPosts = async () => {
+  hasLoaded.value = false;
+  // Armar lista de Authors
+  const selected = store.getters["USERS/getSelected"];
+  const authors = createAuthorsList(
+    selected,
+    await store.dispatch("MUTUALS/FETCH_MUTUALS", selected._id)
+  );
 
-/*const fetchNewerPosts = () =>
-  store
-    .dispatch("POSTS/FETCH_ADDITIONAL_POSTS", {
-      page: 1,
-      pageSize: pageSize.value,
-      filters: { loadSide: "top", referenceDate: newestDate.value },
-    })
-    .then((newPosts: Post[]) => updateReferenceDates(newPosts, "top"));*/
+  const newerPosts: Post[] = await store.dispatch("POSTS/FETCH_INITIAL_POSTS", {
+    page: 1,
+    pageSize: pageSize.value,
+    filters: { authors: authors as Author[] },
+  });
+
+  updateReferenceDates(newerPosts, "top");
+  hasLoaded.value = true;
+};
+
+const fetchNewerPosts = async () => {
+  hasLoaded.value = false;
+
+  const currentPosts = store.state["POSTS"].posts;
+  const referenceDate = currentPosts.length > 0 ? currentPosts[0].createdAt : null; // createdAt del ultimo post o null
+
+  // Armar lista de autores
+  const selected = store.getters["USERS/getSelected"];
+  const authors = createAuthorsList(
+    selected,
+    await store.dispatch("MUTUALS/FETCH_MUTUALS", selected._id)
+  );
+
+  const newerPosts: Post[] = await store.dispatch("POSTS/FETCH_ADDITIONAL_POSTS", {
+    filters: { loadSide: "top", referenceDate, authors: authors as Author[] },
+  });
+
+  updateReferenceDates(newerPosts, "top");
+  hasLoaded.value = true;
+};
 
 const fetchOlderPosts = async () => {
   hasLoaded.value = false;
@@ -56,13 +123,19 @@ const fetchOlderPosts = async () => {
   const referenceDate =
     currentPosts.length > 0 ? currentPosts[currentPosts.length - 1].createdAt : null; // createdAt del ultimo post o null
 
+  // Armar lista de Authors
+  const selected = store.getters["USERS/getSelected"];
+  const authors = createAuthorsList(
+    selected,
+    await store.dispatch("MUTUALS/FETCH_MUTUALS", selected._id)
+  );
+
   const olderPosts: Post[] = await store.dispatch("POSTS/FETCH_ADDITIONAL_POSTS", {
     page: 1,
     pageSize: pageSize.value,
-    filters: { loadSide: "bottom", referenceDate },
+    filters: { loadSide: "bottom", referenceDate, authors: authors as Author[] },
   });
 
-  //store.commit("POSTS/addPosts", olderPosts, "bottom");
   updateReferenceDates(olderPosts, "bottom");
   hasLoaded.value = true;
 };
@@ -86,6 +159,23 @@ const onScroll = (event: UIEvent) => {
 
 onBeforeMount(() => {
   initialFetchNewerPosts();
+  socket.on("newPost", (message: string) => {
+    fetchNewerPosts();
+    console.log("Se recibió una notificación:", message);
+  });
+
+  socket.on("deletePost", (message: string) => {
+    initialFetchNewerPosts();
+    console.log("Se recibió una notificación:", message);
+  });
+
+  store.watch(
+    () => store.getters["USERS/getSelected"],
+    () => {
+      initialFetchNewerPosts();
+      console.log("Se cambió de actor");
+    }
+  );
 });
 </script>
 
@@ -120,7 +210,7 @@ onBeforeMount(() => {
             <!-- Post input -->
             <PostInput />
 
-            <Button :click="() => {}">Cargar nuevos</Button>
+            <!--<Button :click="() => {}">Cargar nuevos</Button>-->
 
             <!-- Bloques grandes -->
             <template v-if="store.state['POSTS'].posts.length !== 0">
@@ -131,14 +221,12 @@ onBeforeMount(() => {
                 :post="post"
                 :index="index"
                 :authorType="post.authorType"
-                :authorId="post.authorId"
+                :authorId="post?.authorId"
               />
             </template>
 
-            <Button @click="loadOlderPosts()">Cargar antiguos</Button>
-
             <!-- begin Loading -->
-            <!--<LoadingIndicator :allPostsLoaded="allPostsLoaded" />-->
+            <LoadingIndicator :allPostsLoaded="!hasLoaded" />
             <!-- end Loading -->
           </div>
         </Tabs>

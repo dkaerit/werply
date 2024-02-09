@@ -51,15 +51,15 @@ const props = defineProps({
 const store = useStore();
 const isLoading = ref(true);
 const getUser = computed(
-  async () => await store.dispatch("USERS/GET_USER_BY_ID", props.post.authorId)
+  async () => await store.dispatch("USERS/GET_USER_BY_ID", props.post?.authorId)
 );
 const getPj = computed(
-  async () => await store.dispatch("CHARACTERS/GET_CHARACTER_BY_ID", props.post.authorId)
+  async () => await store.dispatch("CHARACTERS/GET_CHARACTER_BY_ID", props.post?.authorId)
 );
 
 const author = ref({
-  _id: props.post.authorId as string,
-  type: props.post.authorType as string,
+  _id: props.post?.authorId as string,
+  type: props.post?.authorType as string,
 } as Author); // + lo que se obtenga por hacer get
 
 const authorLink = computed(() => {
@@ -76,7 +76,7 @@ const authorLink = computed(() => {
 
 // Methods
 const formatRelativeTime = () => {
-  if (props.post.createdAt) {
+  if (props.post?.createdAt) {
     const parsedPostDate = new Date(props.post.createdAt);
     const currentDate = new Date(Date.now());
     const differenceInSeconds = Math.floor(
@@ -89,12 +89,20 @@ const formatRelativeTime = () => {
       return `Hace ${hours > 0 ? `${hours}h ` : ""}${minutes}m`;
     } else {
       // Si ha pasado más de un día, muestra la fecha en formato "día mes"
-      const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
+      const options: Intl.DateTimeFormatOptions = {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      };
 
       return new Intl.DateTimeFormat("es-ES", options).format(new Date(parsedPostDate));
     }
   } else {
-    const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
+    const options: Intl.DateTimeFormatOptions = {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    };
     return new Intl.DateTimeFormat("es-ES", options).format(new Date());
   }
 };
@@ -155,7 +163,7 @@ watchEffect(() => {
             <!-- Celda 2-2: Contenido -->
             <div class="row-start-2 pl-4 col-span-2 col-start-2">
               <CardDescription class="text-justify whitespace-pre-line pr-2">
-                {{ post.content }}
+                {{ post?.content }}
               </CardDescription>
             </div>
 

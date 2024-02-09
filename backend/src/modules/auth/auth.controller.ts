@@ -1,7 +1,7 @@
 import { Controller, Post, Get, Body, Headers } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { RegisterAuthDto, LoginEmailAuthDto, LoginUsernameAuthDto, LoginTlfnAuthDto, } from './auth.dto'; /* TokenAuthenticationDto */
+import { RegisterAuthDto, LoginEmailAuthDto, LoginUsernameAuthDto, LoginTlfnAuthDto, TrackingInformationDto } from './auth.dto'; /* TokenAuthenticationDto */
 
 @ApiTags('auth')
 @Controller('auth')
@@ -60,5 +60,14 @@ export class AuthController {
     @Get('/user-info')
     getUserInfoByToken(@Headers('authorization') token: string) {
         return this.authService.getUserInfoByToken(token);
+    }
+
+    /**
+     * Actualiza la asociación entre los datos del usuario y el ID del socket en el servidor.
+     * #param data - Datos de seguimiento.
+     */
+    @Post('/updateSocketAssociation')
+    updateSocketAssociation(@Body() data: TrackingInformationDto) {
+        return this.authService.updateSocketAssociation(data);
     }
 }

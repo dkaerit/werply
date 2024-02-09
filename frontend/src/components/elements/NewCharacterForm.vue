@@ -28,10 +28,10 @@ const schema = toTypedSchema(
   z.object({
     nickname: z
       .string({ required_error: "El nickname no puede estar en blanco" })
-      .min(4, { message: "Demasiado corto (mínimo 4 carácteres)" }),
+      .min(3, { message: "Demasiado corto (mínimo 3 carácteres)" }),
     pjname: z
       .string({ required_error: "El nombre de personaje no puede estar en blanco" })
-      .min(4, { message: "Demasiado corto (mínimo 4 carácteres)" }),
+      .min(3, { message: "Demasiado corto (mínimo 3 carácteres)" }),
   })
 );
 

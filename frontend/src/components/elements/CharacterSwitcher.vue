@@ -21,7 +21,6 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-
 import NewCharacterForm from "@/components/elements/NewCharacterForm.vue";
 
 const store = useStore();
@@ -65,6 +64,13 @@ const groups = ref([
 ]);
 
 const open = ref(false);
+
+const updateSocketAssociation = async () => {
+  const data = store.getters["USERS/getTracker"];
+
+  // Lógica para enviar los datos actualizados al servidor
+  await store.dispatch("AUTH/UPDATE_SOCKET_ASSOCIATION", data);
+};
 
 const selectedPj = ref<Team>(
   store.state["CHARACTERS"].currentCharacter
@@ -115,6 +121,7 @@ const selectCharacter = async (character: Team) => {
     await store.commit("CHARACTERS/setCurrentCharacter", finded);
     await store.dispatch("MUTUALS/FETCH_MUTUALS", character.id);
   }
+  await updateSocketAssociation();
 };
 
 watchEffect(() => {

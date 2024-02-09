@@ -30,10 +30,10 @@ export default {
        * #param {PostData} post - Nuevo post a añadir.
        * #param {string} side - Lado en el que añadir el post, 'top' o 'bottom'.
        */
-      addPost(state: PostsState, post: PostData, side: string = 'top') {
-         (side === 'top') ?
-            state.posts.unshift(post) :  // Añadir el nuevo post al principio del array
-            state.posts.push(post); // Añadir el nuevo post al final del array
+      addPost(state: PostsState, payload: { side:string, post:PostData}) {
+         (payload.side === 'top') ?
+            state.posts.unshift(payload.post) :  // Añadir el nuevo post al principio del array
+            state.posts.push(payload.post); // Añadir el nuevo post al final del array
       },
 
       /**
@@ -42,10 +42,10 @@ export default {
        * #param {PostData[]} newPosts - Nuevos posts a añadir.
        * #param {string} side - Lado en el que añadir los posts, 'top' o 'bottom'.
        */
-      addPosts(state: PostsState, newPosts: PostData[], side: string = 'bottom') {
-         (side === 'top') ?
-            state.posts = newPosts.concat(state.posts) : // Añadir al principio
-            state.posts = state.posts.concat(newPosts); // Añadir al final (puedes ajustarlo según tu lógica)
+      addPosts(state: PostsState, payload: { side:string, newPosts:PostData[]}) {
+         (payload.side === 'top') ?
+            state.posts = payload.newPosts.concat(state.posts) : // Añadir al principio
+            state.posts = state.posts.concat(payload.newPosts); // Añadir al final (puedes ajustarlo según tu lógica)
       },
 
       /**
@@ -77,7 +77,7 @@ export default {
       async CREATE_POST({ commit }: Triggers, postData: PostData) {
          try {
             const response = await axios.post(`${uri}/posts/create`, postData);
-            await commit("addPost", postData);
+            await commit("addPost", {"side":"top", "post":response.data});
             return response.data
          } catch (error) {
             console.error('Error creating post:', error);
@@ -92,17 +92,25 @@ export default {
        * #returns {Array} La lista de posts recuperados.
        */
 
-      async FETCH_INITIAL_POSTS({ commit }: Triggers, { page, pageSize, filters }: { tab: string, page: number, pageSize: number, filters: filtersInterface }) {
+      async FETCH_INITIAL_POSTS({ commit }: Triggers, { page, pageSize, filters }: { tab: string, page?: number, pageSize?: number, filters: filtersInterface }) {
          try {
-            const response = await axios.post(`${uri}/posts/read?pageSize=${pageSize}&page=${page}`, filters);
-            const newPosts = response.data;
-            await commit('fetchPosts', newPosts);
-            return newPosts;
+           let url = `${uri}/posts/read`;
+       
+           // Si se proporciona un tamaño de página y un número de página, usamos paginación
+           if (pageSize !== undefined && page !== undefined) {
+             url += `?pageSize=${pageSize}&page=${page}`;
+           }
+           
+           const response = await axios.post(url, filters);
+           const newPosts = response.data;
+           await commit('fetchPosts', newPosts);
+           return newPosts;
          } catch (error) {
-            console.error('Error fetching initial posts:', error);
-            throw error;
+           console.error('Error fetching initial posts:', error);
+           throw error;
          }
-      },
+       },
+       
 
 
       /**
@@ -120,13 +128,21 @@ export default {
        * #throws {Error} Si ocurre un error durante la solicitud.
        * #returns {Array} La lista de posts recuperados.
        */
-      async FETCH_ADDITIONAL_POSTS({ commit }: Triggers, { page, pageSize, filters }: { tab: string, page: number, pageSize: number, filters: filtersInterface }) {
+      async FETCH_ADDITIONAL_POSTS({ commit }: Triggers, { page, pageSize, filters }: { tab: string, page?: number, pageSize?: number, filters: filtersInterface }) {
          try {
-            console.log("filters", filters)
-            const response = await axios.post(`${uri}/posts/read?pageSize=${pageSize}&page=${page}`, filters);
+
+            let url = `${uri}/posts/read`;
+
+            // Si se proporciona un tamaño de página y un número de página, usamos paginación
+            if (pageSize !== undefined && page !== undefined) {
+              url += `?pageSize=${pageSize}&page=${page}`;
+            }
+
+            const response = await axios.post(url, filters);
             const newPosts = response.data;
-            console.log(response.data)
-            await commit('addPosts', newPosts, filters?.loadSide);
+            const side = filters?.loadSide;
+            
+            await commit('addPosts', { side, newPosts });
             return newPosts;
          } catch (error) {
             console.error('Error fetching posts:', error);

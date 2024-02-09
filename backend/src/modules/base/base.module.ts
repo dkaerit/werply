@@ -14,9 +14,6 @@ import { PostModule } from '../post/post.module';
 // mongoose
 import { MongoModule } from '../../database/mongo.module';
 
-// middlewares
-import { AppGateway } from '../../midlewares/websocketGateway';
-
 @Module({
   imports: [ 
     MongoModule, // Módulo de MongoDB.
@@ -27,6 +24,6 @@ import { AppGateway } from '../../midlewares/websocketGateway';
     PostModule
   ],
   controllers: [BaseController],
-  providers: [BaseService, AppGateway],
+  providers: [BaseService],
 })
 export class BaseModule {}

@@ -3,14 +3,12 @@ import { PostController } from './post.controller';
 import { PostService,  } from './post.service';
 import { PostFeatured } from './post.schema';
 import { MutualModule } from '../mutual/mutual.module';
-
-// middlewares
-import { AppGateway } from '../../midlewares/websocketGateway';
+import { SharedModule } from '../shared/shared.module';
 
 @Module({
-  imports: [PostFeatured, MutualModule],
+  imports: [PostFeatured, MutualModule, SharedModule],
   controllers: [PostController],
-  providers: [PostService, AppGateway],
-  exports: [PostService]
+  providers: [PostService, SharedModule],
+  exports: [PostService, SharedModule]
 })
 export class PostModule {}

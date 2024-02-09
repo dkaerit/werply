@@ -15,7 +15,6 @@ import POSTS from './posts/posts.module';
 const backendHost = import.meta.env.BACKEND_HOST || "localhost";
 const backendPort = import.meta.env.BACKEND_PORT || 3000;
 export const uri: string = `http://${backendHost}:${backendPort}`;
-const socket = io(uri); // Inicializar el socket.io
 
 const vuexLocal = new VuexPersistence()
 
@@ -26,5 +25,10 @@ export const store = createStore({
   modules: { AUTH, MENU, USERS, CHARACTERS, MUTUALS, POSTS },
   plugins: [vuexLocal.plugin]
 })
+
+// conexión al socket
+const socket = io(uri, {
+  query: store.getters["USERS/getTracker"],
+}); 
 
 export { socket };

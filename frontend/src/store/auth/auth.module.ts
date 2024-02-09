@@ -6,6 +6,12 @@ import { UserData } from './auth.interfaces'
 import { LoginPayload, EndpointWithPayload, RegistrationData } from "./auth.interfaces"
 interface Triggers { commit: Commit, dispatch: Dispatch }
 
+interface TrackingInformation {
+    id: string;
+    alias: string;
+    type: string;
+  }
+
 const fieldMapping: { [key: string]: string } = {
     '/auth/login/email': 'email',
     '/auth/login/tlfn': 'tlfn',
@@ -41,7 +47,7 @@ export default {
 
         setToken: (_: {}, token: string) => {
             //state.token = token
-            localStorage.setItem("TokenSession", token); 
+            localStorage.setItem("TokenSession", token);
             location.reload();
         },
 
@@ -74,10 +80,10 @@ export default {
         async CHECK_TOKEN_EXPIRATION({ commit }: Triggers): Promise<void> {
             try {
                 const token = localStorage.TokenSession;
-                const response = await axios.get(`${uri}/auth/expiration`, { headers: { authorization: token } } );
+                const response = await axios.get(`${uri}/auth/expiration`, { headers: { authorization: token } });
                 if (response.data.expired) commit('dismissToken'); // if expired dismiss token
                 if (!token) return;
-            } catch(err) {
+            } catch (err) {
                 throw new Error("Hubo un error verificando la sesión")
             }
         },
@@ -98,49 +104,49 @@ export default {
 
                 //console.log("AUTHENTICATE-token:", token);
 
-                if(token) 
-                await dispatch('USERS/FETCH_USER', payload.identifier, {root:true});
+                if (token)
+                    await dispatch('USERS/FETCH_USER', payload.identifier, { root: true });
 
                 //console.log(store.state["USERS"].user)
 
-                await commit('setToken', token);                              
+                await commit('setToken', token);
             } catch (error) {
-                
+
                 if (axios.isAxiosError(error)) {
                     const axiosError = error as AxiosError;
-                    if(error.code == "ERR_NETWORK") throw new Error('Servidor no disponible');
-                    if (axiosError.response?.status === 401 || axiosError.response?.status === 404) throw new Error('Usuario o contraseña incorrectos'); 
+                    if (error.code == "ERR_NETWORK") throw new Error('Servidor no disponible');
+                    if (axiosError.response?.status === 401 || axiosError.response?.status === 404) throw new Error('Usuario o contraseña incorrectos');
                 }
-                
-                throw new Error('Error desconocido al autenticar'); 
+
+                throw new Error('Error desconocido al autenticar');
             }
         },
 
         async REGISTER_USER({ dispatch }: Triggers, user: RegistrationData): Promise<void | { error: string }> {
             try {
-              // Lógica de registro de usuario
-              if (await dispatch('CHECK_EMAIL_EXISTENCE', user.email))
-              throw new Error('El correo electrónico ya está registrado');
+                // Lógica de registro de usuario
+                if (await dispatch('CHECK_EMAIL_EXISTENCE', user.email))
+                    throw new Error('El correo electrónico ya está registrado');
 
-              if (await dispatch('CHECK_USERNAME_EXISTENCE', user.username))
-              throw new Error('El nombre de usuario ya está registrado');
+                if (await dispatch('CHECK_USERNAME_EXISTENCE', user.username))
+                    throw new Error('El nombre de usuario ya está registrado');
 
-              await axios.post(`${uri}/users/create`, user, {
+                await axios.post(`${uri}/users/create`, user, {
                     headers: { 'Content-Type': 'application/json' } // Asegúrate de enviar el tipo de contenido correcto
                 });
-              
+
             } catch (error) {
-              if (axios.isAxiosError(error)) {
-                if(error.code == "ERR_NETWORK") throw new Error('Servidor no disponible');
-                if(error.code == "ERR_BAD_RESPONSE") throw new Error('El servidor encontró una condición inesperada que le impidió cumplir con la solicitud (Posible mal formato).');
-                // Puedes manejar más casos específicos de errores aquí si es necesario
-                throw new Error('Error desconocido'); 
-                
-              }
-          
-              throw new Error('Error desconocido durante el registro de usuario');
+                if (axios.isAxiosError(error)) {
+                    if (error.code == "ERR_NETWORK") throw new Error('Servidor no disponible');
+                    if (error.code == "ERR_BAD_RESPONSE") throw new Error('El servidor encontró una condición inesperada que le impidió cumplir con la solicitud (Posible mal formato).');
+                    // Puedes manejar más casos específicos de errores aquí si es necesario
+                    throw new Error('Error desconocido');
+
+                }
+
+                throw new Error('Error desconocido durante el registro de usuario');
             }
-          },
+        },
 
         /**
          * Acción de autenticación con email.
@@ -178,10 +184,10 @@ export default {
          * #param username - Carga útil para la verificación
          * #returns {Promise<boolean>} - Devuelve true si el usuario existe, false en caso contrario.
          */
-        async CHECK_USERNAME_EXISTENCE({}: Triggers, username: string): Promise<boolean> {
+        async CHECK_USERNAME_EXISTENCE({ }: Triggers, username: string): Promise<boolean> {
             try {
                 const response = await axios.get(`${uri}/users/checkuser:${username}`);
-                return response.data; 
+                return response.data;
             } catch (error) {
                 throw new Error('Error al verificar la existencia del usuario');
             }
@@ -193,20 +199,20 @@ export default {
          * #param email - Carga útil para la verificación
          * #returns {Promise<boolean>} - Devuelve true si el correo electrónico existe, false en caso contrario.
          */
-        async CHECK_EMAIL_EXISTENCE({}: Triggers, email: any): Promise<boolean> {
+        async CHECK_EMAIL_EXISTENCE({ }: Triggers, email: any): Promise<boolean> {
             try {
                 const response = await axios.get(`${uri}/users/checkmail:${email}`);
-                return response.data; 
+                return response.data;
             } catch (error) {
                 throw new Error('Error al verificar la existencia del correo electrónico');
             }
         },
 
 
-        async GET_USER_INFO({}: Triggers): Promise<UserData | {}> {
+        async GET_USER_INFO({ }: Triggers): Promise<UserData | {}> {
             try {
                 const token = localStorage.getItem("TokenSession");
-                if(token) {
+                if (token) {
                     const response = await axios.get(`${uri}/auth/user-info`, { headers: { authorization: token } });
                     return response.data;
                 } else return {}
@@ -215,5 +221,20 @@ export default {
                 throw new Error("Error al obtener la información del usuario");
             }
         },
-    }   
+
+
+        /**
+         * Acción para actualizar la asociación entre los datos del seleccionado y el ID del socket en el servidor.
+         * #param data - data tracking.
+         */
+
+        async UPDATE_SOCKET_ASSOCIATION({}: Triggers, data:TrackingInformation): Promise<void> {
+            try {
+                await axios.post(`${uri}/auth/updateSocketAssociation`, data);
+                // Si necesitas realizar alguna acción adicional después de la actualización, puedes hacerlo aquí.
+            } catch (error) {
+                throw new Error('Error al actualizar la asociación del socket en el servidor');
+            }
+        },
+    }
 }

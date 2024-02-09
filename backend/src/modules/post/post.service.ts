@@ -22,21 +22,19 @@ export class PostService {
    * #returns Una lista de posts.
    */
   async getPosts(
-    page: number, 
-    pageSize: number, 
+    page: number | undefined, 
+    pageSize: number | undefined, 
     filters?: GetPostsFilterDto,
     ): Promise<Post[]> {
 
-    const skip = (page - 1) * pageSize;
     let query = this.postModel.find();
 
     // construir lista de condiciones
+    if (filters?.globalAuthorType) query = query.where('authorType').equals(filters.globalAuthorType);
     if (filters?.authors?.length > 0) {
       const authorIds: string[] = filters.authors.map((author) => author.authorId);
       query = query.where('authorId').in(authorIds);
-    } else if (filters?.globalAuthorType) {
-      query = query.where('authorType').equals(filters.globalAuthorType);
-    }
+    } 
 
     // Filtrar por fecha si se proporciona una de referencia
     if (filters?.referenceDate) {
@@ -52,8 +50,13 @@ export class PostService {
     // Ordenar por fecha de creación (más reciente primero)
     query = query.sort({ createdAt: -1 });
 
-    //const query = filters ? this.postModel.find(filters) : this.postModel.find();
-    const posts = await await query.limit(pageSize).skip(skip).exec();
+    // paginación
+    if (page !== undefined && pageSize !== undefined) {
+      const skip = (page - 1) * pageSize;
+      query = query.limit(pageSize).skip(skip);
+    }
+  
+    const posts = await query.exec();
     return posts;
   }
 
@@ -77,12 +80,9 @@ export class PostService {
     const createdPost = new this.postModel(postDto);
     const newPost = await createdPost.save();
 
-    const mutualIds = await this.getMutuals(postDto.authorId);
-    const channelId = this.appGateway.generateChannelId(postDto.authorId, mutualIds);
-
-    // Emitir notificación de nuevo post al grupo de mutuals
-    this.appGateway.sendNotificationToChannel(channelId, 'Nuevo post creado');
-
+    const mutualIds = await this.getMutuals(postDto.authorId); // mutuals del postDto.authorId
+    this.appGateway.sendNotificationToMutuals(mutualIds, 'newPost', postDto.authorId, "Un mutual posteó un nuevo post");
+    
     return newPost;
   }
 
@@ -93,8 +93,10 @@ export class PostService {
    * #returns El post eliminado.
    */
   async deletePost(postId: string): Promise<Post> {
-    const post = await this.postModel.findByIdAndDelete(postId).exec();
-
+      const post = await this.postModel.findByIdAndDelete(postId).exec();
+      const mutualIds = await this.getMutuals(post.authorId); // mutuals del postDto.authorId
+      this.appGateway.sendNotificationToMutuals(mutualIds, 'deletePost', post.authorId, "Un mutual borró uno de sus posts");
+    
     if (!post)
     throw new Error(`Post with ID ${postId} not found`);
 

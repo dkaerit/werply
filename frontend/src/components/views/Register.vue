@@ -50,8 +50,8 @@ const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
   <div
     class="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0"
   >
-    <a
-      href="/login"
+    <router-link
+      to="/login"
       :class="
         cn(
           buttonVariants({ variant: 'ghost' }),
@@ -60,7 +60,7 @@ const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
       "
     >
       Login
-    </a>
+    </router-link>
     <div
       class="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex"
     >

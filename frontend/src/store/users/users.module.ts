@@ -2,9 +2,11 @@
 import { Commit, Dispatch } from 'vuex'
 import axios from 'axios'
 
-import { uri } from '../index';
-interface Triggers { commit: Commit, dispatch: Dispatch }
+import { uri, store } from '../index';
 import { UserState, RootState } from "./users.interfaces"
+import { Character } from "../characters/characters.interfaces"
+interface Triggers { commit: Commit, dispatch: Dispatch }
+
 
 
 export default {
@@ -41,6 +43,7 @@ export default {
       setUser(state: RootState, user: UserState) {
          state.user = user;
       },
+
    },
 
    /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +68,7 @@ export default {
             const response = await axios.get(`${uri}/users/read:${identifier}`);
             console.log("fetch-user(data)", response.data);
             await commit('setUser', response.data);
-            dispatch('CHARACTERS/FETCH_CHARACTERS_BY_USER_ID', response.data._id, {root:true});
+            dispatch('CHARACTERS/FETCH_CHARACTERS_BY_USER_ID', response.data._id, { root: true });
          } catch (error) {
             // Manejar errores (por ejemplo, usuario no autenticado)
             throw new Error('Error al obtener información del usuario:');
@@ -116,8 +119,35 @@ export default {
    /////////////////////////////////////////////////////////////////////////////////////////////////
 
    getters: {
-      getCurrentUserId: (state:RootState) => {
+      getCurrentUserId: (state: RootState) => {
          return state.user ? state.user._id : null;
-       },
+      },
+
+      getSelected(state: RootState): UserState | Character | null {
+         try {
+            return (store.state["CHARACTERS"].currentCharacter !== null)? 
+            store.state["CHARACTERS"].currentCharacter:
+            state.user
+         } catch (error) {
+            throw new Error('Error fetching user or character:');
+         }
+      },
+
+      getTypeSelected: (): string => {
+         return (store.state["CHARACTERS"].currentCharacter !== null)? "pj": "user"
+      },
+
+      getAlias: (state: RootState): string => {
+         return (store.state["CHARACTERS"].currentCharacter !== null)? 
+         store.state["CHARACTERS"].currentCharacter.nickname:
+         state.user.username
+      },
+
+      getTracker: () => ({
+         "id": store.getters["USERS/getSelected"]._id,
+         "owner": store.state["USERS"].user._id,
+         "alias": store.getters["USERS/getAlias"],
+         "type": store.getters["USERS/getTypeSelected"]
+      })
    }
 }
