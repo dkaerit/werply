@@ -105,7 +105,7 @@ export default {
      * #throws {Error} Lanza un error si el nickname ya está en uso.
      * #returns {Promise<boolean>} Devuelve true si el nickname no está en uso, de lo contrario, lanza un error.
      */
-    async CHECK_NICKNAME_EXISTENCE({ }: Triggers, pjname: string): Promise<boolean> {
+    async CHECK_NICKNAME_EXISTENCE(_: Triggers, pjname: string): Promise<boolean> {
       try {
         // Realiza una llamada al backend para verificar la existencia del nickname
         const response = await axios.get(`${uri}/characters/check:${pjname}`);

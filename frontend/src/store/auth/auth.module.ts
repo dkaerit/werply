@@ -10,7 +10,7 @@ interface TrackingInformation {
     id: string;
     alias: string;
     type: string;
-  }
+}
 
 const fieldMapping: { [key: string]: string } = {
     '/auth/login/email': 'email',
@@ -57,9 +57,6 @@ export default {
          */
 
         dismissToken: () => {
-            store.state["USERS"].user = undefined;
-            store.state["CHARACTERS"].characters = {};
-            store.state["CHARACTERS"].currentCharacter = null;
             localStorage.removeItem("TokenSession");
             location.reload();
         }
@@ -83,12 +80,9 @@ export default {
         async CHECK_TOKEN_EXPIRATION({ commit }: Triggers): Promise<void> {
             try {
                 const token = localStorage.TokenSession;
-                
-                if(token) {
-                    const response = await axios.get(`${uri}/auth/expiration`, { headers: { authorization: `${token}` } });
-                    if (response.data.expired) commit('dismissToken'); // if expired dismiss token
-                }
-
+                const response = await axios.get(`${uri}/auth/expiration`, { headers: { Authorization: `Bearer $` } });
+                if (response.data.expired) commit('dismissToken'); // if expired dismiss token
+                if (!token) return;
             } catch (err) {
                 throw new Error("Hubo un error verificando la sesión")
             }
@@ -190,7 +184,7 @@ export default {
          * #param username - Carga útil para la verificación
          * #returns {Promise<boolean>} - Devuelve true si el usuario existe, false en caso contrario.
          */
-        async CHECK_USERNAME_EXISTENCE({ }: Triggers, username: string): Promise<boolean> {
+        async CHECK_USERNAME_EXISTENCE(_: Triggers, username: string): Promise<boolean> {
             try {
                 const response = await axios.get(`${uri}/users/checkuser:${username}`);
                 return response.data;
@@ -205,7 +199,7 @@ export default {
          * #param email - Carga útil para la verificación
          * #returns {Promise<boolean>} - Devuelve true si el correo electrónico existe, false en caso contrario.
          */
-        async CHECK_EMAIL_EXISTENCE({ }: Triggers, email: any): Promise<boolean> {
+        async CHECK_EMAIL_EXISTENCE(_: Triggers, email: any): Promise<boolean> {
             try {
                 const response = await axios.get(`${uri}/users/checkmail:${email}`);
                 return response.data;
@@ -214,12 +208,17 @@ export default {
             }
         },
 
+        /**
+         * Acció para obtener la información de usuario dado un token
+         * #returns 
+         */
 
-        async GET_USER_INFO({ }: Triggers): Promise<UserData | {}> {
+        async GET_USER_INFO(_: Triggers): Promise<UserData | {}> {
             try {
                 const token = localStorage.getItem("TokenSession");
+                console.log(token)
                 if (token) {
-                    const response = await axios.get(`${uri}/auth/user-info`, { headers: { authorization: `${token}` } });
+                    const response = await axios.get(`${uri}/auth/user-info`, { headers: { Authorization: `Bearer ${token}` } });
                     return response.data;
                 } else return {}
 
@@ -234,7 +233,7 @@ export default {
          * #param data - data tracking.
          */
 
-        async UPDATE_SOCKET_ASSOCIATION({}: Triggers, data:TrackingInformation): Promise<void> {
+        async UPDATE_SOCKET_ASSOCIATION(_: Triggers, data: TrackingInformation): Promise<void> {
             try {
                 await axios.post(`${uri}/auth/updateSocketAssociation`, data);
                 // Si necesitas realizar alguna acción adicional después de la actualización, puedes hacerlo aquí.
@@ -242,6 +241,6 @@ export default {
                 throw new Error('Error al actualizar la asociación del socket en el servidor');
             }
         },
-        
+
     }
 }
