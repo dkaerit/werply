@@ -11,7 +11,7 @@ import { omit } from 'lodash';
 describe('UserController', () => {
   let userController: UserController;
   let userService: UserService;
-  const mockUser: UserDocument = { user: 'newuser', email: 'newuser@example.com', passwd: '1234' } as UserDocument;
+  const mockUser: UserDocument = { username: 'newuser', email: 'newuser@example.com', passwd: '1234', nickname: 'nickname' } as UserDocument;
   let mockUsers = [
     { username: 'user1', email: 'user1@example.com' },
     { username: 'user2', email: 'user2@example.com' },
