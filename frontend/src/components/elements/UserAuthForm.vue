@@ -32,7 +32,7 @@ const actionsMap = {
     errorMessage: "Ingresa un correo electrónico válido.",
   },
   [loginActions.username]: {
-    regex: /.*/,
+    regex: /^[a-zA-Z0-9_]{3,15}$/,
     errorMessage: "Ingresa un nombre de usuario válido.",
   },
 };
