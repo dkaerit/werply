@@ -56,7 +56,7 @@ describe('UserController', () => {
   describe('getUser', () => {
     it('should return a user by username', async () => {
       jest.spyOn(userService, 'readUserByUsername').mockResolvedValueOnce(mockUser);
-      const result = await userController.getUser('newuser');
+      const result = await userController.getUserByUsername('newuser');
       const keysToDelete = ['passwd'];
       expect(result).toEqual(omit(mockUser, keysToDelete));
     });
