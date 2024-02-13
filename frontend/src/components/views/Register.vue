@@ -43,7 +43,11 @@ const quotes = [
   },
 ];
 
-const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+const crypto = window.crypto;
+const array = new Uint32Array(1);
+crypto.getRandomValues(array);
+const randomIndex = array[0] % quotes.length;
+const randomQuote = quotes[randomIndex];
 </script>
 
 <template>

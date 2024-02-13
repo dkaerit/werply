@@ -28,11 +28,11 @@ const loginActions = {
 
 const actionsMap = {
   [loginActions.email]: {
-    regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     errorMessage: "Ingresa un correo electrónico válido.",
   },
   [loginActions.username]: {
-    regex: /^[a-zA-Z0-9_]{3,15}$/,
+    regex: /^\w{3,15}$/,
     errorMessage: "Ingresa un nombre de usuario válido.",
   },
 };
