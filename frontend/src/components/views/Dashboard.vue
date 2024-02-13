@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // @ts-ignore
-import { useStore, mapGetters } from "vuex";
+import { useStore } from "vuex";
 import { ref, watchEffect, onBeforeMount } from "vue"; // onBeforeUnmount
 
 // Importar componentes y estilos

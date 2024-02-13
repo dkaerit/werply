@@ -80,8 +80,6 @@ const loadCharacter = async (charactername: string) => {
   }
 };
 
-const submitHeaderForm = () => {};
-
 /**
  * Hook de ciclo de vida que se ejecuta antes de montar el componente.
  * Obtiene y asigna los datos del personaje actual.
@@ -242,7 +240,7 @@ const status = computed(() => {
 
           <!-- ///////// FORMULARIO HEADER -->
           <DialogContent>
-            <form @submit.prevent="submitHeaderForm">
+            <form>
               <DialogHeader class="mb-4">
                 <DialogTitle>Encabezado</DialogTitle>
               </DialogHeader>
@@ -331,7 +329,7 @@ const status = computed(() => {
                 </div>
                 <!-- ///////// FORMULARIO AVATAR -->
                 <DialogContent>
-                  <form @submit.prevent="submitHeaderForm">
+                  <form>
                     <DialogHeader class="mb-4">
                       <DialogTitle>Avatar</DialogTitle>
                     </DialogHeader>
