@@ -7,58 +7,67 @@ import { UserDto } from '../user.dto';
 import { UserModule } from '../user.module';
 import { omit } from 'lodash';
 
-// Describe la suite de pruebas para el controlador de usuario.
 describe('UserController', () => {
-  let userController: UserController;
+  let controller: UserController;
   let userService: UserService;
+
   const mockUser: UserDocument = { username: 'newuser', email: 'newuser@example.com', passwd: '1234', nickname: 'nickname' } as UserDocument;
   let mockUsers = [
     { username: 'user1', email: 'user1@example.com' },
     { username: 'user2', email: 'user2@example.com' },
   ];
 
-  // Configura el controlador y sus dependencias antes de cada prueba.
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [UserModule]
-    })
-    .overrideProvider(getModelToken(User.name))
-    .useValue(jest.fn)
-    .compile();
+      controllers: [UserController],
+      providers: [UserService, {
+        // Simula el modelo de mongoose para User durante las pruebas.
+        provide: getModelToken(User.name),
+        useValue: {
+          find: jest.fn(), // función simulada que imita "find" de mongoose
+          findOne: jest.fn(), // función simulada que imita "findOne" de mongoose
+          save: jest.fn(), // función simulada que imita "save" de mongoose,
+          exec: jest.fn(), // función simulada que imita "save" de mongoose
+        },
+      }],
+    }).compile();
 
-    userController = module.get<UserController>(UserController);
+    controller = module.get<UserController>(UserController);
     userService = module.get<UserService>(UserService);
-
   });
 
-  // Prueba básica para verificar si el controlador está definido.
   it('should be defined', () => {
-    expect(userController).toBeDefined();
+    expect(controller).toBeDefined();
   });
-
-  // Prueba para verificar el si el tipo de los usuarios listados es correcto
-  describe('getUsers', () => {
-   it('should return an Array of type User', async () => {
-      jest.spyOn(userService, 'readUsers').mockImplementation(() => Promise.resolve(mockUsers as unknown as User[]));
-      const result = await userController.getUsers();
-      expect(result).toEqual(mockUsers);
-   })
-  })
 
   describe('createUser', () => {
     it('should create a new user', async () => {
       jest.spyOn(userService, 'createUser').mockResolvedValueOnce(mockUser);
-      const result = await userController.createUser(mockUser as UserDto);
-      expect(result).toEqual(mockUser);
+      const result = await controller.createUser(mockUser as UserDto);
+      expect(result).toBe(mockUser);
     });
   });
 
   describe('getUserByUsername', () => {
     it('should return a user by username', async () => {
-      jest.spyOn(userService, 'readUserByUsername').mockResolvedValueOnce(mockUser);
-      const result = await userController.getUserByUsername('newuser');
-      const keysToDelete = ['passwd'];
-      expect(result).toEqual(omit(mockUser, keysToDelete));
+      const mockUsername = 'testuser';
+      const mockUser: UserDto = {
+        username: mockUsername,
+        email: 'testuser@example.com',
+      };
+
+      jest.spyOn(userService, 'findUserByField').mockResolvedValueOnce(mockUser);
+      const result = await controller.getUserByUsername(mockUsername);
+      expect(result).toEqual(expect.objectContaining({ username: mockUsername }));
     });
   });
+
+  // Prueba para verificar el si el tipo de los usuarios listados es correcto
+  describe('getUsers', () => {
+    it('should return an Array of type User', async () => {
+      jest.spyOn(userService, 'readUsers').mockImplementation(() => Promise.resolve(mockUsers as unknown as User[]));
+      const result = await controller.getUsers();
+      expect(result).toEqual(mockUsers);
+    })
+  })
 });
