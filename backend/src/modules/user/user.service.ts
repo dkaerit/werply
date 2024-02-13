@@ -97,14 +97,11 @@ export class UserService {
  */
 
   public async updateUserById(id: string, data: UserDto): Promise<UserDto> {
-    console.log(id, data)
     const updatedUser = await this.userModel.findByIdAndUpdate(
       id, // ID del usuario a actualizar
       { $set: data }, // Datos actualizados del usuario
       { new: true } // Opciones para devolver el documento actualizado
     );
-
-    console.log(updatedUser)
 
     // Si el usuario no se encuentra en la base de datos, se lanza una excepción
     if (!updatedUser)
