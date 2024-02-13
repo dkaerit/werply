@@ -152,7 +152,7 @@ export default {
      * #param triggers Objeto que contiene commit y dispatch de Vuex.
      * #param characterId Identificador del personaje a obtener.
      */
-    async GET_CHARACTER({ }: Triggers, charactername: string): Promise<void> {
+    async GET_CHARACTER(_: Triggers, charactername: string): Promise<void> {
       try {
         //console.log("GET_CHARACTER-charactername", charactername)
         const response = await axios.get(`${uri}/characters/read:${charactername}`);
@@ -168,7 +168,7 @@ export default {
      * #param triggers Objeto que contiene commit y dispatch de Vuex.
      * #param characterId Identificador del personaje a obtener.
      */
-    async GET_CHARACTER_BY_ID({ }: Triggers, id: string): Promise<void> {
+    async GET_CHARACTER_BY_ID(_: Triggers, id: string): Promise<void> {
       try {
         //console.log("GET_CHARACTER-charactername", charactername)
         const response = await axios.get(`${uri}/characters/id:${id}`);

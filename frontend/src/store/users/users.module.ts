@@ -82,7 +82,7 @@ export default {
        * #throws Error if there's an issue fetching user information
        */
 
-      async GET_USER({ }: Triggers, identifier: string): Promise<UserState> {
+      async GET_USER(_: Triggers, identifier: string): Promise<UserState> {
          try {
             // Hacer una solicitud al backend para obtener la información del usuario
             const response = await axios.get(`${uri}/users/read:${identifier}`);
@@ -100,7 +100,7 @@ export default {
        * #throws Error if there's an issue fetching user information
        */
 
-      async GET_USER_BY_ID({ }: Triggers, identifier: string): Promise<UserState> {
+      async GET_USER_BY_ID(_: Triggers, identifier: string): Promise<UserState> {
          try {
             // Hacer una solicitud al backend para obtener la información del usuario
             const response = await axios.get(`${uri}/users/id:${identifier}`);
