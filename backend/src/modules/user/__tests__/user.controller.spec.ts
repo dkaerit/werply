@@ -53,7 +53,7 @@ describe('UserController', () => {
     });
   });
 
-  describe('getUser', () => {
+  describe('getUserByUsername', () => {
     it('should return a user by username', async () => {
       jest.spyOn(userService, 'readUserByUsername').mockResolvedValueOnce(mockUser);
       const result = await userController.getUserByUsername('newuser');
