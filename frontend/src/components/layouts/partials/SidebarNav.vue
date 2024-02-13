@@ -17,7 +17,6 @@ import MessageIcon from "@/assets/svg/message.svg";
 import SettingIcon from "@/assets/svg/setting.svg";
 import SquaresIcon from "@/assets/svg/squares.svg";
 
-//const $route = useRoute();
 const store = useStore();
 const router = useRouter();
 const username = ref(store.state["USERS"].user?.username);

@@ -1,5 +1,5 @@
 // src/characters/dto/character.dto.ts
-import { IsNotEmpty, IsString, IsArray, MinLength, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CharacterFieldDto {

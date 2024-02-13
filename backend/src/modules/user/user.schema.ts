@@ -1,5 +1,4 @@
-import { MongooseModule } from '@nestjs/mongoose';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory, MongooseModule } from '@nestjs/mongoose';
 
 // @Schema: Define la estructura de los datos en la base de datos MongoDB para el modelo "User".
 

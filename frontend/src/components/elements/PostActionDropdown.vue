@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Edit, Trash, BookText } from "lucide-vue-next";
 
 import MoreIcon from "@/assets/svg/more-horizontal.svg";
-//import StoryPlotIcon from "@/assets/svg/fill/story-plot.svg";
 
 interface Post {
   _id: string;
@@ -27,7 +26,9 @@ const props = defineProps({
   post: Object as () => Post,
 });
 
-const editPost = () => {};
+const editPost = () => {
+  console.log("Edit post");
+};
 
 const deletePost = async () => {
   // Lógica para eliminar el post con el ID props.postId
@@ -40,9 +41,8 @@ const deletePost = async () => {
 
 const startPlot = () => {
   // Lógica para iniciar un hilo relacionado con el post con el ID props.postId
+  console.log("Start Plot");
 };
-
-//console.log("dropdown", props.post);
 
 const isPostOwnedByCurrentUser = computed(() => {
   const currentCharacterId = store.getters["CHARACTERS/getCurrentCharacterId"];

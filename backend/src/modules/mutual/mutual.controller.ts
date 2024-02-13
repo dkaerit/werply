@@ -1,8 +1,8 @@
 // src/characters/controllers/characters.controller.ts
-import { Controller, Get, Delete, Post, Body, HttpStatus, HttpCode, Param, UseGuards, HttpException, Query } from '@nestjs/common';
+import { Controller, Get, Delete, Post, Body, Param, Query } from '@nestjs/common';
 import { MutualService } from './mutual.service';
 import { Mutual } from './mutual.schema';
-import { CreateMutualDto, DeleteMutualDto } from './mutual.dto';
+import { CreateMutualDto } from './mutual.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiBearerAuth()

@@ -68,7 +68,6 @@ onMounted(() => {
   border: 10px solid var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  //background-color: color-mix(in hsl shorter hue, hsl(0, 0%, 10%) 50%, hsl(var(--border)));
   background-color: hsl(var(--border));
   border-radius: 2px;
   border: 1px solid hsl(var(--background));

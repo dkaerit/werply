@@ -77,34 +77,27 @@ const authorLink = computed(() => {
 
 // Methods
 const formatRelativeTime = () => {
-  if (props.post?.createdAt) {
-    const parsedPostDate = new Date(props.post.createdAt);
-    const currentDate = new Date(Date.now());
-    const differenceInSeconds = Math.floor(
-      (currentDate.getTime() - parsedPostDate.getTime()) / 1000
-    );
-    if (differenceInSeconds < 86400) {
-      // Si ha pasado menos de un día, muestra la diferencia relativa en horas y minutos
-      const hours = Math.floor(differenceInSeconds / 3600);
-      const minutes = Math.floor((differenceInSeconds % 3600) / 60);
-      return `Hace ${hours > 0 ? `${hours}h ` : ""}${minutes}m`;
-    } else {
-      // Si ha pasado más de un día, muestra la fecha en formato "día mes"
-      const options: Intl.DateTimeFormatOptions = {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      };
+  const postCreatedAt = props.post?.createdAt;
+  const parsedPostDate = postCreatedAt ? new Date(postCreatedAt) : new Date();
+  const currentDate = new Date();
+  const differenceInSeconds = Math.floor(
+    (currentDate.getTime() - parsedPostDate.getTime()) / 1000
+  );
 
-      return new Intl.DateTimeFormat("es-ES", options).format(new Date(parsedPostDate));
-    }
+  if (differenceInSeconds < 86400) {
+    // Si ha pasado menos de un día, muestra la diferencia relativa en horas y minutos
+    const hours = Math.floor(differenceInSeconds / 3600);
+    const minutes = Math.floor((differenceInSeconds % 3600) / 60);
+    const timeParts = [hours > 0 ? `${hours}h` : "", `${minutes}m`];
+    return `Hace ${timeParts.filter((part) => part.trim() !== "").join(" ")}`;
   } else {
+    // Si ha pasado más de un día, muestra la fecha en formato "día mes"
     const options: Intl.DateTimeFormatOptions = {
       day: "numeric",
       month: "short",
       year: "numeric",
     };
-    return new Intl.DateTimeFormat("es-ES", options).format(new Date());
+    return new Intl.DateTimeFormat("es-ES", options).format(parsedPostDate);
   }
 };
 

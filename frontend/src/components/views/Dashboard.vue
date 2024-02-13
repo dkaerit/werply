@@ -8,8 +8,6 @@ import PostInput from "@/components/elements/PostInput.vue";
 import PostBlock from "@/components/elements/PostBlock.vue";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DualColumnLayout from "@/components/layouts/DualColumnLayout.vue";
-//import { PostData } from "@/store/posts/posts.interface";
-//import LoadingIndicator from "@/components/elements/LoadingIndicator.vue";
 
 import { Character } from "@/store/characters/characters.interfaces";
 import { UserState } from "@/store/users/users.interfaces";
@@ -89,7 +87,7 @@ const initialFetchNewerPosts = async () => {
   const newerPosts: Post[] = await store.dispatch("POSTS/FETCH_INITIAL_POSTS", {
     page: 1,
     pageSize: pageSize.value,
-    filters: { authors: authors as Author[] },
+    filters: { authors },
   });
 
   updateReferenceDates(newerPosts, "top");
@@ -110,7 +108,7 @@ const fetchNewerPosts = async () => {
   );
 
   const newerPosts: Post[] = await store.dispatch("POSTS/FETCH_ADDITIONAL_POSTS", {
-    filters: { loadSide: "top", referenceDate, authors: authors as Author[] },
+    filters: { loadSide: "top", referenceDate, authors },
   });
 
   updateReferenceDates(newerPosts, "top");
@@ -133,7 +131,7 @@ const fetchOlderPosts = async () => {
   const olderPosts: Post[] = await store.dispatch("POSTS/FETCH_ADDITIONAL_POSTS", {
     page: 1,
     pageSize: pageSize.value,
-    filters: { loadSide: "bottom", referenceDate, authors: authors as Author[] },
+    filters: { loadSide: "bottom", referenceDate, authors },
   });
 
   updateReferenceDates(olderPosts, "bottom");
@@ -209,8 +207,6 @@ onBeforeMount(() => {
           >
             <!-- Post input -->
             <PostInput />
-
-            <!--<Button :click="() => {}">Cargar nuevos</Button>-->
 
             <!-- Bloques grandes -->
             <template v-if="store.state['POSTS'].posts.length !== 0">

@@ -7,9 +7,8 @@ const props = defineProps<{
   modelValue?: string | number;
 }>();
 
-const emits = defineEmits<{
-  (e: "update:modelValue", payload: string | number): void;
-}>();
+type EmitsType = (e: "update:modelValue", payload: typeof props.modelValue) => void;
+const emits = defineEmits<EmitsType>();
 
 const modelValue = useVModel(props, "modelValue", emits, {
   passive: true,

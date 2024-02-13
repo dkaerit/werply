@@ -38,7 +38,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
    * #param client Socket del cliente que se desconecta.
    */
   handleDisconnect(client: Socket) {
-    const data = this.connectedUsers.get(client.id) as TrackingInformationDto;
+    const data = this.connectedUsers.get(client.id);
     this.connectedUsers.delete(client.id);
     console.log('\x1b[31m[Sock] Cliente desconect:\x1b[0m', `${client.id}(socket) ${data.owner}(ownerid) ${data.id}(selected)`, data.alias, data.type);
   }

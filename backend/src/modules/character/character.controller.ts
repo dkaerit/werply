@@ -1,5 +1,5 @@
 // src/characters/controllers/characters.controller.ts
-import { Controller, Get, Put, Post, Body, HttpStatus, HttpCode, Param, UseGuards, HttpException } from '@nestjs/common';
+import { Controller, Get, Put, Post, Body, HttpStatus, HttpCode, Param, HttpException } from '@nestjs/common';
 import { CharacterService } from './character.service';
 import { Character } from './character.schema';
 import { CharacterDto, UpdateCharacterDto } from './character.dto';

@@ -2,8 +2,7 @@
 import { Commit, Dispatch } from 'vuex'
 import axios, { AxiosError } from 'axios'
 import { uri, store } from '../index';
-import { UserData } from './auth.interfaces'
-import { LoginPayload, EndpointWithPayload, RegistrationData } from "./auth.interfaces"
+import { LoginPayload, EndpointWithPayload, RegistrationData, UserData } from "./auth.interfaces"
 interface Triggers { commit: Commit, dispatch: Dispatch }
 
 interface TrackingInformation {
@@ -102,12 +101,8 @@ export default {
                 const response = await axios.post(`${uri}${endpoint}`, { [field]: payload.identifier, "passwd": payload.password });
                 const token = response.data.token;
 
-                //console.log("AUTHENTICATE-token:", token);
-
                 if (token)
                     await dispatch('USERS/FETCH_USER', payload.identifier, { root: true });
-
-                //console.log(store.state["USERS"].user)
 
                 await commit('setToken', token);
             } catch (error) {

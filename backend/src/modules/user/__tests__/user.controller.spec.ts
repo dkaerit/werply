@@ -4,8 +4,6 @@ import { UserService } from '../user.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { User, UserDocument } from '../user.schema';
 import { UserDto } from '../user.dto';
-import { UserModule } from '../user.module';
-import { omit } from 'lodash';
 
 describe('UserController', () => {
   let controller: UserController;

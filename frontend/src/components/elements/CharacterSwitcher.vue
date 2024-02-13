@@ -1,11 +1,9 @@
 <script setup lang="ts">
 // @ts-ignore
 import { useStore } from "vuex";
-import { Check, ChevronsUpDown } from "lucide-vue-next";
+import { Check, ChevronsUpDown, LogOut } from "lucide-vue-next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlusCircledIcon } from "@radix-icons/vue";
-
-import { LogOut } from "lucide-vue-next";
 
 import { ref, computed, onBeforeMount, watchEffect } from "vue";
 import { cn } from "@/lib/utils";

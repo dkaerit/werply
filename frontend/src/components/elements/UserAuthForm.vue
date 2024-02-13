@@ -48,13 +48,10 @@ const login = async () => {
     // Lógica de inicio de sesión con correo electrónico/usuario y contraseña
     // Llama a la acción de autenticación del módulo de Vuex
     const action = getLoginAction(identifier.value);
-    //console.log("login", action, identifier.value);
     await store.dispatch(action, {
       identifier: identifier.value, // email o username
       password: password.value,
     });
-
-    // console.log(`Token de sesión: ${store.state.AUTH.token}`); // Muestra un alert con el token
   } catch (error) {
     if (error instanceof Error) {
       // Manejo de errores y muestra de Toast

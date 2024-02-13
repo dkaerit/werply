@@ -1,7 +1,6 @@
 // mutual.model.ts
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory, MongooseModule } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { MongooseModule } from '@nestjs/mongoose';
 
 @Schema({ versionKey: '_vk' })
 export class Mutual extends Document {

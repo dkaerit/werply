@@ -78,8 +78,7 @@ function extractNameId(): string {
 onBeforeMount(async () => {
   id.value = props.src ? extractNameId() : props.name || "werply";
   const werplypfp = await import("@/assets/avatares/pfp-traslucid.png");
-  //image.value = `https://avatar.vercel.sh/${id.value}.png`;
-  image.value = werplypfp.default;
+  image.value = werplypfp.default; // or https://avatar.vercel.sh/${id.value}.png
 });
 
 watch(

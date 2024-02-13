@@ -1,8 +1,6 @@
-import { Controller, Get, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Res, Req, HttpStatus } from '@nestjs/common';
 import { BaseService } from './base.service';
-import { Response } from 'express';
-import { Req } from '@nestjs/common';
-import { Request, Router } from 'express';
+import { Response, Request, Router } from 'express';
 
 /**
  * Controlador principal que maneja las solicitudes en la ruta raíz ("/").

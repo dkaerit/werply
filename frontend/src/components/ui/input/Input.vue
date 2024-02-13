@@ -17,9 +17,8 @@ const props = defineProps<{
   valid?: boolean;
 }>();
 
-const emits = defineEmits<{
-  (e: "update:modelValue", payload: string | number): void;
-}>();
+type EmitsType = (e: "update:modelValue", payload: typeof props.modelValue) => void;
+const emits = defineEmits<EmitsType>();
 
 const { class: className, ...rest } = useAttrs();
 
@@ -111,7 +110,6 @@ const modelValue = useVModel(props, "modelValue", emits, {
     &:focus {
       border: 1px solid #ccff55;
       --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 0px #ccff55;
-      //--tw-ring-color: #ccff55;
     }
 
     /* Estilos para la etiqueta flotante al enfocar o cuando hay contenido en el campo */

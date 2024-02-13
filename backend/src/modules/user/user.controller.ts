@@ -1,7 +1,6 @@
 import { JwtGuard } from '../../streategies/jwt/jwt.guard';
-import { Controller, Get, Post, Put, Body, HttpStatus, HttpCode, Param, UseGuards, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Body, HttpStatus, HttpCode, Param, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './user.schema';
 import { UserDto } from './user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { omit } from 'lodash';
@@ -61,7 +60,7 @@ export class UserController {
 
     const identifiers = [
       { regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, handler: 'email' },
-      { regex: /^[a-zA-Z0-9_]+$/, handler: 'username' },
+      { regex: /^\w+$/, handler: 'username' },
       { regex: /^\d{10}$/, handler: 'tlfn' },
     ];
 

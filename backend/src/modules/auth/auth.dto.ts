@@ -1,7 +1,5 @@
-import { IsEmail, MaxLength, MinLength, IsNotEmpty, IsArray, } from 'class-validator';
-import { PartialType } from '@nestjs/swagger';
-import { ApiProperty } from '@nestjs/swagger';
-
+import { IsEmail, MaxLength, MinLength, IsNotEmpty } from 'class-validator';
+import { PartialType, ApiProperty } from '@nestjs/swagger';
 
 // Objeto de transferencia de datos para la información de login
 export class LoginEmailAuthDto {

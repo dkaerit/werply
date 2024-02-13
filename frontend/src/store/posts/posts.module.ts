@@ -10,7 +10,7 @@ interface PostsState {
    posts: PostData[];
 }
 
-interface filtersInterface {
+interface FiltersInterface {
    globalAuthorType?: string;
    authors?: [];
    loadSide?: string;
@@ -43,9 +43,9 @@ export default {
        * #param {string} side - Lado en el que añadir los posts, 'top' o 'bottom'.
        */
       addPosts(state: PostsState, payload: { side:string, newPosts:PostData[]}) {
-         (payload.side === 'top') ?
-            state.posts = payload.newPosts.concat(state.posts) : // Añadir al principio
-            state.posts = state.posts.concat(payload.newPosts); // Añadir al final (puedes ajustarlo según tu lógica)
+         state.posts = (payload.side === 'top') ?
+            payload.newPosts.concat(state.posts) : // Añadir al principio
+            state.posts.concat(payload.newPosts); // Añadir al final (puedes ajustarlo según tu lógica)
       },
 
       /**
@@ -92,7 +92,7 @@ export default {
        * #returns {Array} La lista de posts recuperados.
        */
 
-      async FETCH_INITIAL_POSTS({ commit }: Triggers, { page, pageSize, filters }: { tab: string, page?: number, pageSize?: number, filters: filtersInterface }) {
+      async FETCH_INITIAL_POSTS({ commit }: Triggers, { page, pageSize, filters }: { tab: string, page?: number, pageSize?: number, filters: FiltersInterface }) {
          try {
            let url = `${uri}/posts/read`;
        
@@ -128,7 +128,7 @@ export default {
        * #throws {Error} Si ocurre un error durante la solicitud.
        * #returns {Array} La lista de posts recuperados.
        */
-      async FETCH_ADDITIONAL_POSTS({ commit }: Triggers, { page, pageSize, filters }: { tab: string, page?: number, pageSize?: number, filters: filtersInterface }) {
+      async FETCH_ADDITIONAL_POSTS({ commit }: Triggers, { page, pageSize, filters }: { tab: string, page?: number, pageSize?: number, filters: FiltersInterface }) {
          try {
 
             let url = `${uri}/posts/read`;

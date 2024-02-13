@@ -59,18 +59,18 @@ const schemas = [
     z.object({
       password1: z
         .string({ required_error: "El campo de la contraseña no puede estar vacío" })
-        .refine((password) => /[0-9]/.test(password), {
+        .refine((password) => /\d/.test(password), {
           message: "Debe incluir al menos un número",
         })
         .refine((password) => /[a-z]/.test(password), {
           message: "Debe incluir al menos una letra minúscula",
         })
-        .refine((password) => !/(qwerty)|[0-9]{4}/i.test(password), {
+        .refine((password) => !/(qwerty)|\d{4}/i.test(password), {
           message: "No puede utilizar patrones de teclado o números en secuencia",
         })
         .refine(
           (password) =>
-            /^(?!^[0-9]+$)(?!^[A-Z]+$)(?!^[a-z]+$)(?!^.*([A-Za-z0-9])\1{2,}).*$/.test(
+            /^(?!^\d+$)(?!^[A-Z]+$)(?!^[a-z]+$)(?!^.*([A-Za-z0-9])\1{2,}).*$/.test(
               password
             ),
           {

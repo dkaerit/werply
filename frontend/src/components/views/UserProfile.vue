@@ -9,9 +9,7 @@ import { Button } from "@/components/ui/button";
 import { MutualData } from "@/store/mutuals/mutuals.interface.ts";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { XOctagon } from "lucide-vue-next";
-
-import { Camera } from "lucide-vue-next";
+import { XOctagon, Camera } from "lucide-vue-next";
 import { Input } from "@/components/ui/input";
 import Squircle from "@/assets/svg/squircle.svg";
 

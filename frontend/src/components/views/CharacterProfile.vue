@@ -8,8 +8,7 @@ import SquircleAvatar from "@/components/elements/SquircleAvatar.vue";
 import { Button } from "@/components/ui/button";
 import { MutualData } from "@/store/mutuals/mutuals.interface.ts";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { XOctagon } from "lucide-vue-next";
-import { Camera } from "lucide-vue-next";
+import { XOctagon, Camera } from "lucide-vue-next";
 import { Input } from "@/components/ui/input";
 
 import Squircle from "@/assets/svg/squircle.svg";
@@ -101,7 +100,6 @@ watch(
   // @ts-ignore
   async (newCharactername: string) => {
     await loadCharacter(newCharactername);
-    //console.log("currentCharacter", store.state["CHARACTERS"].currentCharacter);
   }
 );
 
@@ -118,7 +116,7 @@ const followCharacter = async () => {
       status: "pending",
     });
   } catch (error) {
-    //console.error("Error al seguir al personaje:", error);
+    console.error("Error al seguir al personaje:", error);
     throw error;
   }
 };
@@ -136,6 +134,7 @@ const unfollowCharacter = async () => {
 
     await store.dispatch("MUTUALS/DELETE_MUTUAL", params);
   } catch (error) {
+    console.log("Error al dejar de seguir al personaje", error);
     throw error;
   }
 };
@@ -398,5 +397,3 @@ const status = computed(() => {
     </div>
   </ResponsiveContainerLayout>
 </template>
-
-<style></style>

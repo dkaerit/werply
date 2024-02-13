@@ -48,6 +48,7 @@ export class CharacterService {
 
       return character;
     } catch (error) {
+      console.error('Error al obtener el personaje por ID:', error);
       throw error;
     }
   }

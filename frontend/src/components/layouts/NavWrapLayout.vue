@@ -1,22 +1,17 @@
 <script setup lang="ts">
-import SidebarNav from './partials/SidebarNav.vue'
+import SidebarNav from "./partials/SidebarNav.vue";
 </script>
 
 <template>
-   <div class="flex">
-      
+  <div class="flex">
     <!-- Primera columna -->
     <div class="hidden md:block border-r">
-      <SidebarNav/>
+      <SidebarNav />
     </div>
 
     <!-- Segunda columna -->
     <div class="flex-auto">
-      <router-view/>
+      <router-view />
     </div>
-
   </div>
-
 </template>
-
-<style scoped lang="scss"></style>

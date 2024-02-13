@@ -68,8 +68,6 @@ const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
       <div class="relative z-20 flex items-center text-lg font-medium">
         <LogoMiniIcon class="svgfill-foreground mr-2" />
         <!-- Icon -->
-        <!-- <LogoIcon class="svgfill-foreground scale-[0.040]"/> -->
-
         Werply
       </div>
       <div class="relative z-20 mt-auto">
@@ -105,5 +103,3 @@ const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     </div>
   </div>
 </template>
-
-<style></style>

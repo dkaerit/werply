@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Mutual, MutualDocument } from './mutual.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
