@@ -1,5 +1,5 @@
 import { JwtGuard } from '../../streategies/jwt/jwt.guard';
-import { Controller, Get, Post, Body, HttpStatus, HttpCode, Param, UseGuards, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Body, HttpStatus, HttpCode, Param, UseGuards, HttpException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.schema';
 import { UserDto } from './user.dto';
@@ -72,8 +72,8 @@ export class UserController {
 
   /**
    * Ruta para verificar la existencia de un usuario en la base de datos.
-   * @param body, cuerpo de la petición con el username a verificar
-   * @return, booleano que indica si el usuario existe
+   * #param body, cuerpo de la petición con el username a verificar
+   * #return, booleano que indica si el usuario existe
    */
   @Get('/checkuser:username')
   @HttpCode(HttpStatus.OK)
@@ -88,8 +88,8 @@ export class UserController {
 
   /**
    * Ruta para verificar la existencia de un correo electrónico en la base de datos.
-   * @param body, cuerpo de la petición con el email a verificar
-   * @return, booleano que indica si el correo electrónico existe
+   * #param body, cuerpo de la petición con el email a verificar
+   * #return, booleano que indica si el correo electrónico existe
    */
   @Get('/checkmail:email')
   @HttpCode(HttpStatus.OK)
@@ -102,6 +102,22 @@ export class UserController {
     }
 
   }
+
+    /**
+   * Maneja las solicitudes PUT para actualizar un usuario por su ID.
+   * #param id El ID del usuario que se va a actualizar.
+   * #param datas Los datos actualizados del usuario.
+   * #returns Una promesa que se resuelve en los datos del usuario actualizado.
+   */
+
+  @Put('update:id')
+  @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
+  async updateCharacter(@Param('id') id: string, @Body() datas: UserDto): Promise<UserDto> {
+    id = id.replace(':', '');
+    return this.userService.updateUserById(id, datas);
+  }
+
 
 
 

@@ -76,6 +76,7 @@ export default {
      */
     async UPDATE_CHARACTER({ commit }: Triggers, { characterId, update }: { characterId: string, update: Character }): Promise<void> {
       try {
+        console.log("update-characterId", characterId)
         const response = await axios.put(`${uri}/characters/update:${characterId}`, update);
         await commit('updateCharacter', response.data);
       } catch (error) {

@@ -29,11 +29,11 @@ export class CharacterController {
     return this.characterService.getCharacterById(pjid);
   }
 
-  @Put('update:pjname')
+  @Put('update:id')
   @HttpCode(HttpStatus.OK)
-  async updateCharacter(@Param('pjname') pjname: string, @Body() datas: UpdateCharacterDto): Promise<Character> {
-    pjname = pjname.replace(':', '');
-    return this.characterService.updateCharacterById(pjname, datas);
+  async updateCharacter(@Param('id') id: string, @Body() datas: UpdateCharacterDto): Promise<Character> {
+    id = id.replace(':', '');
+    return this.characterService.updateCharacterById(id, datas);
   }
 
   @Get('check:nickname')

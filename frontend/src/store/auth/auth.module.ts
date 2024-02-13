@@ -57,6 +57,9 @@ export default {
          */
 
         dismissToken: () => {
+            store.state["USERS"].user = undefined;
+            store.state["CHARACTERS"].characters = {};
+            store.state["CHARACTERS"].currentCharacter = null;
             localStorage.removeItem("TokenSession");
             location.reload();
         }
@@ -80,9 +83,12 @@ export default {
         async CHECK_TOKEN_EXPIRATION({ commit }: Triggers): Promise<void> {
             try {
                 const token = localStorage.TokenSession;
-                const response = await axios.get(`${uri}/auth/expiration`, { headers: { authorization: token } });
-                if (response.data.expired) commit('dismissToken'); // if expired dismiss token
-                if (!token) return;
+                
+                if(token) {
+                    const response = await axios.get(`${uri}/auth/expiration`, { headers: { authorization: `${token}` } });
+                    if (response.data.expired) commit('dismissToken'); // if expired dismiss token
+                }
+
             } catch (err) {
                 throw new Error("Hubo un error verificando la sesión")
             }
@@ -213,7 +219,7 @@ export default {
             try {
                 const token = localStorage.getItem("TokenSession");
                 if (token) {
-                    const response = await axios.get(`${uri}/auth/user-info`, { headers: { authorization: token } });
+                    const response = await axios.get(`${uri}/auth/user-info`, { headers: { authorization: `${token}` } });
                     return response.data;
                 } else return {}
 
@@ -236,5 +242,6 @@ export default {
                 throw new Error('Error al actualizar la asociación del socket en el servidor');
             }
         },
+        
     }
 }

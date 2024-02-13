@@ -15,6 +15,7 @@ export class Character {
   @Prop({ required: true }) ownerId: string;
   @Prop({ required: true }) pjname: string;
   @Prop() avatar: string;
+  @Prop() header: string;
   @Prop() bio: string;
   @Prop() shortFields: CharacterField[];
   @Prop() longFields: CharacterField[];

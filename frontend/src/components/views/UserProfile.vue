@@ -8,6 +8,22 @@ import SquircleAvatar from "@/components/elements/SquircleAvatar.vue";
 import { Button } from "@/components/ui/button";
 import { MutualData } from "@/store/mutuals/mutuals.interface.ts";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { XOctagon } from "lucide-vue-next";
+
+import { Camera } from "lucide-vue-next";
+import { Input } from "@/components/ui/input";
+import Squircle from "@/assets/svg/squircle.svg";
+
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
+
 interface User {
   _id: string;
   nickname: string;
@@ -18,7 +34,43 @@ interface User {
 const store = useStore();
 const userParam = ref<User | null>(null);
 const router = useRouter();
-const currentCharacter = ref(store.state["CHARACTERS"].currentCharacter);
+const currentUser = ref(store.getters["USERS/getSelected"]);
+const currentType = ref(store.getters["USERS/getTypeSelected"]);
+
+const headerUrl = ref<string | undefined>(undefined);
+const avatarUrl = ref<string | undefined>(undefined);
+const tempHeaderUrl = ref<string | undefined>(undefined);
+const tempAvatarUrl = ref<string | undefined>(undefined);
+const isEditing = ref<boolean>(false);
+
+const switchEditMode = () => {
+  isEditing.value = true;
+  tempHeaderUrl.value = headerUrl.value;
+  tempAvatarUrl.value = avatarUrl.value;
+};
+
+const cancelEdit = () => {
+  isEditing.value = false;
+  // Descartar los cambios y revertir a las imágenes originales al cancelar
+  tempHeaderUrl.value = headerUrl.value;
+  tempAvatarUrl.value = avatarUrl.value;
+};
+
+const confirmEdit = async () => {
+  isEditing.value = false;
+  // Traspasar las imágenes temporales a las versiones originales al confirmar
+  headerUrl.value = tempHeaderUrl.value;
+  avatarUrl.value = tempAvatarUrl.value;
+  console.log(currentUser.value._id, avatarUrl.value, headerUrl.value);
+  await store.dispatch("USERS/UPDATE_USER", {
+    userId: currentUser.value._id,
+    update: {
+      avatar: avatarUrl.value,
+      header: headerUrl.value,
+    },
+  });
+  // Aquí deberías enviar la información actualizada a la base de datos
+};
 
 /**
  * Hook de ciclo de vida que se ejecuta antes de montar el componente.
@@ -27,6 +79,8 @@ const currentCharacter = ref(store.state["CHARACTERS"].currentCharacter);
 onBeforeMount(async () => {
   const username = router.currentRoute.value.params.username as string;
   userParam.value = await store.dispatch("USERS/GET_USER", username);
+  headerUrl.value = userParam.value?.header; // Asignar imagen del header obtenida de la base de datos
+  avatarUrl.value = userParam.value?.avatar; // Asignar avatar obtenido de la base de datos
 });
 
 /**
@@ -124,36 +178,175 @@ const status = computed(() => {
     <div class="h-screen">
       <div class="flex flex-col">
         <!-- PARTE DE ARRIBA -->
+
         <!-- header imagen like twitter header -->
-        <div
-          v-if="userParam?.header"
-          id="header"
-          class="w-full h-[240px] overflow-hidden flex items-center"
-        >
-          <img :src="userParam.header" class="w-full" />
-        </div>
-        <div
-          v-else
-          id="header"
-          class="w-full h-[240px] dark:bg-[#161618] bg-[#dbdbdb]"
-        ></div>
+        <Dialog>
+          <div class="relative">
+            <!-- OVERLAY HEADER -->
+            <div v-if="isEditing">
+              <DialogTrigger asChild>
+                <Button
+                  variant="link"
+                  class="absolute z-20 bg-black inset-0 opacity-50 cursor-pointer h-full"
+                >
+                  <transition
+                    enter-from-class="opacity-0"
+                    enter-active-class="transition duration-500"
+                    leave-to-class="opacity-0"
+                    leave-active-class="transition duration-100"
+                  >
+                    <div id="header-overlay" />
+                  </transition>
+                </Button>
+              </DialogTrigger>
+            </div>
+
+            <!-- CAMERA -->
+            <div v-if="isEditing">
+              <DialogTrigger asChild>
+                <Button
+                  variant="link"
+                  class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 cursor-pointer"
+                >
+                  <transition
+                    enter-from-class="opacity-0"
+                    enter-active-class="transition duration-500"
+                    leave-to-class="opacity-0"
+                    leave-active-class="transition duration-100"
+                  >
+                    <Camera class="h-5 w-5 duration-300 hover:h-6 hover:w-6 text-white" />
+                  </transition>
+                </Button>
+              </DialogTrigger>
+            </div>
+
+            <div>
+              <div
+                v-if="userParam?.header"
+                id="header"
+                :style="{ backgroundImage: `url('${headerUrl}')` }"
+                class="w-full h-[240px] overflow-hidden flex items-center bg-center bg-cover"
+              />
+              <div
+                v-else-if="tempHeaderUrl"
+                id="header"
+                :style="{ backgroundImage: `url('${tempHeaderUrl}')` }"
+                class="w-full h-[240px] bg-center bg-cover"
+              />
+              <div
+                v-else
+                id="header"
+                class="w-full h-[240px] dark:bg-[#161618] bg-[#dbdbdb] bg-center bg-cover"
+              />
+            </div>
+          </div>
+          <!-- ///////// FORMULARIO HEADER -->
+          <DialogContent>
+            <form @submit.prevent="">
+              <DialogHeader class="mb-4">
+                <DialogTitle>Encabezado</DialogTitle>
+              </DialogHeader>
+              <Input
+                id="url-header"
+                label="Url (.png, .jpg, etc)"
+                type="text"
+                :valid="true"
+                v-model="tempHeaderUrl"
+              />
+              <DialogClose asChild>
+                <Button variant="outline" class="mt-4" type="submit"> Guardar </Button>
+              </DialogClose>
+            </form>
+          </DialogContent>
+        </Dialog>
 
         <!-- PARTE DE ABAJO -->
         <div class="px-10 mt-[-80px]">
           <!-- avatar y editar perfil -->
           <div class="relative grid grid-cols-[auto_auto_1fr] gap-3" v-if="userParam">
             <div class="row-span-2">
-              <SquircleAvatar
-                v-if="userParam?.avatar"
-                size="145px"
-                :name="($route.params.username as string)"
-              />
-              <SquircleAvatar
-                v-else
-                size="145px"
-                :name="($route.params.username as string)"
-                :bg="true"
-              />
+              <Dialog>
+                <div class="relative w-[145px] h-[145px]">
+                  <!-- Overlay -->
+                  <div v-if="isEditing">
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="link"
+                        class="absolute z-40 inset-0 opacity-50 cursor-pointer p-0 h-full"
+                      >
+                        <transition
+                          enter-from-class="opacity-0"
+                          enter-active-class="transition duration-500"
+                          leave-to-class="opacity-0"
+                          leave-active-class="transition duration-100"
+                        >
+                          <Squircle />
+                        </transition>
+                      </Button>
+                    </DialogTrigger>
+                  </div>
+
+                  <!-- Camera -->
+                  <div v-if="isEditing">
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="link"
+                        class="absolute z-40 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 cursor-pointer"
+                      >
+                        <transition
+                          enter-from-class="opacity-0"
+                          enter-active-class="transition duration-500"
+                          leave-to-class="opacity-0"
+                          leave-active-class="transition duration-100"
+                        >
+                          <Camera
+                            class="h-5 w-5 hover:h-6 hover:w-6 duration-300 text-white"
+                          />
+                        </transition>
+                      </Button>
+                    </DialogTrigger>
+                  </div>
+
+                  <SquircleAvatar
+                    v-if="userParam?.avatar"
+                    size="145px"
+                    class="relative z-30"
+                    :src="avatarUrl"
+                    :name="($route.params.nickname as string)"
+                  />
+                  <SquircleAvatar
+                    v-else-if="tempAvatarUrl"
+                    size="145px"
+                    class="relative z-30"
+                    :src="tempAvatarUrl"
+                    :name="($route.params.nickname as string)"
+                  />
+                  <SquircleAvatar
+                    v-else
+                    size="145px"
+                    class="relative z-30"
+                    :name="($route.params.nickname as string)"
+                    :bg="true"
+                  />
+                </div>
+                <DialogContent>
+                  <form @submit.prevent="">
+                    <DialogHeader class="mb-4">
+                      <DialogTitle>Avatar</DialogTitle>
+                    </DialogHeader>
+                    <Input
+                      id="url-avatar"
+                      label="Url (.png, .jpg, etc)"
+                      type="text"
+                      :valid="true"
+                      v-model="tempAvatarUrl"
+                    />
+                    <DialogClose asChild>
+                      <Button variant="outline" class="mt-4"> Guardar </Button>
+                    </DialogClose>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
             <div class="col-start-2 row-start-2 h-[65px] flex flex-col justify-center">
               <div class="font-extrabold text-xl">{{ userParam?.nickname }}</div>
@@ -163,14 +356,23 @@ const status = computed(() => {
             </div>
             <div class="col-start-3 row-start-2 flex items-center justify-end">
               <!--Button editar perfil -->
-              <div v-if="currentCharacter == null">
-                <Button v-if="status.current" variant="outline">Editar</Button>
-                <Button v-if="status.active" @click="unfollowUser" variant="outline"
-                  >Mutual</Button
+              <div v-if="currentType == 'user'">
+                <div
+                  v-if="isEditing && currentUser._id == userParam._id"
+                  class="flex gap-x-2"
                 >
-                <Button v-if="status.pending" variant="outline" disabled
-                  >Pendiente</Button
-                >
+                  <Button variant="outline" @click="cancelEdit">Cancelar</Button>
+                  <Button @click="confirmEdit">Confirmar</Button>
+                </div>
+                <div v-else-if="currentUser._id == userParam._id">
+                  <Button variant="outline" @click="switchEditMode">Editar</Button>
+                </div>
+                <Button v-if="status.active" @click="unfollowUser" variant="outline">
+                  Mutual
+                </Button>
+                <Button v-if="status.pending" variant="outline" disabled>
+                  Pendiente
+                </Button>
                 <Button v-if="status.default" @click="followUser">Seguir</Button>
               </div>
               <div v-else>

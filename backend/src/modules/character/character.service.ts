@@ -57,9 +57,9 @@ export class CharacterService {
   * #param name Nombre del personaje.
   * #returns El personaje encontrado.
   */
-  async updateCharacterById(pjname: string, datas: UpdateCharacterDto): Promise<Character> {
+  async updateCharacterById(id: string, datas: UpdateCharacterDto): Promise<Character> {
     const character = await this.characterModel.findByIdAndUpdate(
-      pjname, { $set: datas }, { new: true }
+      id, { $set: datas }, { new: true }
     );
 
     if (!character)

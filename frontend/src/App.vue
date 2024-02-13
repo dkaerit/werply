@@ -25,7 +25,9 @@ const handleResize = () => {
 onBeforeMount(async () => {
   const token = localStorage.getItem("TokenSession");
   let user = {};
+
   if (token) {
+    store.dispatch("AUTH/CHECK_TOKEN_EXPIRATION");
     user = await store.dispatch("AUTH/GET_USER_INFO");
     store.commit("USERS/setUser", user);
     store.dispatch("MUTUALS/FETCH_MUTUALS", store.state["USERS"].user._id);

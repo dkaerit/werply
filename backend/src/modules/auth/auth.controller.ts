@@ -49,7 +49,7 @@ export class AuthController {
      */
     @Get('/login/google')
     loginWithGoogle() {
-        return this.authService.loginWithGoogle();
+        return this.authService.loginWithGoogle(); 
     }
 
     @Get('/expiration')

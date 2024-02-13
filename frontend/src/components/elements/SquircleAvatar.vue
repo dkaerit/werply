@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, onBeforeMount } from "vue";
+import { ref, defineProps, onBeforeMount, watch } from "vue";
 
 const props = defineProps({
   size: {
@@ -81,6 +81,13 @@ onBeforeMount(async () => {
   //image.value = `https://avatar.vercel.sh/${id.value}.png`;
   image.value = werplypfp.default;
 });
+
+watch(
+  () => props.src,
+  () => {
+    id.value = props.src ? extractNameId() : props.name || "werply";
+  }
+);
 </script>
 
 <style lang="scss" scoped>

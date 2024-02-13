@@ -16,6 +16,7 @@ import { ref, watchEffect, computed } from "vue";
 interface Author {
   _id: string;
   type: string;
+  avatar: string;
   authorName: string;
   authorPublicName?: string;
 }
@@ -120,6 +121,7 @@ watchEffect(() => {
 
     author.value = {
       _id: props.post.authorId,
+      avatar: authorData.avatar,
       type: props.post.authorType,
       authorName: name,
       authorPublicName: publicName,
@@ -138,7 +140,11 @@ watchEffect(() => {
           <div class="grid grid-cols-[auto_auto_1fr] justify-start">
             <!-- GRID POST -->
             <!-- Celda 1-1: Avatar -->
-            <SquircleAvatar size="45px" />
+            <SquircleAvatar
+              size="45px"
+              :src="author.avatar"
+              :name="(author.authorName as string)"
+            />
 
             <!-- Celda 2-1: Título y UserID -->
             <div class="col-start-2 pl-4 flex">

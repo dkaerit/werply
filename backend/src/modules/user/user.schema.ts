@@ -9,6 +9,7 @@ export class User {
   @Prop({ unique: true }) email: string;
   @Prop() passwd: string;
   @Prop() avatar: string; 
+  @Prop() header: string;
   @Prop() nickname: string; 
 }
 

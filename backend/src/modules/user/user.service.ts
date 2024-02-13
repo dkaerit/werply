@@ -79,8 +79,38 @@ export class UserService {
     return this.findUserByField('tlfn', tlfn);
   }
 
+  /**
+ * Lee un usuario por su ID.
+ * #param id El ID del usuario que se va a buscar.
+ * #returns Una promesa que se resuelve en los datos del usuario encontrado.
+ */
+
   public async readUserById(id: string): Promise<UserDto> {
     return this.findUserByField('_id', id);
+  }
+
+  /**
+ * Actualiza un usuario por su ID.
+ * #param id El ID del usuario que se va a actualizar.
+ * #param data Los nuevos datos del usuario.
+ * #returns Una promesa que se resuelve en los datos del usuario actualizado.
+ */
+
+  public async updateUserById(id: string, data: UserDto): Promise<UserDto> {
+    console.log(id, data)
+    const updatedUser = await this.userModel.findByIdAndUpdate(
+      id, // ID del usuario a actualizar
+      { $set: data }, // Datos actualizados del usuario
+      { new: true } // Opciones para devolver el documento actualizado
+    );
+
+    console.log(updatedUser)
+
+    // Si el usuario no se encuentra en la base de datos, se lanza una excepción
+    if (!updatedUser)
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+
+    return updatedUser;
   }
 
 

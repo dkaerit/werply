@@ -10,6 +10,7 @@ export class CharacterFieldDto {
 export class CharacterDto {
   @ApiProperty() @IsNotEmpty() @MinLength(4) readonly pjname: string;
   @ApiProperty() @IsNotEmpty() readonly avatar: string;
+  @ApiProperty() @IsOptional() readonly header?: string;
   @ApiProperty() @IsNotEmpty() readonly ownerId: string;
   @ApiProperty() @IsNotEmpty() readonly nickname: string;
   @ApiProperty() @IsOptional() readonly bio: string;
@@ -22,6 +23,7 @@ export class UpdateCharacterDto {
    @IsOptional() @IsString() bio?: string;
    @IsOptional() @IsString() nickname?: string;
    @IsOptional() @IsString() pjname?: string;
+   @IsOptional() @IsString() header?: string;
  }
 
 

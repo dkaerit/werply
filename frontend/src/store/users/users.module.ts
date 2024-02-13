@@ -94,16 +94,32 @@ export default {
       },
 
       /**
- * Action to fetch user information from the backend.
- * #param triggers - Vuex action triggers (commit, dispatch)
- * #param username - Username of the user to fetch
- * #throws Error if there's an issue fetching user information
- */
+       * Action to fetch user information from the backend.
+       * #param triggers - Vuex action triggers (commit, dispatch)
+       * #param username - Username of the user to fetch
+       * #throws Error if there's an issue fetching user information
+       */
 
       async GET_USER_BY_ID({ }: Triggers, identifier: string): Promise<UserState> {
          try {
             // Hacer una solicitud al backend para obtener la información del usuario
             const response = await axios.get(`${uri}/users/id:${identifier}`);
+            return response.data;
+         } catch (error) {
+            // Manejar errores (por ejemplo, usuario no autenticado)
+            throw new Error('Error al obtener información del usuario:');
+         }
+      },
+
+
+      async UPDATE_USER({ commit }: Triggers, { userId, update }: { userId: string, update: UserState }): Promise<void> {
+         try {
+            const token = localStorage.getItem("TokenSession");
+            // Hacer una solicitud al backend para obtener la información del usuario
+            const response = await axios.put(`${uri}/users/update:${userId}`, update, {
+               headers: { authorization: `Bearer ${token}`} // Añadir el token JWT al encabezado de autorización
+            });
+            await commit('setUser', response.data);
             return response.data;
          } catch (error) {
             // Manejar errores (por ejemplo, usuario no autenticado)

@@ -13,7 +13,7 @@ import { JwtPayload } from './jwt.interfaces';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor() {
-        // Extrae el token JWT del encabezado de autorización de la solicitud.
+        // Extrae el token JWT del encabezado de autorización de la solicitud. 
         // en falso, se comprobará la caducidad del token.
         // La clave secreta utilizada para firmar el token JWT.
         super({
