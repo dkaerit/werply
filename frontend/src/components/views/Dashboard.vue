@@ -171,7 +171,6 @@ onBeforeMount(() => {
     () => store.getters["USERS/getSelected"],
     () => {
       initialFetchNewerPosts();
-      console.log("Se cambió de actor");
     }
   );
 });

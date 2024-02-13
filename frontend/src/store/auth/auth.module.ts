@@ -79,7 +79,7 @@ export default {
         async CHECK_TOKEN_EXPIRATION({ commit }: Triggers): Promise<void> {
             try {
                 const token = localStorage.TokenSession;
-                const response = await axios.get(`${uri}/auth/expiration`, { headers: { Authorization: `Bearer $` } });
+                const response = await axios.get(`${uri}/auth/expiration`, { headers: { authorization: `${token}` } });
                 if (response.data.expired) commit('dismissToken'); // if expired dismiss token
                 if (!token) return;
             } catch (err) {
@@ -211,9 +211,8 @@ export default {
         async GET_USER_INFO(_: Triggers): Promise<UserData | {}> {
             try {
                 const token = localStorage.getItem("TokenSession");
-                console.log(token)
                 if (token) {
-                    const response = await axios.get(`${uri}/auth/user-info`, { headers: { Authorization: `Bearer ${token}` } });
+                    const response = await axios.get(`${uri}/auth/user-info`, { headers: { authorization: `${token}` } });
                     return response.data;
                 } else return {}
 
