@@ -2,6 +2,7 @@ services:
   - type: web
     name: backend-nestjs
     rootDir: backend
+    runtime: node
     buildCommand: npm install
     startCommand: npm run start:dev
     envVars:
@@ -13,6 +14,7 @@ services:
   - type: web
     name: frontend-vuejs
     rootDir: frontend
+    runtime: node
     buildCommand: npm install
     startCommand: npm run build && npx http-server dist
     envVars:
