@@ -1,31 +1,22 @@
 services:
-  - name: backend-nestjs
+  - type: web
+    name: backend-nestjs
+    rootDir: backend
     buildCommand: npm install
     startCommand: npm run start:dev
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: "3000"
-      - key: DEBUG
-        value: "true"
-    volumes:
-      - name: backend
-        path: /srv/backend
-    ports:
-      - number: 3000
-        protocol: TCP
-        
+        value: 3000
+
   - type: web
-  - name: frontend-vuejs
+    name: frontend-vuejs
+    rootDir: frontend
     buildCommand: npm install
     startCommand: npm run build && npx http-server dist
     envVars:
       - key: NODE_ENV
         value: production
-    volumes:
-      - name: frontend
-        path: /srv/frontend
-    ports:
-      - number: 8080
-        protocol: TCP
+      - key: PORT
+        value: 8080
