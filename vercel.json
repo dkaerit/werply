@@ -1,0 +1,38 @@
+{
+   "version": 2,
+   "builds": [
+     {
+       "src": "/backend",
+       "use": "@vercel/node"
+     },
+     {
+       "src": "/frontend",
+       "use": "@vercel/node"
+     }
+   ],
+   "routes": [
+     {
+       "src": "/backend/(.*)",
+       "dest": "/backend/$1"
+     },
+     {
+       "src": "/frontend/(.*)",
+       "dest": "/frontend/$1"
+     }
+   ],
+   "env": {
+     "NODE_ENV": "production"
+   },
+   "dev": {
+     "routes": [
+       {
+         "src": "/backend/(.*)",
+         "dest": "http://localhost:3000/backend/$1"
+       },
+       {
+         "src": "/frontend/(.*)",
+         "dest": "http://localhost:8080/frontend/$1"
+       }
+     ]
+   }
+ }
