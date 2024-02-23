@@ -4,7 +4,9 @@ import { BaseModule } from './modules/base/base.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(BaseModule);
+  const app = await NestFactory.create<NestExpressApplication>(BaseModule, {
+    snapshot: true,
+  });
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Nest js api rest full')

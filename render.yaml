@@ -1,12 +1,10 @@
 services:
   - name: backend-nestjs
-    plan: starter
-    env: 
-      - key: NODE_ENV
-        value: production
     buildCommand: npm install
     startCommand: npm run start:dev
     envVars:
+      - key: NODE_ENV
+        value: production
       - key: PORT
         value: "3000"
       - key: DEBUG
@@ -17,9 +15,9 @@ services:
     ports:
       - number: 3000
         protocol: TCP
-
+        
+  - type: web
   - name: frontend-vuejs
-    plan: starter
     buildCommand: npm install
     startCommand: npm run build && npx http-server dist
     envVars:

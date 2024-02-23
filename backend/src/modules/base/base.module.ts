@@ -10,6 +10,7 @@ import { AuthModule } from '../auth/auth.module';
 import { MutualModule } from '../mutual/mutual.module';
 import { CharacterModule } from '../character/character.module';
 import { PostModule } from '../post/post.module';
+import { DevtoolsModule } from '@nestjs/devtools-integration';
 
 // mongoose
 import { MongoModule } from '../../database/mongo.module';
@@ -21,7 +22,10 @@ import { MongoModule } from '../../database/mongo.module';
     CharacterModule, // Módulo de personajes (dependencia).
     AuthModule, // Módulo de usuarios (dependencia).
     MutualModule,
-    PostModule
+    PostModule,
+    DevtoolsModule.register({
+      http: process.env.NODE_ENV !== 'production',
+    }),
   ],
   controllers: [BaseController],
   providers: [BaseService],
