@@ -10,7 +10,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "node dist/main.js",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -35,13 +35,15 @@
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.14.0",
     "dotenv": "^16.0.3",
+    "fs": "^0.0.1-security",
     "lodash": "^4.17.21",
     "mongoose": "^6.6.7",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "serve": "^14.2.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.3.0",

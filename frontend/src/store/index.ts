@@ -10,11 +10,12 @@ import USERS from './users/users.module';
 import CHARACTERS from './characters/characters.module';
 import MUTUALS from './mutuals/mutuals.module';
 import POSTS from './posts/posts.module';
+import NOTIFICATIONS from './notifications/notifications.module';
 
 
-const backendHost = import.meta.env.BACKEND_HOST || "localhost";
-const backendPort = import.meta.env.BACKEND_PORT || 3000;
-export const uri: string = `http://${backendHost}:${backendPort}`;
+const backendHost = import.meta.env.VITE_BACKEND_HOST || "http://localhost";
+const backendPort = import.meta.env.VITE_BACKEND_PORT === "80" ? "" : import.meta.env.VITE_BACKEND_PORT || 3000;
+export const uri: string = `${backendHost}:${backendPort}`;
 
 const vuexLocal = new VuexPersistence()
 
@@ -22,7 +23,7 @@ export const store = createStore({
   state: () => ({}),
   mutations: {
   },
-  modules: { AUTH, MENU, USERS, CHARACTERS, MUTUALS, POSTS },
+  modules: { AUTH, MENU, USERS, CHARACTERS, MUTUALS, POSTS, NOTIFICATIONS },
   plugins: [vuexLocal.plugin]
 })
 

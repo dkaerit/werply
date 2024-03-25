@@ -59,7 +59,7 @@ const confirmEdit = async () => {
   // Traspasar las imágenes temporales a las versiones originales al confirmar
   headerUrl.value = tempHeaderUrl.value;
   avatarUrl.value = tempAvatarUrl.value;
-  console.log(currentUser.value._id, avatarUrl.value, headerUrl.value);
+  //console.log(currentUser.value._id, avatarUrl.value, headerUrl.value);
   await store.dispatch("USERS/UPDATE_USER", {
     userId: currentUser.value._id,
     update: {

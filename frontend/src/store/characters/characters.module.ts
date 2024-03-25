@@ -128,18 +128,23 @@ export default {
     * #param {string} userId El _id del usuario.
     * #throws {Error} Lanza un error si la obtención de personajes falla.
     */
-    async FETCH_CHARACTERS_BY_USER_ID({ commit }: Triggers, userId: string): Promise<Character[]> {
+    async FETCH_CHARACTERS_BY_USER_ID({ commit }: Triggers, userId: string): Promise<Character[]|undefined> {
       try {
         // Realiza la solicitud para obtener los personajes por userId
-        const response = await axios.get(`${uri}/characters/fetch:${userId}`);
-        const characters = response.data.reduce((acc: Record<string, Character>, character: Character) => {
-          acc[character._id] = character; // Utiliza el id del personaje como clave en el objeto
-          return acc;
-        }, {});
 
-        // Actualiza el estado de la store con los personajes obtenidos
-        await commit('setCharacters', characters);
-        return characters;
+        if(userId !== 'undefined' && userId !== undefined) {
+          const response = await axios.get(`${uri}/characters/fetch:${userId}`);
+          const characters = response.data.reduce((acc: Record<string, Character>, character: Character) => {
+            acc[character._id] = character; // Utiliza el id del personaje como clave en el objeto
+            return acc;
+          }, {});
+  
+          // Actualiza el estado de la store con los personajes obtenidos
+          await commit('setCharacters', characters);
+          return characters;
+        }
+
+        return;
 
       } catch (error) {
         // Maneja cualquier error que pueda ocurrir durante la obtención de personajes por userId

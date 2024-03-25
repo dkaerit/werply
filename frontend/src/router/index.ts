@@ -44,6 +44,11 @@ export default createRouter({
           beforeEnter: redirectToIfCondition(!isAuthenticated(), '/login'),
         },
         {
+          path: 'requests',
+          component: () => import('../components/views/PendingRequests.vue'),
+          beforeEnter: redirectToIfCondition(!isAuthenticated(), '/login'),
+        },
+        {
           path: 'profile',
           children: [
             {

@@ -83,7 +83,10 @@ export default {
                 if (response.data.expired) commit('dismissToken'); // if expired dismiss token
                 if (!token) return;
             } catch (err) {
-                throw new Error("Hubo un error verificando la sesión")
+                commit('dismissToken');
+                window.location.reload();
+                throw new Error("Hubo un error verificando la sesión");
+                
             }
         },
 
@@ -95,6 +98,7 @@ export default {
          */
 
         async AUTHENTICATE({ commit, dispatch }: Triggers, { endpoint, payload }: EndpointWithPayload): Promise<void | { error: string }> {
+            console.log("AUTHENTICATE-payload", payload);
             const field = fieldMapping[endpoint];
 
             try {
@@ -104,7 +108,10 @@ export default {
                 if (token)
                     await dispatch('USERS/FETCH_USER', payload.identifier, { root: true });
 
+                console.log("AUTHENTICATE-getTracker", store.getters["USERS/getTracker"]);
+
                 await commit('setToken', token);
+                console.log("AUTHENTICATE-token", token);
             } catch (error) {
 
                 if (axios.isAxiosError(error)) {

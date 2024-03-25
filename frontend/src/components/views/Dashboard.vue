@@ -49,22 +49,25 @@ const createAuthorsList = (
 
   // Agregar el actor seleccionado como autor
   const selfAuthorType = (selectedActor as Character) ? "pj" : "user";
-  authors.push({ authorId: selectedActor._id, authorType: selfAuthorType });
+  authors.push({ authorId: selectedActor?._id, authorType: selfAuthorType });
 
   // filtrar
-  const mutualAuthors = pairsOfMutuals
-    .filter(
-      (mutual) =>
-        (selectedActor._id === mutual.id1 || selectedActor._id === mutual.id2) &&
-        mutual.status === "active"
-    )
-    .map((mutual) => {
-      const authorId = selectedActor._id === mutual.id1 ? mutual.id2 : mutual.id1;
-      const authorType = (selectedActor as Character) ? "pj" : "user";
-      return { authorId, authorType };
-    });
+  if (Array.isArray(pairsOfMutuals)) {
+    const mutualAuthors = pairsOfMutuals
+      .filter(
+        (mutual: Mutual) =>
+          (selectedActor?._id === mutual?.id1 || selectedActor?._id === mutual?.id2) &&
+          mutual?.status === "active"
+      )
+      .map((mutual: Mutual) => {
+        const authorId = selectedActor._id === mutual.id1 ? mutual.id2 : mutual.id1;
+        const authorType = (selectedActor as Character) ? "pj" : "user";
+        return { authorId, authorType };
+      });
 
-  return [...authors, ...mutualAuthors];
+    return [...authors, ...mutualAuthors];
+  }
+  return [];
 };
 
 const updateReferenceDates = (newPosts: Post[], side: string) => {

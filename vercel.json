@@ -1,18 +1,23 @@
 {
    "version": 2,
+   "github": { "enabled": false },
    "builds": [
       {
-         "src": "backend/src/main.ts",
-         "use": "@vercel/node"
+         "src": "/backend/src/main.ts",
+         "use": "@now/node",
+         "config": { "nodeVersion": "20.x" } 
       },
       {
-         "src": "frontend/dist/*",
-         "use": "@now/static"
+         "src": "/frontend/dist/*",
+         "use": "@now/static",
+         "config": { "nodeVersion": "20.x" } 
       }
    ],
    "routes": [
-      {
-         "src": "/(.*)", "dest": "frontend/src/dist", "methods": ["GET", "POST", "PUT", "DELETE"]
-      }
-   ]
+      { "handle": "filesystem" },
+      { "src": "/api/(.*)", "dest": "/backend/src/main.ts" },
+      { "src": "/assets/(.*)", "dest": "/frontend/src/assets/$1" },
+      { "src": "/(.*).(js|css|ico)", "dest": "/frontend/$1.$2" },
+      { "src": "/(.*)", "dest": "/frontend/dist/index.html" }
+    ]
 }

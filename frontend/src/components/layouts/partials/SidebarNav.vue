@@ -16,6 +16,7 @@ import UserIcon from "@/assets/svg/user.svg";
 import MessageIcon from "@/assets/svg/message.svg";
 import SettingIcon from "@/assets/svg/setting.svg";
 import SquaresIcon from "@/assets/svg/squares.svg";
+import ContactsIcon from "@/assets/svg/contacts.svg";
 
 const store = useStore();
 const router = useRouter();
@@ -33,6 +34,7 @@ const sidebarNavItems = computed(() => [
   { title: "Perfil", href: dynamicProfile.value, svg: UserIcon },
   { title: "Mensajes", href: "#", svg: MessageIcon },
   { title: "Werplaces", href: "#", svg: SquaresIcon },
+  { title: "Solicitudes Pendientes", href: "/requests", svg: ContactsIcon },
   { title: "Configuración", href: "#", svg: SettingIcon },
 ]);
 
